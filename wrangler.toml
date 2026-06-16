@@ -1,12 +1,16 @@
 name = "games-craftisle"
-type = "webpack"
-account_id = ""
-workers_dev = false
+compatibility_date = "2026-01-01"
 
-[[pages]]
-  bucket = "./out"
+# Cloudflare Pages 配置
+# 方式1：通过 Cloudflare Dashboard 连接 GitHub（推荐）
+#   构建命令：npm run build
+#   输出目录：out
+#   Node.js 版本：20+（在 Settings > Functions > Compatibility 中设置）
+#
+# 方式2：使用 Wrangler CLI 部署（见下方命令）
 
-# Cloudflare Pages 构建配置（在 Cloudflare Dashboard 中设置）：
-# 构建命令：npm run build
-# 输出目录：out
-# Node.js 版本：18+（在 Cloudflare 设置中指定）
+# 本地预览（需要先构建）
+# wrangler pages dev out
+
+# CLI 部署命令（先构建，再部署）
+# npm run build && wrangler pages deploy out --project-name=games-craftisle
