@@ -1,0 +1,12 @@
+name = "games-craftisle"
+type = "webpack"
+account_id = ""
+workers_dev = false
+
+[[pages]]
+  bucket = "./out"
+
+# Cloudflare Pages 构建配置（在 Cloudflare Dashboard 中设置）：
+# 构建命令：npm run build
+# 输出目录：out
+# Node.js 版本：18+（在 Cloudflare 设置中指定）
