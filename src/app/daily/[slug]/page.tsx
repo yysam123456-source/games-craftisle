@@ -320,7 +320,7 @@ function getDailyTip(category: string, title: string, dayNumber: number): string
     action: [
       "Stay focused, avoid distractions.",
       "Find the operation rhythm that suits you.",
-      "Remember应对策略 for key moments.",
+      "Remember the strategy for key moments.",
     ],
   };
 
