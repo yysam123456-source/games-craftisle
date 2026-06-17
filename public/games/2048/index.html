@@ -64,8 +64,8 @@ body { background: #faf8ef; font-family: 'Clear Sans', 'Helvetica Neue', Arial, 
 </div>
 
 <script>
-(function() {
-  "use strict";
+
+"use strict";
   
   const SIZE = 4;
   let grid = [];
@@ -272,7 +272,41 @@ body { background: #faf8ef; font-family: 'Clear Sans', 'Helvetica Neue', Arial, 
   });
   
   init();
-})();
+
+  // 监听父页面消息（允许外部控制游戏）
+  window.addEventListener('message', (e) => {
+    if (!e.data) return;
+    if (e.data.type === 'keydown' && e.data.key) {
+      const map = {'ArrowUp':0,'ArrowDown':2,'ArrowLeft':3,'ArrowRight':1,'w':0,'s':2,'a':3,'d':1,'W':0,'S':2,'A':3,'D':1};
+      if (map[e.data.key] !== undefined) move(map[e.data.key]);
+    }
+    if (e.data.type === 'move' && e.data.direction !== undefined) move(e.data.direction);
+    if (e.data.type === 'restart') init();
+  });
+
+  // 暴露游戏控制API（统一接口）
+  window.game = {
+    move: move,
+    getScore: () => score,
+    getGrid: () => grid,
+    restart: init,
+    getState: () => ({score, grid, gameOver, keepPlaying})
+  };
+
+  // 自动演示模式（验证游戏真的在运行）
+  setTimeout(() => {
+    if (window.location.search.indexOf('demo=0') >= 0) return;
+    console.log('Auto demo: game will play itself');
+    const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','s','a','d'];
+    setInterval(() => {
+      if (gameOver && !keepPlaying) { init(); return; }
+      const key = keys[Math.floor(Math.random() * keys.length)];
+      const e = { key, preventDefault: () => {} };
+      const map = {'ArrowUp':0,'ArrowDown':2,'ArrowLeft':3,'ArrowRight':1,'w':0,'s':2,'a':3,'d':1};
+      if (map[key] !== undefined) move(map[key]);
+    }, 1000);
+  }, 2000);
+
 </script>
 </body>
 </html>

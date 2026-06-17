@@ -387,6 +387,9 @@
     
     drawBoard();
     drawNextPiece();
+
+    // 自动开始游戏（不需要点击Start按钮）
+    if (!isPlaying && !isGameOver) startGame();
   </script>
 </body>
 </html>
