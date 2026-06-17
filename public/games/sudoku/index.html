@@ -286,42 +286,6 @@
     // Initialize game
     newGame();
   
-    // 自动演示模式（自动填入正确答案）
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Sudoku auto demo started');
-      let currentRow = 0, currentCol = 0;
-      const interval = setInterval(() => {
-        // 找到下一个空格
-        while (currentRow < 9 && board[currentRow][currentCol] !== 0) {
-          currentCol++;
-          if (currentCol >= 9) { currentCol = 0; currentRow++; }
-        }
-        if (currentRow >= 9) { clearInterval(interval); console.log('Sudoku solved!'); return; }
-        
-        // 填入正确答案
-        board[currentRow][currentCol] = solution[currentRow][currentCol];
-        drawBoard();
-        selectCell(currentRow, currentCol);
-        
-        // 移动到下一个格子
-        currentCol++;
-        if (currentCol >= 9) { currentCol = 0; currentRow++; }
-      }, 200);
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

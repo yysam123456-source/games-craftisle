@@ -317,44 +317,6 @@
     // Initialize game
     newGame();
   
-    // 自动演示模式
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Minesweeper auto demo started');
-      let firstClickDone = false;
-      const interval = setInterval(() => {
-        if (gameOver || gameWon) { newGame(); firstClickDone = false; return; }
-        
-        if (!firstClickDone) {
-          // 第一次点击(0,0)保证安全
-          handleClick(0, 0);
-          firstClickDone = true;
-        } else {
-          // 随机点击一个未揭示的格子
-          const unrevealed = [];
-          for (let r = 0; r < ROWS; r++)
-            for (let c = 0; c < COLS; c++)
-              if (!revealed[r][c] && !flagged[r][c]) unrevealed.push({r, c});
-          
-          if (unrevealed.length === 0) { clearInterval(interval); return; }
-          
-          const {r, c} = unrevealed[Math.floor(Math.random() * unrevealed.length)];
-          handleClick(r, c);
-        }
-      }, 800);
-    }, 1000);
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

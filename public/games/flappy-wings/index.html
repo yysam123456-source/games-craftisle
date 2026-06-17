@@ -297,31 +297,6 @@
 
 
   
-    // 自动演示模式
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Flappy Wings auto demo started');
-      // 自动开始游戏
-      setTimeout(() => { if (!gameStarted) flap(); }, 500);
-      // 定期拍打
-      setInterval(() => {
-        if (gameOver) { resetGame(); setTimeout(() => flap(), 500); return; }
-        if (!gameStarted) { flap(); return; }
-        flap();
-      }, 600);
-    }, 1000);
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

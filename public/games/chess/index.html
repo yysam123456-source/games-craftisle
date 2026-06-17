@@ -412,56 +412,6 @@
     // Initialize game
     initBoard();
   
-    // 自动演示模式（自动走棋）
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Chess auto demo started');
-      setInterval(() => {
-        // 找到当前方的所有棋子
-        const pieces = [];
-        for (let r = 0; r < BOARD_SIZE; r++) {
-          for (let c = 0; c < BOARD_SIZE; c++) {
-            const piece = board[r][c];
-            if (piece && piece.color === currentTurn) {
-              const moves = getValidMoves(r, c);
-              if (moves.length > 0) {
-                pieces.push({row: r, col: c, moves});
-              }
-            }
-          }
-        }
-        if (pieces.length === 0) return; // 无子可走
-        
-        // 随机选一个棋子和走法
-        const pieceData = pieces[Math.floor(Math.random() * pieces.length)];
-        const move = pieceData.moves[Math.floor(Math.random() * pieceData.moves.length)];
-        
-        // 执行移动
-        const target = board[move.row][move.col];
-        if (target) {
-          capturedPieces[currentTurn].push(target);
-          updateCapturedPieces();
-        }
-        board[move.row][move.col] = board[pieceData.row][pieceData.col];
-        board[pieceData.row][pieceData.col] = null;
-        currentTurn = currentTurn === 'white' ? 'black' : 'white';
-        updateStatus();
-        drawBoard();
-      }, 1500);
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

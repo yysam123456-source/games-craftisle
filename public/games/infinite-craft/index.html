@@ -555,63 +555,6 @@
 
     // Start the game
     init();
-  
-    // 自动演示模式（自动合并元素）
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Infinite Craft auto demo started');
-      setInterval(() => {
-        const canvas = document.getElementById('canvasArea');
-        const elements = canvas.querySelectorAll('.element');
-        if (elements.length < 2) return;
-        
-        // 随机选两个元素合并
-        const idx1 = Math.floor(Math.random() * elements.length);
-        let idx2 = Math.floor(Math.random() * elements.length);
-        while (idx2 === idx1) idx2 = Math.floor(Math.random() * elements.length);
-        
-        const elem1 = elements[idx1];
-        const elem2 = elements[idx2];
-        const key = `${elem1.dataset.element}+${elem2.dataset.element}`;
-        const key2 = `${elem2.dataset.element}+${elem1.dataset.element}`;
-        const recipe = recipes[key] || recipes[key2];
-        
-        if (recipe) {
-          // 直接合并
-          if (!discoveries.has(recipe.result)) {
-            discoveries.add(recipe.result);
-            combinationCount++;
-            showNewDiscovery(recipe);
-            const rect = elem2.getBoundingClientRect();
-            createElement(recipe, rect.left, rect.top);
-            updateStats();
-            updateDiscoveriesList();
-          }
-          elem1.remove();
-          elem2.remove();
-        } else {
-          // 随机拖动一个元素到另一个附近（触发碰撞检测）
-          const rect1 = elem1.getBoundingClientRect();
-          const rect2 = elem2.getBoundingClientRect();
-          // 简单移动元素1到元素2附近
-          elem1.style.left = (parseInt(elem2.style.left) - 50) + 'px';
-          elem1.style.top = (parseInt(elem2.style.top) || 0) + 'px';
-        }
-      }, 2000);
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
-</script>
+  </script>
 </body>
 </html>

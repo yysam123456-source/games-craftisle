@@ -385,35 +385,6 @@
     // Start the game
     initGame();
   
-    // 自动演示模式（自动输入密码）
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Password Game auto demo started');
-      const target = document.getElementById('passwordInput');
-      // 一个满足所有12条规则的密码
-      const pwd = 'Pass12!😀racecarIVH2Oleet4';
-      let idx = 0;
-      const typeChar = () => {
-        if (idx >= pwd.length) return;
-        target.value += pwd[idx++];
-        target.dispatchEvent(new Event('input', { bubbles: true }));
-        setTimeout(typeChar, 300);
-      };
-      typeChar();
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

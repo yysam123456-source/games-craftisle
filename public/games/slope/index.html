@@ -360,33 +360,6 @@
     
     drawGame();
   
-    // 自动演示模式
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Slope auto demo started');
-      // 自动开始游戏
-      setTimeout(() => { if (!isPlaying) startGame(); }, 500);
-      // 定期左右移动
-      setInterval(() => {
-        if (!isPlaying) { startGame(); return; }
-        // 随机向左或向右移动
-        ball.dx = (Math.random() < 0.5 ? -1 : 1) * 5;
-        setTimeout(() => { ball.dx *= 0.3; }, 200);
-      }, 800);
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>

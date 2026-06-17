@@ -184,48 +184,6 @@
     
     initGame();
   
-    // 自动演示模式
-    setTimeout(() => {
-      if (window.location.search.indexOf('demo=0') >= 0) return;
-      console.log('Snake auto demo started');
-      setInterval(() => {
-        // 随机改变方向（但不能直接反向）
-        const directions = [
-          {dx:1,dy:0},  // 右
-          {dx:-1,dy:0}, // 左
-          {dx:0,dy:1},   // 下
-          {dx:0,dy:-1}   // 上
-        ];
-        const validDirs = directions.filter(d => {
-          // 不能反向
-          if (d.dx === -dx && d.dy === -dy) return false;
-          // 不能撞墙
-          const head = {x: snake[0].x + d.dx, y: snake[0].y + d.dy};
-          if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) return false;
-          // 不能撞自己
-          if (snake.some(seg => seg.x === head.x && seg.y === head.y)) return false;
-          return true;
-        });
-        if (validDirs.length > 0) {
-          const dir = validDirs[Math.floor(Math.random() * validDirs.length)];
-          dx = dir.dx;
-          dy = dir.dy;
-        }
-      }, 500);
-
-
-  
-// ===== 游戏操作指示器 =====
-(function addIndicator() {
-  if (window.__indicatorAdded) return;
-  window.__indicatorAdded = true;
-
-  // 注入 CSS 动画
-  const style = document.createElement('style');
-  style.textContent = `
-
-
-
 </script>
 </body>
 </html>
