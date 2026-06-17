@@ -13,7 +13,7 @@ interface GameIframeProps {
 export function GameIframe({
   game,
   width = "100%",
-  height = "75vh"
+  height = "85vh"
 }: GameIframeProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export function GameIframe({
 
   if (!game.sourceUrl) {
     return (
-      <div className="overflow-hidden rounded-lg border bg-card">
+      <div className="rounded-lg border bg-card">
         <div className="flex items-center justify-center h-[600px] bg-muted/50">
           <p className="text-muted-foreground">Game source URL not configured</p>
         </div>
@@ -39,10 +39,10 @@ export function GameIframe({
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-card">
-      <div className="relative" style={{ height, minHeight: "650px" }}>
+    <div className="rounded-lg border bg-card">
+      <div className="relative" style={{ minHeight: "700px" }}>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10 transition-opacity duration-500">
+          <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10 transition-opacity duration-500 rounded-t-lg">
             <div className="text-center">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
               <p className="text-sm text-muted-foreground">Loading {game.title}...</p>
@@ -58,7 +58,9 @@ export function GameIframe({
           style={{ 
             border: "none",
             width: "100%",
+            minHeight: "700px",
           }}
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
           allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           onLoad={() => {
@@ -72,7 +74,7 @@ export function GameIframe({
         />
         
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/90 z-20">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/90 z-20 rounded-lg">
             <div className="text-center p-6">
               <p className="text-red-500 mb-4 text-lg font-semibold">{error}</p>
               <button 
