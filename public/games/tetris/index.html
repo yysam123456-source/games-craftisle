@@ -186,6 +186,22 @@
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
+      // 绘制网格线
+      ctx.strokeStyle = '#1a1a2e';
+      ctx.lineWidth = 0.5;
+      for (let x = 0; x <= COLS; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * BLOCK_SIZE, 0);
+        ctx.lineTo(x * BLOCK_SIZE, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= ROWS; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * BLOCK_SIZE);
+        ctx.lineTo(canvas.width, y * BLOCK_SIZE);
+        ctx.stroke();
+      }
+      
       for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
           if (board[y][x]) {
@@ -383,13 +399,11 @@
       drawBoard();
     });
     
-    startBtn.addEventListener('click', startGame);
-    
-    drawBoard();
-    drawNextPiece();
-
-    // 自动开始游戏（不需要点击Start按钮）
-    if (!isPlaying && !over) startGame();
+    // 自动开始游戏（页面加载即玩，不需要点击按钮）
+    startBtn.addEventListener('click', () => {
+      if (!isPlaying) startGame();
+    });
+    startGame();
 
   
 
