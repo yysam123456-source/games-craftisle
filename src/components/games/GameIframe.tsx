@@ -22,7 +22,7 @@ export function GameIframe({
     return (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="flex items-center justify-center h-[600px] bg-muted/50">
-          <p className="text-muted-foreground">游戏源URL未配置</p>
+          <p className="text-muted-foreground">Game source URL not configured</p>
         </div>
       </div>
     );
@@ -35,7 +35,7 @@ export function GameIframe({
           <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10">
             <div className="text-center">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">加载游戏中...</p>
+              <p className="text-sm text-muted-foreground">Loading game...</p>
             </div>
           </div>
         )}
@@ -55,7 +55,7 @@ export function GameIframe({
           onLoad={() => setIsLoading(false)}
           onError={() => {
             setIsLoading(false);
-            setError("游戏加载失败，请刷新页面重试");
+            setError("Game failed to load, please refresh the page");
           }}
           loading="lazy"
         />
@@ -75,7 +75,7 @@ export function GameIframe({
                 }}
                 className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
               >
-                重试
+                Retry
               </button>
             </div>
           </div>

@@ -13,9 +13,9 @@ export async function generateMetadata({ params }: AlternativesPageProps): Promi
   const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
-    title: `类似 ${game.title} 的游戏推荐 | Craftisle Games`,
-    description: `发现与 ${game.title} 类似的优秀免费网页游戏！精选推荐，免费在线玩。`,
-    keywords: [`类似${game.title}`, `games like ${game.title}`, "同类游戏推荐", game.title],
+    title: `Games Like ${game.title} | Craftisle Games`,
+    description: `Discover great free web games similar to ${game.title}! Curated recommendations, free online play.`,
+    keywords: [`games like ${game.title}`, `${game.title} alternatives`, "similar games", game.title],
   };
 }
 
@@ -24,7 +24,7 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
   const game = games.find(g => g.slug === slug);
   if (!game) return notFound();
 
-  // 同类游戏推荐（同分类，排除自己）
+  // Same category recommendations (exclude self)
   const sameCategory = games.filter(g => g.category === game.category && g.slug !== game.slug);
   const otherGames = games.filter(g => g.slug !== game.slug && g.isActive).slice(0, 8);
 
@@ -38,20 +38,20 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-sm text-muted-foreground mb-4">
-          <a href="/" className="hover:underline">首页</a> / 
+          <a href="/" className="hover:underline">Home</a> / 
           <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
-          <span>同类推荐</span>
+          <span>Alternatives</span>
         </div>
 
-        <h1 className="text-3xl font-bold mb-2">类似 {game.title} 的游戏</h1>
+        <h1 className="text-3xl font-bold mb-2">Games Like {game.title}</h1>
         <p className="text-muted-foreground mb-8">
-          发现更多同类型免费网页游戏，无需下载，点击即玩。
+          Discover more free web games of the same type. No download, click to play.
         </p>
 
-        {/* 同分类推荐 */}
+        {/* Same Category Recommendations */}
         {sameCategory.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">同类型推荐</h2>
+            <h2 className="text-2xl font-semibold mb-4">Same Category</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {sameCategory.map((g) => (
                 <a
@@ -68,9 +68,9 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
           </section>
         )}
 
-        {/* 更多推荐 */}
+        {/* More Recommendations */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">更多免费游戏</h2>
+          <h2 className="text-2xl font-semibold mb-4">More Free Games</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {otherGames.map((g) => (
               <a
@@ -86,14 +86,14 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
           </div>
         </section>
 
-        {/* 为什么选我们 */}
+        {/* Why Play on Craftisle Games */}
         <section className="bg-muted/50 rounded-lg p-6 text-sm text-muted-foreground">
-          <h3 className="font-semibold text-foreground mb-2">为什么在 Craftisle Games 玩？</h3>
+          <h3 className="font-semibold text-foreground mb-2">Why Play on Craftisle Games?</h3>
           <ul className="list-disc list-inside space-y-1">
-            <li>✅ 完全免费，无需注册</li>
-            <li>✅ 点击即玩，无需下载</li>
-            <li>✅ 支持手机、平板、电脑</li>
-            <li>✅ 每日更新新内容</li>
+            <li>✅ 100% free, no registration</li>
+            <li>✅ Click and play, no download</li>
+            <li>✅ Supports mobile, tablet, desktop</li>
+            <li>✅ New content daily</li>
           </ul>
         </section>
 
@@ -103,7 +103,7 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
             href={`/play/${game.slug}`}
             className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
           >
-            回去玩 {game.title} →
+            Back to {game.title} →
           </a>
         </section>
       </div>
@@ -111,7 +111,7 @@ export default async function AlternativesPage({ params }: AlternativesPageProps
   );
 }
 
-// 生成静态路径
+// Generate static paths
 export async function generateStaticParams() {
   return games.map((game) => ({
     slug: game.slug,

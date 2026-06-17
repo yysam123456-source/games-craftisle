@@ -13,19 +13,19 @@ export async function generateMetadata({ params }: SolverPageProps): Promise<Met
   const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
-    title: `${game.title} 解题器 & 答案 | Craftisle Games`,
-    description: `在线${game.title}解题器！自动计算答案、提示和解决方案。${game.description}`,
-    keywords: [`${game.title} 解题器`, `${game.title} 答案`, `${game.title} solver`, `${game.title} 提示`],
+    title: `${game.title} Solver & Answers | Craftisle Games`,
+    description: `Online ${game.title} solver! Auto-calculate answers, hints, and solutions. ${game.description}`,
+    keywords: [`${game.title} solver`, `${game.title} answers`, `${game.title} hints`, game.title, "game solver"],
   };
 }
 
-// 根据游戏分类返回解题技巧
+// Return solver tips based on game category
 function getSolverTips(category: string): string {
-  if (category === "puzzle") return "从约束最多的区域入手，逐步缩小可选范围。";
-  if (category === "arcade") return "掌握节奏，预判障碍位置，保持平稳操作。";
-  if (category === "casual") return "保持耐心，观察模式，不要急于求成。";
-  if (category === "strategy") return "提前规划3步以上，权衡取舍，选择最优解。";
-  return "多练习，掌握游戏规律。";
+  if (category === "puzzle") return "Start with the most constrained area, gradually narrow down options.";
+  if (category === "arcade") return "Master the rhythm, anticipate obstacles, maintain smooth control.";
+  if (category === "casual") return "Be patient, observe patterns, don't rush.";
+  if (category === "strategy") return "Plan 3 steps ahead, weigh trade-offs, choose optimal solutions.";
+  return "Practice more, master the game patterns.";
 }
 
 export default async function SolverPage({ params }: SolverPageProps) {
@@ -45,52 +45,52 @@ export default async function SolverPage({ params }: SolverPageProps) {
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-sm text-muted-foreground mb-4">
-          <a href="/" className="hover:underline">首页</a> / 
+          <a href="/" className="hover:underline">Home</a> / 
           <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
-          <span>解题器</span>
+          <span>Solver</span>
         </div>
 
-        <h1 className="text-3xl font-bold mb-2">{game.title} 解题器</h1>
-        <p className="text-muted-foreground mb-8">在线自动计算答案，支持提示和分步骤解析。</p>
+        <h1 className="text-3xl font-bold mb-2">{game.title} Solver</h1>
+        <p className="text-muted-foreground mb-8">Auto-calculate answers online, supports hints and step-by-step solutions.</p>
 
-        {/* 使用说明 */}
+        {/* How to Use */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">如何使用</h2>
+          <h2 className="text-2xl font-semibold mb-4">How to Use</h2>
           <div className="bg-card rounded-lg p-6 border space-y-3 text-sm">
-            <p>① 在游戏中遇到卡关时，记录当前状态</p>
-            <p>② 在本页面输入当前状态</p>
-            <p>③ 点击"计算答案"获取完整解题步骤</p>
-            <p>④ 查看提示（不剧透答案）</p>
+            <p>① When stuck in the game, record the current state</p>
+            <p>② Input the current state on this page</p>
+            <p>③ Click "Calculate Answer" to get complete solution steps</p>
+            <p>④ View hints (no spoilers)</p>
           </div>
         </section>
 
-        {/* 在线解题器工具区（静态展示） */}
+        {/* Online Solver Tool (Static Demo) */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">在线解题</h2>
+          <h2 className="text-2xl font-semibold mb-4">Online Solver</h2>
           <div className="bg-card rounded-lg p-8 border text-center">
             <p className="text-muted-foreground mb-4">
-              请在游戏中遇到卡关时，记录当前状态，使用本解题器获取提示。
+              When stuck in the game, record the current state and use this solver to get hints.
             </p>
             <div className="bg-muted rounded p-4 text-sm text-left">
-              <p className="font-semibold mb-2">提示：</p>
+              <p className="font-semibold mb-2">Hint:</p>
               <p>{tips}</p>
             </div>
           </div>
         </section>
 
-        {/* 解题技巧 */}
+        {/* Solver Tips */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">解题技巧</h2>
+          <h2 className="text-2xl font-semibold mb-4">Solver Tips</h2>
           <div className="space-y-3">
             {[1, 2, 3, 4, 5].map((n) => (
               <details key={n} className="bg-card rounded-lg p-4 border cursor-pointer">
-                <summary className="font-semibold cursor-pointer">技巧 {n}</summary>
+                <summary className="font-semibold cursor-pointer">Tip {n}</summary>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {n === 1 && "从约束最多的区域入手，逐步缩小可选范围。"}
-                  {n === 2 && "标记确定的答案，避免重复猜测。"}
-                  {n === 3 && "利用排除法，删除不可能的选项。"}
-                  {n === 4 && "多练习，记住常见模式和规律。"}
-                  {n === 5 && "保持冷静，不要急于求成，稳扎稳打。"}
+                  {n === 1 && "Start with the most constrained area, gradually narrow down options."}
+                  {n === 2 && "Mark confirmed answers to avoid repeated guesses."}
+                  {n === 3 && "Use elimination to remove impossible options."}
+                  {n === 4 && "Practice more, remember common patterns and rules."}
+                  {n === 5 && "Stay calm, don't rush, play steadily."}
                 </p>
               </details>
             ))}
@@ -102,7 +102,7 @@ export default async function SolverPage({ params }: SolverPageProps) {
             href={`/play/${game.slug}`}
             className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
           >
-            回到 {game.title} 开始游戏 →
+            Back to {game.title} →
           </a>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default async function SolverPage({ params }: SolverPageProps) {
   );
 }
 
-// 生成静态路径
+// Generate static paths
 export async function generateStaticParams() {
   return games.map((game) => ({
     slug: game.slug,

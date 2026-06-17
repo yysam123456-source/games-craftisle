@@ -15,14 +15,14 @@ export async function generateMetadata({ params }: GamePageProps): Promise<Metad
 
   if (!game) {
     return {
-      title: "游戏未找到",
+      title: "Game Not Found",
     };
   }
 
   return {
-    title: `${game.title} - 在线免费玩 | Craftisle Games`,
+    title: `${game.title} - Play Free Online | Craftisle Games`,
     description: game.description,
-    keywords: [...game.tags, "免费游戏", "在线游戏", game.title],
+    keywords: [...game.tags, "free games", "online games", game.title],
   };
 }
 
@@ -38,7 +38,7 @@ export default async function GamePage({ params }: GamePageProps) {
     <div className="container mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <nav className="mb-4 text-sm text-muted-foreground">
-        <a href="/" className="hover:text-primary">首页</a>
+        <a href="/" className="hover:text-primary">Home</a>
         <span className="mx-2">/</span>
         <span>{game.title}</span>
       </nav>
@@ -56,7 +56,7 @@ export default async function GamePage({ params }: GamePageProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Instructions */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">游戏说明</h2>
+          <h2 className="text-xl font-semibold mb-4">Instructions</h2>
           <div className="prose prose-sm max-w-none">
             <p>{game.instructions}</p>
           </div>
@@ -64,28 +64,28 @@ export default async function GamePage({ params }: GamePageProps) {
 
         {/* Controls */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">操作方式</h2>
+          <h2 className="text-xl font-semibold mb-4">Controls</h2>
           <div className="space-y-2">
             {game.controls.keyboard && (
               <div className="flex items-center gap-2">
                 <span className="text-2xl">⌨️</span>
                 <span>
-                  键盘：{Array.isArray(game.controls.keyboard)
-                    ? game.controls.keyboard.join("、")
-                    : "支持"}
+                  Keyboard: {Array.isArray(game.controls.keyboard)
+                    ? game.controls.keyboard.join(", ")
+                    : "Supported"}
                 </span>
               </div>
             )}
             {game.controls.mouse && (
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🖱️</span>
-                <span>鼠标：支持</span>
+                <span>Mouse: Supported</span>
               </div>
             )}
             {game.controls.touch && (
               <div className="flex items-center gap-2">
                 <span className="text-2xl">📱</span>
-                <span>触控：支持</span>
+                <span>Touch: Supported</span>
               </div>
             )}
           </div>
@@ -94,7 +94,7 @@ export default async function GamePage({ params }: GamePageProps) {
 
       {/* Tags */}
       <section className="mt-8 pt-8 border-t">
-        <h2 className="text-xl font-semibold mb-4">标签</h2>
+        <h2 className="text-xl font-semibold mb-4">Tags</h2>
         <div className="flex flex-wrap gap-2">
           {game.tags.map((tag) => (
             <span
@@ -110,7 +110,7 @@ export default async function GamePage({ params }: GamePageProps) {
   );
 }
 
-// 生成静态路径
+// Generate static paths
 export async function generateStaticParams() {
   return games.map((game) => ({
     slug: game.slug,
