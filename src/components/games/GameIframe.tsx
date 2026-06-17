@@ -10,10 +10,10 @@ interface GameIframeProps {
   height?: string;
 }
 
-export function GameIframe({ 
-  game, 
-  width = "100%", 
-  height = "600px" 
+export function GameIframe({
+  game,
+  width = "100%",
+  height = "75vh"
 }: GameIframeProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export function GameIframe({
 
   return (
     <div className="overflow-hidden rounded-lg border bg-card">
-      <div className="relative" style={{ height }}>
+      <div className="relative" style={{ height, minHeight: "650px" }}>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10 transition-opacity duration-500">
             <div className="text-center">
