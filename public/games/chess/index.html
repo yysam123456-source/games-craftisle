@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess - Play Free Online</title>
+  <style>
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      font-family: 'Arial', sans-serif;
+    }
+    .game-wrapper {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    h1 { 
+      color: #333; 
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      text-align: center;
+    }
+    .chess-container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .board-container {
+      position: relative;
+    }
+    canvas { 
+      border: 4px solid #333;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .game-info {
+      min-width: 250px;
+    }
+    .info-box {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .info-box h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    .status {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #333;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .captured {
+      min-height: 60px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .captured span {
+      font-size: 2em;
+      margin: 0 5px;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+    }
+    .controls {
+      margin-top: 20px;
+      color: #666;
+      font-size: 0.9em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <h1>♟️ Chess</h1>
+    <div class="chess-container">
+      <div class="board-container">
+        <canvas id="chessBoard" width="560" height="560"></canvas>
+        <div class="status" id="status">White's Turn</div>
+      </div>
+      
+      <div class="game-info">
+        <div class="info-box">
+          <h3>Captured Pieces</h3>
+          <div class="captured" id="capturedWhite"></div>
+          <div class="captured" id="capturedBlack"></div>
+        </div>
+        
+        <div class="info-box">
+          <h3>Game Controls</h3>
+          <button onclick="newGame()">New Game</button>
+          <button onclick="undoMove()">Undo Move</button>
+        </div>
+        
+        <div class="controls">
+          <p><strong>How to Play:</strong></p>
+          <p>Click a piece to select it</p>
+          <p>Green squares show valid moves</p>
+          <p>Click a destination to move</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('chessBoard');
+    const ctx = canvas.getContext('2d');
+    const TILE_SIZE = 70;
+    const BOARD_SIZE = 8;
+    
+    let board = [];
+    let selectedPiece = null;
+    let validMoves = [];
+    let currentTurn = 'white';
+    let moveHistory = [];
+    let capturedPieces = {white: [], black: []};
+    
+    // Piece types and values
+    const PIECES = {
+      'K': {name: 'king', value: 0},
+      'Q': {name: 'queen', value: 9},
+      'R': {name: 'rook', value: 5},
+      'B': {name: 'bishop', value: 3},
+      'N': {name: 'knight', value: 3},
+      'P': {name: 'pawn', value: 1}
+    };
+    
+    // Initialize board
+    function initBoard() {
+      board = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(null));
+      
+      // Black pieces (top)
+      board[0] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'].map(p => ({type: p, color: 'black'}));
+      board[1] = Array(BOARD_SIZE).fill(null).map(() => ({type: 'P', color: 'black'}));
+      
+      // White pieces (bottom)
+      board[7] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'].map(p => ({type: p, color: 'white'}));
+      board[6] = Array(BOARD_SIZE).fill(null).map(() => ({type: 'P', color: 'white'}));
+      
+      selectedPiece = null;
+      validMoves = [];
+      currentTurn = 'white';
+      moveHistory = [];
+      capturedPieces = {white: [], black: []};
+      updateStatus();
+      drawBoard();
+    }
+    
+    function drawBoard() {
+      for (let row = 0; row < BOARD_SIZE; row++) {
+        for (let col = 0; col < BOARD_SIZE; col++) {
+          // Draw tile
+          ctx.fillStyle = (row + col) % 2 === 0 ? '#f0d9b5' : '#b58863';
+          ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          
+          // Highlight selected piece
+          if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
+            ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+            ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
+          
+          // Highlight valid moves
+          if (validMoves.some(m => m.row === row && m.col === col)) {
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+            ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
+          
+          // Draw piece
+          const piece = board[row][col];
+          if (piece) {
+            ctx.font = '50px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = piece.color === 'white' ? '#fff' : '#000';
+            ctx.strokeStyle = piece.color === 'white' ? '#000' : '#fff';
+            ctx.lineWidth = 2;
+            
+            const symbols = {
+              'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙'
+            };
+            const symbol = piece.color === 'white' ? symbols[piece.type] : symbols[piece.type].charCodeAt(0) + 6;
+            const displaySymbol = piece.color === 'white' ? symbols[piece.type] : String.fromCharCode(symbols[piece.type].charCodeAt(0) + 6);
+            
+            ctx.fillText(displaySymbol, col * TILE_SIZE + TILE_SIZE/2, row * TILE_SIZE + TILE_SIZE/2);
+          }
+        }
+      }
+    }
+    
+    function getValidMoves(row, col) {
+      const piece = board[row][col];
+      if (!piece || piece.color !== currentTurn) return [];
+      
+      let moves = [];
+      
+      // Simplified move validation (only basic moves, no check detection)
+      switch(piece.type) {
+        case 'P': // Pawn
+          const direction = piece.color === 'white' ? -1 : 1;
+          const startRow = piece.color === 'white' ? 6 : 1;
+          
+          // Forward move
+          if (row + direction >= 0 && row + direction < BOARD_SIZE && !board[row + direction][col]) {
+            moves.push({row: row + direction, col: col});
+            // Double move from start
+            if (row === startRow && !board[row + 2 * direction][col]) {
+              moves.push({row: row + 2 * direction, col: col});
+            }
+          }
+          // Captures
+          [-1, 1].forEach(dc => {
+            const newCol = col + dc;
+            if (newCol >= 0 && newCol < BOARD_SIZE && row + direction >= 0 && row + direction < BOARD_SIZE) {
+              const target = board[row + direction][newCol];
+              if (target && target.color !== piece.color) {
+                moves.push({row: row + direction, col: newCol});
+              }
+            }
+          });
+          break;
+          
+        case 'N': // Knight
+          [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => {
+            const newRow = row + dr;
+            const newCol = col + dc;
+            if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
+              const target = board[newRow][newCol];
+              if (!target || target.color !== piece.color) {
+                moves.push({row: newRow, col: newCol});
+              }
+            }
+          });
+          break;
+          
+        case 'B': // Bishop
+        case 'R': // Rook
+        case 'Q': // Queen
+          const directions = piece.type === 'B' ? [[-1,-1],[-1,1],[1,-1],[1,1]] :
+                           piece.type === 'R' ? [[-1,0],[1,0],[0,-1],[0,1]] :
+                           [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+          
+          directions.forEach(([dr, dc]) => {
+            let newRow = row + dr;
+            let newCol = col + dc;
+            while (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
+              const target = board[newRow][newCol];
+              if (target) {
+                if (target.color !== piece.color) {
+                  moves.push({row: newRow, col: newCol});
+                }
+                break;
+              }
+              moves.push({row: newRow, col: newCol});
+              newRow += dr;
+              newCol += dc;
+            }
+          });
+          break;
+          
+        case 'K': // King
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              if (dr === 0 && dc === 0) continue;
+              const newRow = row + dr;
+              const newCol = col + dc;
+              if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
+                const target = board[newRow][newCol];
+                if (!target || target.color !== piece.color) {
+                  moves.push({row: newRow, col: newCol});
+                }
+              }
+            }
+          }
+          break;
+      }
+      
+      return moves;
+    }
+    
+    function handleClick(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      const col = Math.floor(x / TILE_SIZE);
+      const row = Math.floor(y / TILE_SIZE);
+      
+      if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return;
+      
+      if (selectedPiece) {
+        // Try to move
+        const move = validMoves.find(m => m.row === row && m.col === col);
+        if (move) {
+          // Capture piece
+          const target = board[row][col];
+          if (target) {
+            capturedPieces[currentTurn].push(target);
+            updateCapturedPieces();
+          }
+          
+          // Save move to history
+          moveHistory.push({
+            piece: selectedPiece.piece,
+            from: {row: selectedPiece.row, col: selectedPiece.col},
+            to: {row: row, col: col}
+          });
+          
+          // Move piece
+          board[row][col] = board[selectedPiece.row][selectedPiece.col];
+          board[selectedPiece.row][selectedPiece.col] = null;
+          
+          // Switch turn
+          currentTurn = currentTurn === 'white' ? 'black' : 'white';
+          selectedPiece = null;
+          validMoves = [];
+          updateStatus();
+          drawBoard();
+          return;
+        }
+      }
+      
+      // Select piece
+      const piece = board[row][col];
+      if (piece && piece.color === currentTurn) {
+        selectedPiece = {row, col, piece};
+        validMoves = getValidMoves(row, col);
+        drawBoard();
+      } else {
+        selectedPiece = null;
+        validMoves = [];
+        drawBoard();
+      }
+    }
+    
+    function updateStatus() {
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = `${currentTurn.charAt(0).toUpperCase() + currentTurn.slice(1)}'s Turn`;
+      statusEl.style.color = currentTurn === 'white' ? '#000' : '#333';
+    }
+    
+    function updateCapturedPieces() {
+      const whiteEl = document.getElementById('capturedWhite');
+      const blackEl = document.getElementById('capturedBlack');
+      
+      const symbols = {'K':'♔','Q':'♕','R':'♖','B':'♗','N':'♘','P':'♙'};
+      
+      whiteEl.innerHTML = '<strong>Black pieces captured:</strong><br>' + 
+        capturedPieces.white.map(p => {
+          const sym = symbols[p.type].charCodeAt(0) + 6;
+          return String.fromCharCode(sym);
+        }).join(' ');
+      
+      blackEl.innerHTML = '<strong>White pieces captured:</strong><br>' + 
+        capturedPieces.black.map(p => symbols[p.type]).join(' ');
+    }
+    
+    function newGame() {
+      if (confirm('Start a new game? Current progress will be lost.')) {
+        initBoard();
+      }
+    }
+    
+    function undoMove() {
+      if (moveHistory.length === 0) return;
+      
+      const lastMove = moveHistory.pop();
+      board[lastMove.from.row][lastMove.from.col] = lastMove.piece;
+      board[lastMove.to.row][lastMove.to.col] = null;
+      
+      // Restore captured piece if any
+      if (capturedPieces[lastMove.piece.color].length > 0) {
+        const restored = capturedPieces[lastMove.piece.color].pop();
+        board[lastMove.to.row][lastMove.to.col] = restored;
+        updateCapturedPieces();
+      }
+      
+      currentTurn = lastMove.piece.color;
+      selectedPiece = null;
+      validMoves = [];
+      updateStatus();
+      drawBoard();
+    }
+    
+    canvas.addEventListener('click', handleClick);
+    
+    // Initialize game
+    initBoard();
+  </script>
+</body>
+</html>
