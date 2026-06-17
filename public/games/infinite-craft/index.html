@@ -60,6 +60,13 @@
       align-items: center;
       gap: 10px;
       font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .discovery-item:hover {
+      background: #667eea;
+      color: white;
+      transform: translateX(5px);
     }
     .discovery-emoji {
       font-size: 1.5em;
@@ -179,6 +186,7 @@
   <div class="header">
     <h1>✨ Infinite Craft</h1>
     <p>Combine elements to discover new ones!</p>
+    <p style="font-size: 0.9em; margin-top: 5px; opacity: 0.7;">💡 Click items in Discoveries to add them to the canvas</p>
   </div>
 
   <div class="game-container">
@@ -228,8 +236,8 @@
     <h3>🎮 How to Play</h3>
     <ul>
       <li><strong>Drag elements</strong> onto each other to combine them</li>
-      <li><strong>Discover new elements</strong> through combinations</li>
-      <li><strong>Experiment freely</strong> - there are 50+ discoveries to find!</li>
+      <li><strong>Click any Discovery</strong> on the left to add it to the canvas</li>
+      <li><strong>Discover new elements</strong> through combinations (50+ to find!)</li>
       <li><strong>Start with:</strong> Water 💧, Fire 🔥, Wind 🌬️, Earth 🌍</li>
     </ul>
   </div>
@@ -408,21 +416,25 @@
       if (!draggedElement) return;
       
       const canvas = document.getElementById('canvasArea');
+      const canvasRect = canvas.getBoundingClientRect();
       const allElements = canvas.querySelectorAll('.element');
       const draggedRect = draggedElement.getBoundingClientRect();
+      
+      let merged = false;
       
       allElements.forEach(el => {
         if (el === draggedElement) return;
         
         const elRect = el.getBoundingClientRect();
         const isColliding = !(
-          draggedRect.right < elRect.left ||
-          draggedRect.left > elRect.right ||
-          draggedRect.bottom < elRect.top ||
-          draggedRect.top > elRect.bottom
+          draggedRect.right < elRect.left + 10 ||
+          draggedRect.left > elRect.right - 10 ||
+          draggedRect.bottom < elRect.top + 10 ||
+          draggedRect.top > elRect.bottom - 10
         );
         
-        if (isColliding) {
+        if (isColliding && !merged) {
+          merged = true;
           const elem1 = draggedElement.dataset.element;
           const elem2 = el.dataset.element;
           const key1 = `${elem1}+${elem2}`;
@@ -430,30 +442,30 @@
           
           const recipe = recipes[key1] || recipes[key2];
           
-          if (recipe && !discoveries.has(recipe.result)) {
-            // New discovery!
-            discoveries.add(recipe.result);
+          if (recipe) {
             combinationCount++;
             
-            // Show discovery notification
-            showNewDiscovery(recipe);
+            // 计算碰撞中心点（相对于canvas的坐标）
+            const centerX = Math.min(draggedRect.left, elRect.left) +
+              Math.abs(draggedRect.left - elRect.left) / 2 - canvasRect.left;
+            const centerY = Math.min(draggedRect.top, elRect.top) +
+              Math.abs(draggedRect.top - elRect.top) / 2 - canvasRect.top;
             
-            // Create new element
-            createElement(recipe, elRect.left, elRect.top);
+            if (!discoveries.has(recipe.result)) {
+              discoveries.add(recipe.result);
+              showNewDiscovery(recipe);
+              updateDiscoveriesList();
+            }
             
-            // Update UI
-            updateStats();
-            updateDiscoveriesList();
+            showMergeEffect(
+              centerX + canvasRect.left,
+              centerY + canvasRect.top
+            );
             
-            // Remove old elements
+            // 删除两个原始元素，在碰撞中心生成新元素
             draggedElement.remove();
             el.remove();
-          } else if (recipe) {
-            // Already discovered, just do the merge animation
-            combinationCount++;
-            showMergeEffect(elRect.left, elRect.top);
-            draggedElement.remove();
-            el.remove();
+            createElement(recipe, centerX, centerY);
             updateStats();
           }
         }
@@ -526,9 +538,28 @@
             <span class="discovery-emoji">${elemData.emoji}</span>
             <span>${elemData.name}</span>
           `;
+          item.addEventListener('click', () => {
+            // 点击后将该元素添加到画布随机位置
+            addElementToCanvas(elem, elemData);
+          });
           list.appendChild(item);
         }
       });
+    }
+
+    function addElementToCanvas(elementKey, elemData) {
+      const canvas = document.getElementById('canvasArea');
+      const canvasRect = canvas.getBoundingClientRect();
+      
+      // 随机位置（留出边距）
+      const padding = 80;
+      const maxX = canvasRect.width - 150;
+      const maxY = canvasRect.height - 60;
+      const x = Math.max(padding, Math.min(maxX, padding + Math.random() * (maxX - padding)));
+      const y = Math.max(padding, Math.min(maxY, padding + Math.random() * (maxY - padding)));
+      
+      const recipe = { result: elementKey, emoji: elemData.emoji, name: elemData.name };
+      createElement(recipe, x, y);
     }
 
     function getAllElements() {
