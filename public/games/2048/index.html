@@ -296,16 +296,70 @@ body { background: #faf8ef; font-family: 'Clear Sans', 'Helvetica Neue', Arial, 
   // 自动演示模式（验证游戏真的在运行）
   setTimeout(() => {
     if (window.location.search.indexOf('demo=0') >= 0) return;
-    console.log('Auto demo: game will play itself');
-    const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','s','a','d'];
-    setInterval(() => {
-      if (gameOver && !keepPlaying) { init(); return; }
-      const key = keys[Math.floor(Math.random() * keys.length)];
-      const e = { key, preventDefault: () => {} };
-      const map = {'ArrowUp':0,'ArrowDown':2,'ArrowLeft':3,'ArrowRight':1,'w':0,'s':2,'a':3,'d':1};
-      if (map[key] !== undefined) move(map[key]);
-    }, 1000);
-  }, 2000);
+    console.log('2048 Auto demo started');
+    document.title = '2048 - Auto Demo Running';
+    const dirs = [0,1,2,3]; // 0=上, 1=右, 2=下, 3=左
+    let moveCount = 0;
+    const demoInterval = setInterval(() => {
+      if (typeof gameOver !== 'undefined' && gameOver && !keepPlaying) { init(); return; }
+      const dir = dirs[Math.floor(Math.random() * dirs.length)];
+      if (typeof move === 'function') {
+        move(dir);
+        moveCount++;
+        document.title = '2048 - Move #' + moveCount + ' Score:' + (typeof score !== 'undefined' ? score : 0);
+      }
+    }, 800);
+  }, 1500);
+
+
+// ===== 游戏操作指示器 =====
+(function addIndicator() {
+  if (window.__indicatorAdded) return;
+  window.__indicatorAdded = true;
+
+  // 注入 CSS 动画
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes __indicatorFlash {
+      0%   { box-shadow: inset 0 0 0 9999px rgba(0,255,0,0.6); }
+      100% { box-shadow: none; }
+    }
+    .__indicator-flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 99999;
+      animation: __indicatorFlash 0.4s ease-out;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 收到任何操作时闪绿光
+  function flashIndicator() {
+    const d = document.createElement('div');
+    d.className = '__indicator-flash';
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 500);
+  }
+
+  // 监听所有操作事件
+  document.addEventListener('keydown', flashIndicator, true);
+  document.addEventListener('mousedown', flashIndicator, true);
+  document.addEventListener('touchstart', flashIndicator, true);
+
+  // 覆盖 window 关键函数，确保指示器一定触发
+  if (typeof move === 'function') {
+    const _origMove = move;
+    window.move = function() { flashIndicator(); return _origMove.apply(this, arguments); };
+  }
+  if (typeof init === 'function') {
+    const _origInit = init;
+    window.init = function() { flashIndicator(); return _origInit.apply(this, arguments); };
+  }
+
+  console.log('✅ 游戏操作指示器已加载');
+})();
 
 </script>
 </body>

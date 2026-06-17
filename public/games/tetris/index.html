@@ -389,7 +389,33 @@
     drawNextPiece();
 
     // 自动开始游戏（不需要点击Start按钮）
-    if (!isPlaying && !isGameOver) startGame();
-  </script>
+    if (!isPlaying && !over) startGame();
+
+    // 自动演示模式
+    setTimeout(() => {
+      if (window.location.search.indexOf('demo=0') >= 0) return;
+      console.log('Tetris auto demo started');
+      document.title = 'Tetris - Auto Demo Running';
+      let moveCount = 0;
+      const demoInterval = setInterval(() => {
+        if (!isPlaying) { startGame(); return; }
+        // 随机动作
+        const actions = ['left', 'right', 'down', 'rotate', 'drop'];
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        switch(action) {
+          case 'left': movePiece(-1, 0); break;
+          case 'right': movePiece(1, 0); break;
+          case 'down': movePiece(0, 1); break;
+          case 'rotate': rotatePiece(); break;
+          case 'drop': while (movePiece(0, 1)) {}; break;
+        }
+        drawBoard();
+        moveCount++;
+        document.title = 'Tetris - Move #' + moveCount + ' Score:' + score;
+      }, 800);
+    }, 1500);
+  
+
+</script>
 </body>
 </html>
