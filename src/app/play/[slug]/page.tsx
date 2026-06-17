@@ -3,6 +3,10 @@ import { games, getRelatedGames } from "@/data/games";
 import { GameIframe } from "@/components/games/GameIframe";
 import { Metadata } from "next";
 import type { Game } from "@/types/game";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import fs from "fs";
+import path from "path";
 
 interface GamePageProps {
   params: Promise<{
@@ -58,6 +62,15 @@ export default async function GamePage({ params }: GamePageProps) {
 
   if (!game) {
     notFound();
+  }
+
+  // Read game guide markdown file
+  let gameGuide = "";
+  try {
+    const mdPath = path.join(process.cwd(), "src", "content", "games", `${slug}.md`);
+    gameGuide = fs.readFileSync(mdPath, "utf-8");
+  } catch (err) {
+    console.warn(`No game guide found for ${slug}`);
   }
 
   const relatedGames = getRelatedGames(slug, 4);
@@ -169,6 +182,20 @@ export default async function GamePage({ params }: GamePageProps) {
               <p className="text-lg leading-relaxed">{game.instructions}</p>
             </div>
           </section>
+
+          {/* Detailed Game Guide (Markdown) */}
+          {gameGuide && (
+            <section className="bg-card rounded-xl p-6 border">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>📚</span> Complete Game Guide
+              </h2>
+              <div className="prose prose-sm max-w-none prose-headings:font-bold prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3 prose-p:leading-relaxed prose-a:text-primary prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {gameGuide}
+                </ReactMarkdown>
+              </div>
+            </section>
+          )}
 
           {/* How to Play */}
         </div>
