@@ -1,19 +1,17 @@
-import { games, getGameBySlug } from "@/data/games";
+import { games } from "@/data/games";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// 为所有游戏生成静态页面
-export function generateStaticParams() {
-  return games.map((game) => ({
-    slug: game.slug,
-  }));
+interface StrategyPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-// 动态生成 metadata
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const game = getGameBySlug(params.slug);
+export async function generateMetadata({ params }: StrategyPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return {};
-
   return {
     title: `${game.title} 攻略 & 技巧 | Craftisle Games`,
     description: `掌握 ${game.title}！完整攻略、技巧、秘籍和高分策略。${game.description}`,
@@ -21,8 +19,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function StrategyPage({ params }: { params: { slug: string } }) {
-  const game = getGameBySlug(params.slug);
+export default async function StrategyPage({ params }: StrategyPageProps) {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return notFound();
 
   return (
@@ -55,14 +54,8 @@ export default function StrategyPage({ params }: { params: { slug: string } }) {
           <div className="bg-card rounded-lg p-6 border">
             <p className="mb-4">{game.description}</p>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-semibold">分类：</span>
-                {game.category}
-              </div>
-              <div>
-                <span className="font-semibold">标签：</span>
-                {game.tags.join("、")}
-              </div>
+              <div><span className="font-semibold">分类：</span>{game.category}</div>
+              <div><span className="font-semibold">标签：</span>{game.tags.join("、")}</div>
             </div>
           </div>
         </section>
@@ -177,4 +170,11 @@ export default function StrategyPage({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+// 生成静态路径
+export async function generateStaticParams() {
+  return games.map((game) => ({
+    slug: game.slug,
+  }));
 }

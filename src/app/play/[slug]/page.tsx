@@ -1,16 +1,17 @@
 import { notFound } from "next/navigation";
-import { getGameBySlug, getAllGames } from "@/data/games";
+import { games } from "@/data/games";
 import { GameIframe } from "@/components/games/GameIframe";
 import { Metadata } from "next";
 
 interface GamePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: GamePageProps): Promise<Metadata> {
-  const game = getGameBySlug(params.slug);
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
 
   if (!game) {
     return {
@@ -25,8 +26,9 @@ export async function generateMetadata({ params }: GamePageProps): Promise<Metad
   };
 }
 
-export default function GamePage({ params }: GamePageProps) {
-  const game = getGameBySlug(params.slug);
+export default async function GamePage({ params }: GamePageProps) {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
 
   if (!game) {
     notFound();
@@ -68,8 +70,8 @@ export default function GamePage({ params }: GamePageProps) {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">⌨️</span>
                 <span>
-                  键盘：{Array.isArray(game.controls.keyboard) 
-                    ? game.controls.keyboard.join("、") 
+                  键盘：{Array.isArray(game.controls.keyboard)
+                    ? game.controls.keyboard.join("、")
                     : "支持"}
                 </span>
               </div>
@@ -110,7 +112,6 @@ export default function GamePage({ params }: GamePageProps) {
 
 // 生成静态路径
 export async function generateStaticParams() {
-  const games = getAllGames();
   return games.map((game) => ({
     slug: game.slug,
   }));

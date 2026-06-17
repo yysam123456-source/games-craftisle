@@ -1,24 +1,39 @@
-import { games, getGameBySlug } from "@/data/games";
+import { games } from "@/data/games";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return games.map((game) => ({ slug: game.slug }));
+interface SolverPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const game = getGameBySlug(params.slug);
+export async function generateMetadata({ params }: SolverPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
     title: `${game.title} 解题器 & 答案 | Craftisle Games`,
-    description: `在线${game.title}解题器！自动计算答案、提示和解决方案。免费使用，无需下载。`,
+    description: `在线${game.title}解题器！自动计算答案、提示和解决方案。${game.description}`,
     keywords: [`${game.title} 解题器`, `${game.title} 答案`, `${game.title} solver`, `${game.title} 提示`],
   };
 }
 
-export default function SolverPage({ params }: { params: { slug: string } }) {
-  const game = getGameBySlug(params.slug);
+// 根据游戏分类返回解题技巧
+function getSolverTips(category: string): string {
+  if (category === "puzzle") return "从约束最多的区域入手，逐步缩小可选范围。";
+  if (category === "arcade") return "掌握节奏，预判障碍位置，保持平稳操作。";
+  if (category === "casual") return "保持耐心，观察模式，不要急于求成。";
+  if (category === "strategy") return "提前规划3步以上，权衡取舍，选择最优解。";
+  return "多练习，掌握游戏规律。";
+}
+
+export default async function SolverPage({ params }: SolverPageProps) {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return notFound();
+
+  const tips = getSolverTips(game.category);
 
   return (
     <main className="min-h-screen bg-background">
@@ -29,6 +44,12 @@ export default function SolverPage({ params }: { params: { slug: string } }) {
       </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-sm text-muted-foreground mb-4">
+          <a href="/" className="hover:underline">首页</a> / 
+          <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
+          <span>解题器</span>
+        </div>
+
         <h1 className="text-3xl font-bold mb-2">{game.title} 解题器</h1>
         <p className="text-muted-foreground mb-8">在线自动计算答案，支持提示和分步骤解析。</p>
 
@@ -36,14 +57,14 @@ export default function SolverPage({ params }: { params: { slug: string } }) {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">如何使用</h2>
           <div className="bg-card rounded-lg p-6 border space-y-3 text-sm">
-            <p>① 在下方输入框中填入当前游戏状态</p>
-            <p>② 点击"计算答案"按钮</p>
-            <p>③ 查看完整解题步骤和提示</p>
-            <p>④ 点击"提示"获取单步指引（不剧透答案）</p>
+            <p>① 在游戏中遇到卡关时，记录当前状态</p>
+            <p>② 在本页面输入当前状态</p>
+            <p>③ 点击"计算答案"获取完整解题步骤</p>
+            <p>④ 查看提示（不剧透答案）</p>
           </div>
         </section>
 
-        {/* 在线解题器工具区（静态展示，实际功能需JS） */}
+        {/* 在线解题器工具区（静态展示） */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">在线解题</h2>
           <div className="bg-card rounded-lg p-8 border text-center">
@@ -52,7 +73,7 @@ export default function SolverPage({ params }: { params: { slug: string } }) {
             </p>
             <div className="bg-muted rounded p-4 text-sm text-left">
               <p className="font-semibold mb-2">提示：</p>
-              <p>每个 {game.title} 关卡都有唯一解，尝试从约束最多的格子入手。</p>
+              <p>{tips}</p>
             </div>
           </div>
         </section>
@@ -65,10 +86,11 @@ export default function SolverPage({ params }: { params: { slug: string } }) {
               <details key={n} className="bg-card rounded-lg p-4 border cursor-pointer">
                 <summary className="font-semibold cursor-pointer">技巧 {n}</summary>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {game.category === "puzzle" && "从约束最多的区域入手，逐步缩小可选范围。"}
-                  {game.category === "arcade" && "掌握节奏，预判障碍位置，保持平稳操作。"}
-                  {game.category === "casual" && "保持耐心，观察模式，不要急于求成。"}
-                  {game.category === "strategy" && "提前规划3步以上，权衡取舍，选择最优解。"}
+                  {n === 1 && "从约束最多的区域入手，逐步缩小可选范围。"}
+                  {n === 2 && "标记确定的答案，避免重复猜测。"}
+                  {n === 3 && "利用排除法，删除不可能的选项。"}
+                  {n === 4 && "多练习，记住常见模式和规律。"}
+                  {n === 5 && "保持冷静，不要急于求成，稳扎稳打。"}
                 </p>
               </details>
             ))}
@@ -86,4 +108,11 @@ export default function SolverPage({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+// 生成静态路径
+export async function generateStaticParams() {
+  return games.map((game) => ({
+    slug: game.slug,
+  }));
 }

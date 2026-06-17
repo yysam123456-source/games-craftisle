@@ -1,15 +1,16 @@
-import { games, getGameBySlug, getGamesByCategory } from "@/data/games";
+import { games } from "@/data/games";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return games.map((game) => ({
-    slug: game.slug,
-  }));
+interface AlternativesPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const game = getGameBySlug(params.slug);
+export async function generateMetadata({ params }: AlternativesPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
     title: `类似 ${game.title} 的游戏推荐 | Craftisle Games`,
@@ -18,13 +19,14 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function AlternativesPage({ params }: { params: { slug: string } }) {
-  const game = getGameBySlug(params.slug);
+export default async function AlternativesPage({ params }: AlternativesPageProps) {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return notFound();
 
   // 同类游戏推荐（同分类，排除自己）
-  const sameCategory = getGamesByCategory(game.category).filter((g) => g.slug !== game.slug);
-  const otherGames = games.filter((g) => g.slug !== game.slug && g.isActive).slice(0, 8);
+  const sameCategory = games.filter(g => g.category === game.category && g.slug !== game.slug);
+  const otherGames = games.filter(g => g.slug !== game.slug && g.isActive).slice(0, 8);
 
   return (
     <main className="min-h-screen bg-background">
@@ -35,6 +37,12 @@ export default function AlternativesPage({ params }: { params: { slug: string } 
       </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-sm text-muted-foreground mb-4">
+          <a href="/" className="hover:underline">首页</a> / 
+          <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
+          <span>同类推荐</span>
+        </div>
+
         <h1 className="text-3xl font-bold mb-2">类似 {game.title} 的游戏</h1>
         <p className="text-muted-foreground mb-8">
           发现更多同类型免费网页游戏，无需下载，点击即玩。
@@ -101,4 +109,11 @@ export default function AlternativesPage({ params }: { params: { slug: string } 
       </div>
     </main>
   );
+}
+
+// 生成静态路径
+export async function generateStaticParams() {
+  return games.map((game) => ({
+    slug: game.slug,
+  }));
 }

@@ -1,15 +1,16 @@
-import { games, getGameBySlug } from "@/data/games";
+import { games } from "@/data/games";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return games.map((game) => ({
-    slug: game.slug,
-  }));
+interface ArchivePageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const game = getGameBySlug(params.slug);
+export async function generateMetadata({ params }: ArchivePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
     title: `${game.title} 历史题库 & 每日挑战 | Craftisle Games`,
@@ -34,8 +35,9 @@ function generateHistory(gameSlug: string) {
   return dates;
 }
 
-export default function ArchivePage({ params }: { params: { slug: string } }) {
-  const game = getGameBySlug(params.slug);
+export default async function ArchivePage({ params }: ArchivePageProps) {
+  const { slug } = await params;
+  const game = games.find(g => g.slug === slug);
   if (!game) return notFound();
 
   const history = generateHistory(game.slug);
@@ -49,6 +51,12 @@ export default function ArchivePage({ params }: { params: { slug: string } }) {
       </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-sm text-muted-foreground mb-4">
+          <a href="/" className="hover:underline">首页</a> / 
+          <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
+          <span>历史题库</span>
+        </div>
+
         <h1 className="text-3xl font-bold mb-2">{game.title} 历史题库</h1>
         <p className="text-muted-foreground mb-8">
           浏览过去30天的每日挑战，免费在线玩。
@@ -112,4 +120,11 @@ export default function ArchivePage({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+// 生成静态路径
+export async function generateStaticParams() {
+  return games.map((game) => ({
+    slug: game.slug,
+  }));
 }

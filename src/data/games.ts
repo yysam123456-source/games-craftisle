@@ -1,6 +1,6 @@
 import { Game } from "@/types/game";
 
-// GameZipper 免费游戏清单（已验证可嵌入）
+// 所有游戏均使用 GameZipper 已验证可嵌入的 iframe URL
 export const games: Game[] = [
   {
     id: "2048",
@@ -10,8 +10,8 @@ export const games: Game[] = [
     category: "puzzle",
     tags: ["益智", "数字", "经典"],
     source: "embed",
-    sourceUrl: "/games/2048/index.html",
-    thumbnail: "/games/2048/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/2048/",
+    thumbnail: "https://gamezipper.com/2048/thumbnail.png",
     instructions: "使用方向键移动方块。相同数字的方块碰撞时会合并成它们的和。目标是合成2048！",
     controls: {
       keyboard: ["方向键 ↑↓←→", "WASD"],
@@ -35,7 +35,7 @@ export const games: Game[] = [
     tags: ["街机", "经典", "反应"],
     source: "embed",
     sourceUrl: "https://gamezipper.com/snake/",
-    thumbnail: "/games/snake/thumbnail.png",
+    thumbnail: "https://gamezipper.com/snake/thumbnail.png",
     instructions: "使用方向键控制蛇的移动。吃到食物会让蛇变长。不要撞墙或撞到自己！",
     controls: {
       keyboard: ["方向键 ↑↓←→", "WASD"],
@@ -59,7 +59,7 @@ export const games: Game[] = [
     tags: ["逻辑", "数字", "益智"],
     source: "embed",
     sourceUrl: "https://gamezipper.com/sudoku/",
-    thumbnail: "/games/sudoku/thumbnail.png",
+    thumbnail: "https://gamezipper.com/sudoku/thumbnail.png",
     instructions: "点击空格输入数字。每行、每列和每个3x3宫格必须包含1-9的数字，且不能重复。",
     controls: {
       keyboard: true,
@@ -82,8 +82,8 @@ export const games: Game[] = [
     category: "puzzle",
     tags: ["逻辑", "经典", "推理"],
     source: "embed",
-    sourceUrl: "/games/minesweeper/index.html",
-    thumbnail: "/games/minesweeper/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/minesweeper/",
+    thumbnail: "https://gamezipper.com/minesweeper/thumbnail.png",
     instructions: "左键点击方格，右键标记地雷。数字表示周围8个方格中的地雷数。",
     controls: {
       keyboard: false,
@@ -106,8 +106,8 @@ export const games: Game[] = [
     category: "arcade",
     tags: ["街机", "经典", "益智"],
     source: "embed",
-    sourceUrl: "/games/tetris/index.html",
-    thumbnail: "/games/tetris/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/tetris/",
+    thumbnail: "https://gamezipper.com/tetris/thumbnail.png",
     instructions: "使用方向键移动和旋转方块。填满整行即可消除得分。游戏随等级提高而加速。",
     controls: {
       keyboard: ["方向键 ↑↓←→", "WASD"],
@@ -131,7 +131,7 @@ export const games: Game[] = [
     tags: ["棋牌", "策略", "经典"],
     source: "embed",
     sourceUrl: "https://gamezipper.com/chess/",
-    thumbnail: "/games/chess/thumbnail.png",
+    thumbnail: "https://gamezipper.com/chess/thumbnail.png",
     instructions: "轮流移动棋子。目标是将死对方的国王。每个棋子有特定的移动规则。",
     controls: {
       keyboard: false,
@@ -155,7 +155,7 @@ export const games: Game[] = [
     tags: ["休闲", "射击", "匹配"],
     source: "embed",
     sourceUrl: "https://gamezipper.com/bubble-shooter/",
-    thumbnail: "/games/bubble-shooter/thumbnail.png",
+    thumbnail: "https://gamezipper.com/bubble-shooter/thumbnail.png",
     instructions: "使用鼠标瞄准，点击射击泡泡。匹配3个或以上相同颜色的泡泡即可消除。",
     controls: {
       keyboard: false,
@@ -179,7 +179,7 @@ export const games: Game[] = [
     tags: ["益智", "记忆", "休闲"],
     source: "embed",
     sourceUrl: "https://gamezipper.com/memory-match/",
-    thumbnail: "/games/memory-match/thumbnail.png",
+    thumbnail: "https://gamezipper.com/memory-match/thumbnail.png",
     instructions: "点击卡片翻开它。记住位置，找到匹配的成对卡片。用最少的步数完成游戏！",
     controls: {
       keyboard: false,
@@ -202,8 +202,8 @@ export const games: Game[] = [
     category: "casual",
     tags: ["工具", "打字", "速度"],
     source: "embed",
-    sourceUrl: "https://gamezipper.com/typing-test/",
-    thumbnail: "/games/typing-test/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/typing-speed/",
+    thumbnail: "https://gamezipper.com/typing-speed/thumbnail.png",
     instructions: "在输入框中尽可能快地输入显示的文本。测试结束后会显示你的打字速度（WPM）。",
     controls: {
       keyboard: true,
@@ -226,8 +226,8 @@ export const games: Game[] = [
     category: "casual",
     tags: ["工具", "反应", "测试"],
     source: "embed",
-    sourceUrl: "https://gamezipper.com/reaction-test/",
-    thumbnail: "/games/reaction-test/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/reaction-time/",
+    thumbnail: "https://gamezipper.com/reaction-time/thumbnail.png",
     instructions: "等待屏幕变色，然后尽可能快地点击。你的反应时间会以毫秒显示。",
     controls: {
       keyboard: false,
@@ -242,23 +242,22 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-16"),
     updatedAt: new Date("2026-06-16"),
   },
-  // ===== 开源克隆版（MIT协议，可商用）=====
   {
-    id: "wordle",
-    slug: "wordle",
-    title: "Wordle 单词猜谜",
-    description: "猜5个字母的英文单词，每天更新新词！绿色表示字母正确且位置正确，黄色表示字母正确但位置错误。",
-    category: "puzzle",
-    tags: ["单词", "逻辑", "每日挑战"],
+    id: "slope",
+    slug: "slope",
+    title: "Slope 极速斜坡",
+    description: "控制小球在陡峭的斜坡上高速滚动，躲避障碍不要掉下去！超刺激的3D反应游戏。",
+    category: "arcade",
+    tags: ["街机", "3D", "反应"],
     source: "embed",
-    sourceUrl: "/games/wordle/index.html",
-    thumbnail: "/games/wordle/thumbnail.png",
-    instructions: "输入5个字母的英文单词，按Enter提交。绿色=字母和位置都正确，黄色=字母正确但位置错误，灰色=字母不在答案中。",
+    sourceUrl: "https://gamezipper.com/slope/",
+    thumbnail: "https://gamezipper.com/slope/thumbnail.png",
+    instructions: "使用方向键←→控制小球左右移动。在斜坡上高速前进，躲避障碍和边缘！",
     controls: {
-      keyboard: true,
+      keyboard: ["方向键 ←→"],
       mouse: false,
       touch: true,
-      gamepad: false,
+      gamepad: true,
     },
     isOriginal: false,
     isActive: true,
@@ -275,8 +274,8 @@ export const games: Game[] = [
     category: "arcade",
     tags: ["休闲", "反应", "经典"],
     source: "embed",
-    sourceUrl: "/games/flappy/index.html",
-    thumbnail: "/games/flappy/thumbnail.png",
+    sourceUrl: "https://gamezipper.com/flappy-wings/",
+    thumbnail: "https://gamezipper.com/flappy-wings/thumbnail.png",
     instructions: "点击屏幕或按空格键让小鸟向上飞。躲避绿色水管，每通过一个水管得1分。",
     controls: {
       keyboard: ["空格键飞翔"],
@@ -295,7 +294,8 @@ export const games: Game[] = [
 
 // 根据slug获取游戏
 export function getGameBySlug(slug: string): Game | undefined {
-  return games.find((game) => game.slug === slug);
+  const game = games.find((game) => game.slug === slug);
+  return game;
 }
 
 // 获取所有游戏
