@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)" rx="16"/>
+  <!-- Tetrominoes -->
+  <!-- I piece - cyan -->
+  <rect x="80" y="40" width="25" height="90" rx="4" fill="#00e5ff" opacity="0.95"/>
+  <!-- O piece - yellow -->
+  <rect x="160" y="40" width="55" height="45" rx="4" fill="#ffd500" opacity="0.95"/>
+  <!-- T piece - purple -->
+  <polygon points="280,85 305,130 255,130" rx="4" fill="#d500f9" opacity="0.95"/>
+  <rect x="260" y="105" width="35" height="25" rx="4" fill="#d500f9" opacity="0.95"/>
+  <!-- S piece - green -->
+  <rect x="70" y="150" width="45" height="25" rx="4" fill="#76ff03" opacity="0.95"/>
+  <rect x="115" y="175" width="45" height="25" rx="4" fill="#76ff03" opacity="0.95"/>
+  <!-- Z piece - red -->
+  <rect x="190" y="165" width="45" height="25" rx="4" fill="#ff1744" opacity="0.95"/>
+  <rect x="145" y="190" width="45" height="25" rx="4" fill="#ff1744" opacity="0.95"/>
+  <!-- J piece - blue -->
+  <rect x="270" y="155" width="25" height="60" rx="4" fill="#2979ff" opacity="0.95"/>
+  <rect x="295" y="190" width="40" height="25" rx="4" fill="#2979ff" opacity="0.95"/>
+  <!-- L piece - orange -->
+  <rect x="60" y="220" width="40" height="25" rx="4" fill="#ff9100" opacity="0.95"/>
+  <rect x="60" y="245" width="25" height="35" rx="4" fill="#ff9100" opacity="0.95"/>
+  <!-- Title -->
+  <text x="200" y="275" font-family="Arial,sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#00e5ff">TETRIS</text>
+</svg>

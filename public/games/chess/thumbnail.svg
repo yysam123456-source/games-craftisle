@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5d4037;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3e2723;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5deb3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d2b48c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#light)" rx="16"/>
+  <!-- Chess board -->
+  <g transform="translate(100,30)">
+    <rect x="0" y="0" width="200" height="200" rx="4"/>
+    <!-- Light squares -->
+    <rect x="0" y="0" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="100" y="0" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="50" y="50" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="150" y="50" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="0" y="100" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="100" y="100" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="50" y="150" width="50" height="50" fill="#f0d9b5"/>
+    <rect x="150" y="150" width="50" height="50" fill="#f0d9b5"/>
+    <!-- Dark squares -->
+    <rect x="50" y="0" width="50" height="50" fill="#b58863"/>
+    <rect x="150" y="0" width="50" height="50" fill="#b58863"/>
+    <rect x="0" y="50" width="50" height="50" fill="#b58863"/>
+    <rect x="100" y="50" width="50" height="50" fill="#b58863"/>
+    <rect x="50" y="100" width="50" height="50" fill="#b58863"/>
+    <rect x="150" y="100" width="50" height="50" fill="#b58863"/>
+    <rect x="0" y="150" width="50" height="50" fill="#b58863"/>
+    <rect x="100" y="150" width="50" height="50" fill="#b58863"/>
+    <!-- Pieces -->
+    <!-- White King -->
+    <text x="125" y="38" font-size="36" text-anchor="middle">♔</text>
+    <!-- Black Queen -->
+    <text x="25" y="138" font-size="36" text-anchor="middle">♛</text>
+    <!-- White Knight -->
+    <text x="175" y="88" font-size="36" text-anchor="middle">♞</text>
+    <!-- White Pawn -->
+    <text x="75" y="188" font-size="30" text-anchor="middle">♙</text>
+    <!-- Black Pawn -->
+    <text x="125" y="188" font-size="30" text-anchor="middle">♟</text>
+  </g>
+  <!-- Border -->
+  <rect x="97" y="27" width="206" height="206" fill="none" stroke="#5d4037" stroke-width="4" rx="6"/>
+  <!-- Title -->
+  <text x="200" y="270" font-family="Georgia,serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#3e2723">♚ CHESS</text>
+</svg>

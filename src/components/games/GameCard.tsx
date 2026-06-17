@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Game } from "@/types/game";
 
@@ -9,16 +10,16 @@ export function GameCard({ game }: GameCardProps) {
   return (
     <Link href={`/play/${game.slug}`}>
       <div className="group relative overflow-hidden rounded-lg border bg-card hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-        {/* Thumbnail placeholder */}
-        <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-          <div className="text-6xl opacity-20">
-            {game.category === "puzzle" && "🧩"}
-            {game.category === "arcade" && "🕹️"}
-            {game.category === "strategy" && "♟️"}
-            {game.category === "casual" && "🎮"}
-            {game.category === "action" && "⚡"}
-            {game.category === "building" && "🏗️"}
-          </div>
+        {/* Thumbnail - uses actual game image */}
+        <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 relative overflow-hidden">
+          <Image
+            src={game.thumbnail}
+            alt={`${game.title} game thumbnail`}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            unoptimized
+          />
         </div>
 
         {/* Game info */}
@@ -50,7 +51,7 @@ export function GameCard({ game }: GameCardProps) {
             </div>
             <div className="flex items-center gap-1">
               <span>🎮</span>
-              <span>{game.playCount.toLocaleString()} plays</span>
+              <span>{(game.playCount / 1000).toFixed(0)}K plays</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import type { Game } from "@/types/game";
 
@@ -18,6 +18,16 @@ export function GameIframe({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Auto-hide loader after 3 seconds as fallback
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (!game.sourceUrl) {
     return (
       <div className="overflow-hidden rounded-lg border bg-card">
@@ -32,10 +42,10 @@ export function GameIframe({
     <div className="overflow-hidden rounded-lg border bg-card">
       <div className="relative" style={{ height }}>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10 transition-opacity duration-500">
             <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Loading game...</p>
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
+              <p className="text-sm text-muted-foreground">Loading {game.title}...</p>
             </div>
           </div>
         )}
@@ -47,35 +57,32 @@ export function GameIframe({
           height={height}
           style={{ 
             border: "none",
-            display: isLoading ? "none" : "block",
             width: "100%",
           }}
           allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            setTimeout(() => setIsLoading(false), 200);
+          }}
           onError={() => {
             setIsLoading(false);
-            setError("Game failed to load, please refresh the page");
+            setError("Game failed to load. Click Retry.");
           }}
           loading="lazy"
         />
         
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/80">
-            <div className="text-center">
-              <p className="text-red-500 mb-2">{error}</p>
+          <div className="absolute inset-0 flex items-center justify-center bg-background/90 z-20">
+            <div className="text-center p-6">
+              <p className="text-red-500 mb-4 text-lg font-semibold">{error}</p>
               <button 
                 onClick={() => {
                   setError(null);
                   setIsLoading(true);
-                  const iframe = document.querySelector(`iframe[title="${game.title}"]`) as HTMLIFrameElement;
-                  if (iframe) {
-                    iframe.src = iframe.src;
-                  }
                 }}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 font-medium text-base"
               >
-                Retry
+                🔄 Retry Loading
               </button>
             </div>
           </div>
