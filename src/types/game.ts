@@ -35,6 +35,9 @@ export interface Game {
   isActive: boolean;
   playCount: number;
   rating: number;
+  featured?: boolean;
+  difficulty?: string;
+  estimatedTime?: string;
   createdAt: Date;
   updatedAt: Date;
 }
