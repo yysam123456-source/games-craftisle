@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Password Game - Craftisle Games</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .game-container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #667eea;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #666;
+    }
+    .password-input-container {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .password-input {
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 1.2em;
+      border: 3px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .password-input:focus {
+      border-color: #667eea;
+    }
+    .password-strength {
+      height: 5px;
+      background: #ddd;
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      background: #667eea;
+      transition: width 0.3s, background 0.3s;
+    }
+    .rules-container {
+      margin-top: 20px;
+    }
+    .rule {
+      background: #f8f9fa;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s;
+    }
+    .rule.met {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+    .rule.unmet {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+    .rule-icon {
+      font-size: 1.5em;
+    }
+    .rule-text {
+      flex: 1;
+      color: #333;
+    }
+    .rule-number {
+      background: #667eea;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .score {
+      text-align: center;
+      font-size: 1.5em;
+      color: #667eea;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .win-message {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px;
+      margin-top: 20px;
+    }
+    .win-message h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    .restart-btn {
+      background: white;
+      color: #667eea;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .restart-btn:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s;
+    }
+    .hint {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px 15px;
+      margin-top: 15px;
+      border-radius: 5px;
+      color: #856404;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1>🔐 The Password Game</h1>
+      <p>Create a password that satisfies all rules!</p>
+    </div>
+
+    <div class="password-input-container">
+      <input type="text" class="password-input" id="passwordInput" placeholder="Type your password here..." autocomplete="off">
+      <div class="password-strength">
+        <div class="password-strength-bar" id="strengthBar"></div>
+      </div>
+    </div>
+
+    <div class="rules-container" id="rulesContainer"></div>
+
+    <div class="score" id="scoreDisplay">Rules Met: 0/12</div>
+
+    <div class="win-message" id="winMessage">
+      <h2>🎉 Congratulations!</h2>
+      <p>You've mastered The Password Game!</p>
+      <p>Your password: <strong id="finalPassword"></strong></p>
+      <button class="restart-btn" onclick="restartGame()">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    let currentRules = [];
+    let ruleIndex = 0;
+    let metRules = new Set();
+
+    // All possible rules
+    const allRules = [
+      {
+        id: 'length',
+        text: 'Password must be at least 8 characters long',
+        check: (pwd) => pwd.length >= 8,
+        hint: 'Keep typing to reach 8 characters'
+      },
+      {
+        id: 'uppercase',
+        text: 'Password must contain at least one uppercase letter',
+        check: (pwd) => /[A-Z]/.test(pwd),
+        hint: 'Add a capital letter (A-Z)'
+      },
+      {
+        id: 'lowercase',
+        text: 'Password must contain at least one lowercase letter',
+        check: (pwd) => /[a-z]/.test(pwd),
+        hint: 'Add a lowercase letter (a-z)'
+      },
+      {
+        id: 'number',
+        text: 'Password must contain at least one number',
+        check: (pwd) => /\d/.test(pwd),
+        hint: 'Add a number (0-9)'
+      },
+      {
+        id: 'special',
+        text: 'Password must contain at least one special character (!@#$%^&*)',
+        check: (pwd) => /[!@#$%^&*]/.test(pwd),
+        hint: 'Add a special character like ! @ # $ %'
+      },
+      {
+        id: 'no-spaces',
+        text: 'Password must not contain spaces',
+        check: (pwd) => !/\s/.test(pwd),
+        hint: 'Remove any spaces from your password'
+      },
+      {
+        id: 'emoji',
+        text: 'Password must contain at least one emoji',
+        check: (pwd) => /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]/u.test(pwd),
+        hint: 'Add an emoji like 😀 🎮 🔥'
+      },
+      {
+        id: 'palindrome',
+        text: 'Password must contain a palindrome (reads same forwards and backwards)',
+        check: (pwd) => {
+          const cleaned = pwd.toLowerCase().replace(/[^a-z0-9]/g, '');
+          for (let i = 0; i < cleaned.length - 2; i++) {
+            for (let j = i + 2; j < cleaned.length; j++) {
+              const sub = cleaned.slice(i, j + 1);
+              if (sub === sub.split('').reverse().join('')) return true;
+            }
+          }
+          return false;
+        },
+        hint: 'Add a palindrome like "racecar" or "madam"'
+      },
+      {
+        id: 'roman',
+        text: 'Password must contain a Roman numeral (I, V, X, L, C, D, M)',
+        check: (pwd) => /[IVXLCDM]/.test(pwd),
+        hint: 'Add a Roman numeral like I, V, X, L, C, D, or M'
+      },
+      {
+        id: 'chemical',
+        text: 'Password must contain a chemical element symbol (H, He, Li, etc.)',
+        check: (pwd) => /^(?=.*H)|(?=.*He)|(?=.*Li)|(?=.*Be)|(?=.*B)|(?=.*C)|(?=.*N)|(?=.*O)|(?=.*F)|(?=.*Ne)|(?=.*Na)|(?=.*Mg)|(?=.*Al)|(?=.*Si)|(?=.*P)|(?=.*S)|(?=.*Cl)|(?=.*Ar)|(?=.*K)|(?=.*Ca)/.test(pwd),
+        hint: 'Add a chemical symbol like H, He, Li, Be, B, C, N, O'
+      },
+      {
+        id: 'leet',
+        text: 'Password must contain leet speak (replace a→4, e→3, i→1, o→0)',
+        check: (pwd) => /[aAeEiIoO]/.test(pwd) && /[4310]/.test(pwd),
+        hint: 'Use leet speak: a→4, e→3, i→1, o→0'
+      },
+      {
+        id: 'length20',
+        text: 'Password must be at least 20 characters long',
+        check: (pwd) => pwd.length >= 20,
+        hint: 'Keep typing to reach 20 characters'
+      }
+    ];
+
+    // Initialize game
+    function initGame() {
+      currentRules = [];
+      ruleIndex = 0;
+      metRules.clear();
+      
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('winMessage').style.display = 'none';
+      document.getElementById('rulesContainer').innerHTML = '';
+      document.getElementById('scoreDisplay').textContent = 'Rules Met: 0/12';
+      document.getElementById('strengthBar').style.width = '0%';
+      document.getElementById('strengthBar').style.background = '#667eea';
+      
+      // Add first rule
+      addRule();
+      
+      // Listen for password input
+      document.getElementById('passwordInput').addEventListener('input', handlePasswordInput);
+      document.getElementById('passwordInput').focus();
+    }
+
+    // Add a new rule
+    function addRule() {
+      if (ruleIndex >= allRules.length) return;
+      
+      const rule = allRules[ruleIndex];
+      currentRules.push(rule);
+      ruleIndex++;
+      
+      renderRules();
+    }
+
+    // Render all current rules
+    function renderRules() {
+      const container = document.getElementById('rulesContainer');
+      container.innerHTML = '';
+      
+      currentRules.forEach((rule, index) => {
+        const ruleEl = document.createElement('div');
+        ruleEl.className = 'rule unmet';
+        ruleEl.id = `rule-${rule.id}`;
+        ruleEl.innerHTML = `
+          <div class="rule-number">${index + 1}</div>
+          <div class="rule-icon">❌</div>
+          <div class="rule-text">${rule.text}</div>
+        `;
+        container.appendChild(ruleEl);
+      });
+    }
+
+    // Handle password input
+    function handlePasswordInput(e) {
+      const password = e.target.value;
+      
+      // Check all current rules
+      let allMet = true;
+      currentRules.forEach(rule => {
+        const isMet = rule.check(password);
+        const ruleEl = document.getElementById(`rule-${rule.id}`);
+        
+        if (isMet && !metRules.has(rule.id)) {
+          metRules.add(rule.id);
+          ruleEl.className = 'rule met';
+          ruleEl.querySelector('.rule-icon').textContent = '✅';
+          
+          // Add hint
+          if (rule.hint) {
+            const hintEl = document.createElement('div');
+            hintEl.className = 'hint';
+            hintEl.textContent = `💡 Hint: ${rule.hint}`;
+            ruleEl.appendChild(hintEl);
+          }
+          
+          // Add new rule if this one was just met
+          if (metRules.size === currentRules.length && ruleIndex < allRules.length) {
+            setTimeout(() => addRule(), 500);
+          }
+        } else if (!isMet) {
+          allMet = false;
+        }
+      });
+      
+      // Update score
+      document.getElementById('scoreDisplay').textContent = `Rules Met: ${metRules.size}/${currentRules.length}`;
+      
+      // Update strength bar
+      const strength = (metRules.size / allRules.length) * 100;
+      document.getElementById('strengthBar').style.width = strength + '%';
+      
+      if (strength < 33) {
+        document.getElementById('strengthBar').style.background = '#dc3545';
+      } else if (strength < 66) {
+        document.getElementById('strengthBar').style.background = '#ffc107';
+      } else {
+        document.getElementById('strengthBar').style.background = '#28a745';
+      }
+      
+      // Check win condition
+      if (metRules.size === allRules.length) {
+        showWin(password);
+      }
+    }
+
+    // Show win message
+    function showWin(password) {
+      document.getElementById('winMessage').style.display = 'block';
+      document.getElementById('finalPassword').textContent = password;
+      document.getElementById('passwordInput').disabled = true;
+    }
+
+    // Restart game
+    function restartGame() {
+      document.getElementById('passwordInput').disabled = false;
+      initGame();
+    }
+
+    // Start the game
+    initGame();
+  </script>
+</body>
+</html>

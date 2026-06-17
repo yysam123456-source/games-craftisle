@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Craft - Craftisle Games</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+    .game-container {
+      display: flex;
+      gap: 30px;
+      max-width: 1400px;
+      width: 100%;
+    }
+    .sidebar {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .sidebar h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+    .discoveries-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .discovery-item {
+      background: #f8f9fa;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9em;
+    }
+    .discovery-emoji {
+      font-size: 1.5em;
+    }
+    .canvas-area {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      min-height: 600px;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    .element {
+      position: absolute;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 15px;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    .element:hover {
+      transform: scale(1.05);
+    }
+    .element.dragging {
+      cursor: grabbing;
+      z-index: 1000;
+      transform: rotate(5deg) scale(1.1);
+    }
+    .element-emoji {
+      font-size: 1.5em;
+    }
+    .stats {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 20px;
+      width: 250px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .stat-item {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #667eea;
+    }
+    .stat-label {
+      color: #666;
+      font-size: 0.9em;
+    }
+    .instructions {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      max-width: 1400px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .instructions h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    .instructions ul {
+      margin-left: 20px;
+      color: #333;
+    }
+    .instructions li {
+      margin-bottom: 8px;
+    }
+    .merge-effect {
+      position: absolute;
+      pointer-events: none;
+      font-size: 3em;
+      animation: mergeAnim 0.5s ease-out forwards;
+    }
+    @keyframes mergeAnim {
+      0% { transform: scale(0); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.8; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+    .new-discovery {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(102, 126, 234, 0.95);
+      color: white;
+      padding: 30px 50px;
+      border-radius: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      z-index: 10000;
+      animation: popIn 0.3s ease-out;
+      text-align: center;
+    }
+    @keyframes popIn {
+      0% { transform: translate(-50%, -50%) scale(0); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✨ Infinite Craft</h1>
+    <p>Combine elements to discover new ones!</p>
+  </div>
+
+  <div class="game-container">
+    <div class="sidebar">
+      <h2>🔬 Discoveries</h2>
+      <div class="discoveries-list" id="discoveriesList"></div>
+    </div>
+
+    <div class="canvas-area" id="canvasArea">
+      <div class="element" data-element="water" style="left: 50px; top: 50px;">
+        <span class="element-emoji">💧</span>
+        <span>Water</span>
+      </div>
+      <div class="element" data-element="fire" style="left: 200px; top: 50px;">
+        <span class="element-emoji">🔥</span>
+        <span>Fire</span>
+      </div>
+      <div class="element" data-element="wind" style="left: 350px; top: 50px;">
+        <span class="element-emoji">🌬️</span>
+        <span>Wind</span>
+      </div>
+      <div class="element" data-element="earth" style="left: 500px; top: 50px;">
+        <span class="element-emoji">🌍</span>
+        <span>Earth</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-number" id="discoveryCount">4</div>
+        <div class="stat-label">Discoveries</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="combinationCount">0</div>
+        <div class="stat-label">Combinations</div>
+      </div>
+      <button onclick="clearCanvas()" style="width: 100%; padding: 10px; margin-top: 10px; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1em;">
+        Clear Canvas
+      </button>
+      <button onclick="showRecipes()" style="width: 100%; padding: 10px; margin-top: 10px; background: #764ba2; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1em;">
+        View Recipes
+      </button>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <h3>🎮 How to Play</h3>
+    <ul>
+      <li><strong>Drag elements</strong> onto each other to combine them</li>
+      <li><strong>Discover new elements</strong> through combinations</li>
+      <li><strong>Experiment freely</strong> - there are 50+ discoveries to find!</li>
+      <li><strong>Start with:</strong> Water 💧, Fire 🔥, Wind 🌬️, Earth 🌍</li>
+    </ul>
+  </div>
+
+  <script>
+    // Game state
+    let discoveries = new Set(['water', 'fire', 'wind', 'earth']);
+    let combinationCount = 0;
+    let draggedElement = null;
+    let elementsOnCanvas = [];
+
+    // Crafting recipes (50+ combinations)
+    const recipes = {
+      'water+fire': { result: 'steam', emoji: '♨️', name: 'Steam' },
+      'fire+water': { result: 'steam', emoji: '♨️', name: 'Steam' },
+      'water+wind': { result: 'wave', emoji: '🌊', name: 'Wave' },
+      'wind+water': { result: 'wave', emoji: '🌊', name: 'Wave' },
+      'water+earth': { result: 'mud', emoji: '💩', name: 'Mud' },
+      'earth+water': { result: 'mud', emoji: '💩', name: 'Mud' },
+      'fire+wind': { result: 'smoke', emoji: '💨', name: 'Smoke' },
+      'wind+fire': { result: 'smoke', emoji: '💨', name: 'Smoke' },
+      'fire+earth': { result: 'lava', emoji: '🌋', name: 'Lava' },
+      'earth+fire': { result: 'lava', emoji: '🌋', name: 'Lava' },
+      'wind+earth': { result: 'dust', emoji: '🌪️', name: 'Dust' },
+      'earth+wind': { result: 'dust', emoji: '🌪️', name: 'Dust' },
+      
+      // Second level
+      'lava+water': { result: 'obsidian', emoji: '🪨', name: 'Obsidian' },
+      'water+lava': { result: 'obsidian', emoji: '🪨', name: 'Obsidian' },
+      'mud+fire': { result: 'brick', emoji: '🧱', name: 'Brick' },
+      'fire+mud': { result: 'brick', emoji: '🧱', name: 'Brick' },
+      'steam+earth': { result: 'geyser', emoji: '⛲', name: 'Geyser' },
+      'earth+steam': { result: 'geyser', emoji: '⛲', name: 'Geyser' },
+      'smoke+water': { result: 'acid', emoji: '⚗️', name: 'Acid' },
+      'water+smoke': { result: 'acid', emoji: '⚗️', name: 'Acid' },
+      'dust+fire': { result: 'ash', emoji: '🌫️', name: 'Ash' },
+      'fire+dust': { result: 'ash', emoji: '🌫️', name: 'Ash' },
+      'wave+wind': { result: 'storm', emoji: '⛈️', name: 'Storm' },
+      'wind+wave': { result: 'storm', emoji: '⛈️', name: 'Storm' },
+      
+      // Third level
+      'lava+air': { result: 'volcano', emoji: '🌋', name: 'Volcano' },
+      'brick+house': { result: 'building', emoji: '🏢', name: 'Building' },
+      'earth+plant': { result: 'tree', emoji: '🌳', name: 'Tree' },
+      'water+plant': { result: 'garden', emoji: '🌺', name: 'Garden' },
+      'fire+human': { result: 'firefighter', emoji: '👨‍🚒', name: 'Firefighter' },
+      'water+human': { result: 'swimmer', emoji: '🏊', name: 'Swimmer' },
+      
+      // Popular combinations
+      'water+water': { result: 'sea', emoji: '🌊', name: 'Sea' },
+      'fire+fire': { result: 'inferno', emoji: '🔥', name: 'Inferno' },
+      'earth+earth': { result: 'mountain', emoji: '⛰️', name: 'Mountain' },
+      'wind+wind': { result: 'tornado', emoji: '🌪️', name: 'Tornado' },
+      
+      'sea+earth': { result: 'island', emoji: '🏝️', name: 'Island' },
+      'earth+sea': { result: 'island', emoji: '🏝️', name: 'Island' },
+      'lava+ocean': { result: 'island', emoji: '🏝️', name: 'Island' },
+      
+      'human+computer': { result: 'programmer', emoji: '👨‍💻', name: 'Programmer' },
+      'computer+human': { result: 'programmer', emoji: '👨‍💻', name: 'Programmer' },
+      'human+book': { result: 'wise', emoji: '🧙', name: 'Wise' },
+      'book+human': { result: 'wise', emoji: '🧙', name: 'Wise' },
+      
+      'plant+sun': { result: 'energy', emoji: '⚡', name: 'Energy' },
+      'sun+plant': { result: 'energy', emoji: '⚡', name: 'Energy' },
+      'energy+human': { result: 'superhero', emoji: '🦸', name: 'Superhero' },
+      'human+energy': { result: 'superhero', emoji: '🦸', name: 'Superhero' },
+      
+      'human+human': { result: 'love', emoji: '❤️', name: 'Love' },
+      'love+human': { result: 'family', emoji: '👨‍👩‍👧‍👦', name: 'Family' },
+      'family+house': { result: 'home', emoji: '🏡', name: 'Home' },
+      
+      'tree+tree': { result: 'forest', emoji: '🌲', name: 'Forest' },
+      'forest+human': { result: 'ranger', emoji: '🧑‍🌾', name: 'Ranger' },
+      'mountain+snow': { result: 'ice', emoji: '🧊', name: 'Ice' },
+      'ice+water': { result: 'penguin', emoji: '🐧', name: 'Penguin' },
+      
+      'fire+phoenix': { result: 'ash', emoji: '🌫️', name: 'Ash' },
+      'human+magic': { result: 'wizard', emoji: '🧙‍♂️', name: 'Wizard' },
+      'wizard+book': { result: 'spell', emoji: '✨', name: 'Spell' },
+      'spell+magic': { result: 'dragon', emoji: '🐉', name: 'Dragon' },
+      
+      'human+music': { result: 'singer', emoji: '🎤', name: 'Singer' },
+      'singer+music': { result: 'concert', emoji: '🎵', name: 'Concert' },
+      'concert+crowd': { result: 'festival', emoji: '🎪', name: 'Festival' },
+      
+      'computer+internet': { result: 'website', emoji: '🌐', name: 'Website' },
+      'website+code': { result: 'app', emoji: '📱', name: 'App' },
+      'app+human': { result: 'socialmedia', emoji: '📱', name: 'Social Media' },
+      
+      'human+animal': { result: 'friendship', emoji: '🤝', name: 'Friendship' },
+      'friendship+love': { result: 'happiness', emoji: '😊', name: 'Happiness' },
+      'happiness+human': { result: 'peace', emoji: '☮️', name: 'Peace' },
+    };
+
+    // Base elements
+    const baseElements = {
+      'water': { emoji: '💧', name: 'Water' },
+      'fire': { emoji: '🔥', name: 'Fire' },
+      'wind': { emoji: '🌬️', name: 'Wind' },
+      'earth': { emoji: '🌍', name: 'Earth' },
+    };
+
+    // Initialize
+    function init() {
+      updateDiscoveriesList();
+      makeElementsDraggable();
+    }
+
+    // Make elements draggable
+    function makeElementsDraggable() {
+      const canvas = document.getElementById('canvasArea');
+      const elements = canvas.querySelectorAll('.element');
+      
+      elements.forEach(el => {
+        el.addEventListener('mousedown', startDrag);
+        el.addEventListener('touchstart', startDragTouch);
+      });
+    }
+
+    function startDrag(e) {
+      draggedElement = this;
+      draggedElement.classList.add('dragging');
+      const rect = canvasArea.getBoundingClientRect();
+      
+      function onMouseMove(e) {
+        const x = e.clientX - rect.left - draggedElement.offsetWidth / 2;
+        const y = e.clientY - rect.top - draggedElement.offsetHeight / 2;
+        draggedElement.style.left = x + 'px';
+        draggedElement.style.top = y + 'px';
+      }
+      
+      function onMouseUp(e) {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        draggedElement.classList.remove('dragging');
+        
+        // Check for collision with other elements
+        checkMerge(e.clientX, e.clientY);
+      }
+      
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    }
+
+    function startDragTouch(e) {
+      e.preventDefault();
+      draggedElement = this;
+      draggedElement.classList.add('dragging');
+      const rect = canvasArea.getBoundingClientRect();
+      const touch = e.touches[0];
+      
+      function onTouchMove(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const x = touch.clientX - rect.left - draggedElement.offsetWidth / 2;
+        const y = touch.clientY - rect.top - draggedElement.offsetHeight / 2;
+        draggedElement.style.left = x + 'px';
+        draggedElement.style.top = y + 'px';
+      }
+      
+      function onTouchEnd(e) {
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        draggedElement.classList.remove('dragging');
+        
+        const touch = e.changedTouches[0];
+        checkMerge(touch.clientX, touch.clientY);
+      }
+      
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    }
+
+    function checkMerge(x, y) {
+      if (!draggedElement) return;
+      
+      const canvas = document.getElementById('canvasArea');
+      const allElements = canvas.querySelectorAll('.element');
+      const draggedRect = draggedElement.getBoundingClientRect();
+      
+      allElements.forEach(el => {
+        if (el === draggedElement) return;
+        
+        const elRect = el.getBoundingClientRect();
+        const isColliding = !(
+          draggedRect.right < elRect.left ||
+          draggedRect.left > elRect.right ||
+          draggedRect.bottom < elRect.top ||
+          draggedRect.top > elRect.bottom
+        );
+        
+        if (isColliding) {
+          const elem1 = draggedElement.dataset.element;
+          const elem2 = el.dataset.element;
+          const key1 = `${elem1}+${elem2}`;
+          const key2 = `${elem2}+${elem1}`;
+          
+          const recipe = recipes[key1] || recipes[key2];
+          
+          if (recipe && !discoveries.has(recipe.result)) {
+            // New discovery!
+            discoveries.add(recipe.result);
+            combinationCount++;
+            
+            // Show discovery notification
+            showNewDiscovery(recipe);
+            
+            // Create new element
+            createElement(recipe, elRect.left, elRect.top);
+            
+            // Update UI
+            updateStats();
+            updateDiscoveriesList();
+            
+            // Remove old elements
+            draggedElement.remove();
+            el.remove();
+          } else if (recipe) {
+            // Already discovered, just do the merge animation
+            combinationCount++;
+            showMergeEffect(elRect.left, elRect.top);
+            draggedElement.remove();
+            el.remove();
+            updateStats();
+          }
+        }
+      });
+      
+      draggedElement = null;
+    }
+
+    function createElement(recipe, x, y) {
+      const canvas = document.getElementById('canvasArea');
+      const newEl = document.createElement('div');
+      newEl.className = 'element';
+      newEl.dataset.element = recipe.result;
+      newEl.style.left = (x - 50) + 'px';
+      newEl.style.top = (y - 25) + 'px';
+      newEl.innerHTML = `
+        <span class="element-emoji">${recipe.emoji}</span>
+        <span>${recipe.name}</span>
+      `;
+      
+      newEl.addEventListener('mousedown', startDrag);
+      newEl.addEventListener('touchstart', startDragTouch);
+      
+      canvas.appendChild(newEl);
+    }
+
+    function showNewDiscovery(recipe) {
+      const notification = document.createElement('div');
+      notification.className = 'new-discovery';
+      notification.innerHTML = `
+        <div style="font-size: 0.5em; margin-bottom: 10px;">New Discovery!</div>
+        <div style="font-size: 2em; margin: 10px 0;">${recipe.emoji}</div>
+        <div>${recipe.name}</div>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s';
+        setTimeout(() => notification.remove(), 300);
+      }, 1500);
+    }
+
+    function showMergeEffect(x, y) {
+      const effect = document.createElement('div');
+      effect.className = 'merge-effect';
+      effect.textContent = '✨';
+      effect.style.left = x + 'px';
+      effect.style.top = y + 'px';
+      document.body.appendChild(effect);
+      
+      setTimeout(() => effect.remove(), 500);
+    }
+
+    function updateStats() {
+      document.getElementById('discoveryCount').textContent = discoveries.size;
+      document.getElementById('combinationCount').textContent = combinationCount;
+    }
+
+    function updateDiscoveriesList() {
+      const list = document.getElementById('discoveriesList');
+      list.innerHTML = '';
+      
+      discoveries.forEach(elem => {
+        const elemData = getAllElements()[elem] || baseElements[elem];
+        if (elemData) {
+          const item = document.createElement('div');
+          item.className = 'discovery-item';
+          item.innerHTML = `
+            <span class="discovery-emoji">${elemData.emoji}</span>
+            <span>${elemData.name}</span>
+          `;
+          list.appendChild(item);
+        }
+      });
+    }
+
+    function getAllElements() {
+      const all = { ...baseElements };
+      Object.values(recipes).forEach(recipe => {
+        all[recipe.result] = { emoji: recipe.emoji, name: recipe.name };
+      });
+      return all;
+    }
+
+    function clearCanvas() {
+      const canvas = document.getElementById('canvasArea');
+      const elements = canvas.querySelectorAll('.element');
+      elements.forEach(el => {
+        if (!baseElements[el.dataset.element]) {
+          el.remove();
+        }
+      });
+    }
+
+    function showRecipes() {
+      alert('Recipes feature coming soon! Keep experimenting to discover all 50+ combinations!');
+    }
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>
