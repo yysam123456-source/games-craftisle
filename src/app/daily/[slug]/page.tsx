@@ -14,8 +14,24 @@ export async function generateMetadata({ params }: DailyPageProps): Promise<Meta
   if (!game) return {};
   return {
     title: `${game.title} Daily Challenge | Craftisle Games`,
-    description: `${game.title} daily challenge mode! New level/puzzle every day. Challenge your limits. ${game.description}`,
-    keywords: [`${game.title} daily`, `${game.title} challenge`, `${game.title} today`, game.title, "daily game"],
+    description: `Play ${game.title} daily challenge! New puzzle every day. Challenge your limits and improve your skills.`,
+    keywords: [`${game.title} daily`, `${game.title} challenge`, `${game.title} today`, game.title, "daily game", "free online game"],
+    alternates: {
+      canonical: `/daily/${game.slug}`,
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: `https://games.craftisle.com/daily/${game.slug}`,
+      title: `${game.title} Daily Challenge | Craftisle Games`,
+      description: `Play ${game.title} daily challenge! New puzzle every day.`,
+      siteName: "Craftisle Games",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${game.title} Daily Challenge | Craftisle Games`,
+      description: `Play ${game.title} daily challenge! New puzzle every day.`,
+    },
   };
 }
 

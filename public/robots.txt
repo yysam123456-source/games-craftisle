@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://games.craftisle.com/sitemap.xml
+
+# Disallow private pages
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
