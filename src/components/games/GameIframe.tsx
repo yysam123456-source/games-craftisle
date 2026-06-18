@@ -53,11 +53,11 @@ export function GameIframe({
         <iframe
           src={game.sourceUrl}
           title={game.title}
-          width={width}
-          height={height}
+          width="100%"
           style={{ 
             border: "none",
             width: "100%",
+            height: height || "85vh",
             minHeight: "700px",
           }}
           sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
