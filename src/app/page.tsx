@@ -2,6 +2,7 @@
 
 import { getAllGames, getGamesByCategory } from "@/data/games";
 import { GameCard } from "@/components/games/GameCard";
+import { GameSearch } from "@/components/games/GameSearch";
 import { AnimatedWordsAdvanced, CharacterPop, Typewriter } from "@/components/animations/text-animate";
 import { ParticleBackground } from "@/components/animations/particle-background";
 import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
@@ -192,6 +193,23 @@ export default function HomePage() {
             <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* ===== Quick Search ===== */}
+      <section className="relative py-12 border-b border-white/[0.04]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <p className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              Quick Search
+            </p>
+            <GameSearch
+              placeholder="Search games by name, category, or keyword..."
+              onSelect={(game) => {
+                window.location.href = `/play/${game.slug}`;
+              }}
+            />
+          </div>
+        </div>
       </section>
 
       {/* ===== Animated Stats ===== */}
