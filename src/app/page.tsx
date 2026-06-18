@@ -6,6 +6,7 @@ import { AnimatedWordsAdvanced, CharacterPop, Typewriter } from "@/components/an
 import { ParticleBackground } from "@/components/animations/particle-background";
 import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
 import { TiltCard } from "@/components/animations/mouse-follower";
+import { GlassCard, AnimatedCounter } from "@/components/animations/premium-components";
 import { motion, type Variants } from "motion/react";
 import { useState, useEffect } from "react";
 
@@ -176,6 +177,46 @@ export default function HomePage() {
             <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* ===== Animated Stats ===== */}
+      <section className="relative py-20 md:py-28 border-b border-white/[0.04] overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[150px]" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {[
+              { value: 10, suffix: "+", label: "Free Games", icon: "🎮" },
+              { value: 50, suffix: "K+", label: "Active Players", icon: "👥" },
+              { value: 48, suffix: "/5", label: "Average Rating", icon: "⭐" },
+              { value: 6, suffix: "", label: "Game Categories", icon: "📂" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.2, 0.65, 0.3, 0.9] }}
+                whileHover={{ y: -8, scale: 1.05 }}
+              >
+                <GlassCard className="text-center p-6">
+                  <div className="text-4xl mb-3">{stat.icon}</div>
+                  <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2">
+                    <AnimatedCounter 
+                      to={stat.value} 
+                      duration={2} 
+                      delay={i * 0.2}
+                      suffix={stat.suffix}
+                    />
+                  </div>
+                  <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ===== Categories ===== */}
