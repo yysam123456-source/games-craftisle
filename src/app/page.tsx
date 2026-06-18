@@ -378,6 +378,14 @@ export default function HomePage() {
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+            >
+              WHY CHOOSE US
+            </motion.div>
             <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
               Why Choose Craftisle?
             </h2>
@@ -409,19 +417,13 @@ export default function HomePage() {
             ].map((feature, i) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.15 }}
-                whileHover={{ y: -8 }}
-                className="relative group rounded-3xl p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] hover:border-primary/20 transition-all duration-500 overflow-hidden"
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.2, 0.65, 0.3, 0.9] }}
               >
-                {/* Gradient bg on hover */}
-                <div
-                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br ${feature.gradient}`}
-                />
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                <GlassCard className="p-8 text-center group">
+                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
                   <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
@@ -430,7 +432,7 @@ export default function HomePage() {
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {feature.desc}
                   </p>
-                </div>
+                </GlassCard>
               </motion.div>
             ))}
           </div>
