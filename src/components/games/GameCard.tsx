@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Game } from "@/types/game";
 import { cn } from "@/lib/utils";
 import { TiltCard, MouseGlow } from "@/components/animations/mouse-follower";
+import { soundManager } from "@/lib/sound-effects";
 
 interface GameCardProps {
   game: Game;
@@ -13,6 +14,10 @@ interface GameCardProps {
 }
 
 export function GameCard({ game, index = 0 }: GameCardProps) {
+  const handleMouseEnter = () => {
+    soundManager.play("buttonHover");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -23,6 +28,7 @@ export function GameCard({ game, index = 0 }: GameCardProps) {
         delay: index * 0.08,
         ease: [0.2, 0.65, 0.3, 0.9],
       }}
+      onMouseEnter={handleMouseEnter}
     >
       <TiltCard 
         tiltStrength={10} 

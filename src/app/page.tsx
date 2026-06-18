@@ -7,6 +7,7 @@ import { ParticleBackground } from "@/components/animations/particle-background"
 import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
 import { TiltCard } from "@/components/animations/mouse-follower";
 import { GlassCard, AnimatedCounter } from "@/components/animations/premium-components";
+import { soundManager } from "@/lib/sound-effects";
 import { motion, type Variants } from "motion/react";
 import { useState, useEffect } from "react";
 
@@ -542,9 +543,19 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="border-t border-white/[0.04] pt-8 text-center text-sm text-muted-foreground"
+            className="border-t border-white/[0.04] pt-8 text-center text-sm text-muted-foreground flex items-center justify-center gap-4"
           >
             © 2026 Craftisle Games. Free online HTML5 games platform.
+            <button
+              onClick={() => {
+                const newState = !soundManager.isEnabled();
+                soundManager.setEnabled(newState);
+                window.location.reload();
+              }}
+              className="ml-4 px-3 py-1 rounded-full text-xs bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              {soundManager.isEnabled() ? "🔊 Sound On" : "🔇 Sound Off"}
+            </button>
           </motion.div>
         </div>
       </footer>
