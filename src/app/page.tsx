@@ -1,5 +1,11 @@
+"use client";
+
 import { getAllGames, getGamesByCategory } from "@/data/games";
 import { GameCard } from "@/components/games/GameCard";
+import { AnimatedText, AnimatedWords } from "@/components/animations/animated-text";
+import { MeteorBackground } from "@/components/animations/meteor-background";
+import { GlowButton } from "@/components/animations/shimmer-button";
+import { motion, type Variants } from "motion/react";
 
 const categoryNames: Record<string, string> = {
   puzzle: "🧩 Puzzle",
@@ -19,246 +25,468 @@ const categoryDescriptions: Record<string, string> = {
   building: "Unleash your creativity, build your own world!",
 };
 
+const sectionVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] },
+  },
+};
+
+const stats = [
+  { value: "10+", label: "Free Games", icon: "🎮" },
+  { value: "0", label: "No Download", icon: "⬇️" },
+  { value: "100%", label: "Free to Play", icon: "💯" },
+  { value: "📱", label: "Multi-Device", icon: "" },
+];
+
 export default function HomePage() {
   const games = getAllGames().filter((g) => g.isActive);
   const categories = [...new Set(games.map((g) => g.category))];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* ===== Hero Section ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20 md:py-28">
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="text-5xl md:text-7xl mb-4">🎮</div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-            Free Online HTML5 Games
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-            No download needed, play directly in your browser!
-            <span className="text-primary font-semibold">Click and play</span>
-            , supports mobile, tablet, and desktop.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="#all-games"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Meteor background */}
+        <MeteorBackground count={20} className="opacity-40" />
+
+        {/* Gradient orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[10%] w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[5%] w-[400px] h-[400px] rounded-full bg-brand-cyan/5 blur-[100px]" />
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10 max-w-5xl">
+          {/* Floating emoji */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.2, 0.65, 0.3, 0.9] }}
+            className="text-7xl md:text-8xl mb-6 inline-block"
+          >
+            🎮
+          </motion.div>
+
+          {/* Animated title */}
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 leading-[1.1]">
+            <span className="block text-foreground">
+              <AnimatedText text="Free Online" delay={0.2} />
+            </span>
+            <span
+              className="block mt-2"
+              style={{
+                background: "linear-gradient(135deg, oklch(0.65 0.25 295), oklch(0.75 0.18 210), oklch(0.70 0.22 350))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
             >
+              <AnimatedText text="HTML5 Games" delay={0.5} />
+            </span>
+          </h1>
+
+          {/* Animated description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.0 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            No download needed, play directly in your browser!
+            <span className="text-primary font-semibold"> Click and play</span>
+            , supports mobile, tablet, and desktop.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.3 }}
+            className="flex flex-wrap justify-center gap-4 mb-16"
+          >
+            <GlowButton href="#all-games" className="text-lg px-10 py-4">
               🎮 Start Playing
-            </a>
-            <a
+            </GlowButton>
+            <GlowButton
               href="#categories"
-              className="inline-flex items-center gap-2 bg-card text-card-foreground px-6 py-3 rounded-lg font-semibold border hover:bg-muted/50 transition"
+              variant="secondary"
+              className="text-lg px-10 py-4"
             >
               📂 Browse Categories
-            </a>
-          </div>
+            </GlowButton>
+          </motion.div>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-muted-foreground">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-foreground">{games.length}+</div>
-              <div>Free Games</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-foreground">0</div>
-              <div>No Download</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-foreground">📱</div>
-              <div>Multi-Device</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-foreground">⚡</div>
-              <div>Instant Play</div>
-            </div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.6 }}
+            className="flex flex-wrap justify-center gap-8 md:gap-12"
+          >
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.6 + i * 0.1 }}
+                className="text-center group cursor-default"
+                whileHover={{ y: -4 }}
+              >
+                <div className="text-3xl md:text-4xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                  {stat.icon} {stat.value}
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5, duration: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1"
+          >
+            <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* ===== Categories ===== */}
-      <section id="categories" className="py-16 border-b">
+      <motion.section
+        id="categories"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 border-b border-white/[0.04] relative"
+      >
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-            Game Categories
-          </h2>
-          <p className="text-muted-foreground text-center mb-10">
-            Choose your favorite game type and start challenging!
-          </p>
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+            >
+              EXPLORE CATEGORIES
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              <AnimatedWords text="Game Categories" delay={0.2} />
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Choose your favorite game type and start challenging!
+            </p>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((cat) => {
+            {categories.map((cat, i) => {
               const count = games.filter((g) => g.category === cat).length;
               return (
-                <a
+                <motion.a
                   key={cat}
                   href={`#cat-${cat}`}
-                  className="bg-card rounded-xl p-6 border hover:border-primary hover:shadow-md transition text-center group"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  className="relative group rounded-2xl p-6 bg-card/60 backdrop-blur-sm border border-white/[0.04] hover:border-primary/30 transition-all duration-500 overflow-hidden"
                 >
-                  <div className="text-3xl mb-2">{categoryNames[cat]?.charAt(0) || "🎮"}</div>
-                  <div className="font-semibold text-sm mb-1">{categoryNames[cat]?.slice(2).trim() || cat}</div>
-                  <div className="text-xs text-muted-foreground">{count} games</div>
-                </a>
+                  {/* Hover glow */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 to-transparent" />
+                  <div className="relative z-10 text-center">
+                    <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                      {categoryNames[cat]?.charAt(0) || "🎮"}
+                    </div>
+                    <div className="font-bold text-sm mb-1 group-hover:text-primary transition-colors">
+                      {categoryNames[cat]?.slice(2).trim() || cat}
+                    </div>
+                    <div className="text-xs text-muted-foreground">{count} games</div>
+                  </div>
+                </motion.a>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ===== Games by Category ===== */}
-      {categories.map((cat) => {
+      {categories.map((cat, catIdx) => {
         const catGames = games.filter((g) => g.category === cat);
         return (
-          <section id={`cat-${cat}`} key={cat} className="py-16 border-b last:border-0">
+          <motion.section
+            id={`cat-${cat}`}
+            key={cat}
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="py-20 md:py-28 border-b border-white/[0.04] last:border-0 relative"
+          >
+            {/* Section header */}
+            <div className="container mx-auto px-4 mb-12">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-3 mb-3"
+              >
+                <span className="text-3xl">{categoryNames[cat]?.charAt(0) || "🎮"}</span>
+                <h2 className="text-2xl md:text-4xl font-extrabold">
+                  {categoryNames[cat]?.slice(2).trim() || cat}
+                </h2>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-muted-foreground text-sm md:text-base max-w-2xl"
+              >
+                {categoryDescriptions[cat]}
+              </motion.p>
+            </div>
+
+            {/* Games grid */}
             <div className="container mx-auto px-4">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold">{categoryNames[cat]}</h2>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {categoryDescriptions[cat]}
-                  </p>
-                </div>
-              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {catGames.map((game) => (
-                  <GameCard key={game.id} game={game} />
+                {catGames.map((game, i) => (
+                  <GameCard key={game.id} game={game} index={i} />
                 ))}
               </div>
             </div>
-          </section>
+          </motion.section>
         );
       })}
 
       {/* ===== All Games ===== */}
-      <section id="all-games" className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-            All Games
-          </h2>
-          <p className="text-muted-foreground text-center mb-10">
-            Curated {games.length} free HTML5 games, click to play!
-          </p>
+      <motion.section
+        id="all-games"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 relative"
+      >
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[150px]" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+            >
+              ALL GAMES
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              Every Game
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Curated {games.length} free HTML5 games, click to play!
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {games.map((game) => (
-              <GameCard key={game.id} game={game} />
+            {games.map((game, i) => (
+              <GameCard key={game.id} game={game} index={i} />
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ===== Why Choose Us ===== */}
-      <section className="py-16 md:py-24">
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 border-t border-white/[0.04] relative"
+      >
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-            Why Choose Craftisle Games?
-          </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            We are committed to providing the best gaming experience. No barriers, just play.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-card rounded-2xl p-8 border text-center hover:shadow-lg hover:-translate-y-1 transition-all">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mx-auto mb-4">
-                🎮
-              </div>
-              <h3 className="text-xl font-bold mb-2">100% Free</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                All games are <span className="text-foreground font-medium">completely free</span>,
-                no registration required, no download needed. Open your browser and start playing.
-              </p>
-            </div>
-            <div className="bg-card rounded-2xl p-8 border text-center hover:shadow-lg hover:-translate-y-1 transition-all">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mx-auto mb-4">
-                📱
-              </div>
-              <h3 className="text-xl font-bold mb-2">Multi-Device</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Perfectly adapted for <span className="text-foreground font-medium">mobile, tablet, and desktop</span>,
-                play anywhere, anytime.
-              </p>
-            </div>
-            <div className="bg-card rounded-2xl p-8 border text-center hover:shadow-lg hover:-translate-y-1 transition-all">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mx-auto mb-4">
-                ⚡
-              </div>
-              <h3 className="text-xl font-bold mb-2">Instant Play</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                No loading waits, <span className="text-foreground font-medium">click and play</span>,
-                perfect for killing time whenever you have a few minutes.
-              </p>
-            </div>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
+              Why Choose Craftisle?
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              We are committed to providing the best gaming experience. No barriers, just play.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* ===== Game Guides ===== */}
-      <section className="py-16 bg-muted/30 border-t">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-            Game Guides & Tips
-          </h2>
-          <p className="text-muted-foreground text-center mb-10">
-            Check out game strategies, solvers, archives, and alternatives to enhance your gaming experience.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {games.slice(0, 4).map((game) => (
-              <a
-                key={game.slug}
-                href={`/strategy/${game.slug}`}
-                className="bg-card rounded-xl p-6 border hover:border-primary hover:shadow-md transition text-center group"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                icon: "🎮",
+                title: "100% Free",
+                desc: "All games are completely free, no registration required, no download needed. Open your browser and start playing.",
+                gradient: "from-emerald-500/10 to-emerald-500/0",
+              },
+              {
+                icon: "📱",
+                title: "Multi-Device",
+                desc: "Perfectly adapted for mobile, tablet, and desktop. Play anywhere, anytime.",
+                gradient: "from-blue-500/10 to-blue-500/0",
+              },
+              {
+                icon: "⚡",
+                title: "Instant Play",
+                desc: "No loading waits, click and play. Perfect for killing time whenever you have a few minutes.",
+                gradient: "from-amber-500/10 to-amber-500/0",
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.15 }}
+                whileHover={{ y: -8 }}
+                className="relative group rounded-3xl p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] hover:border-primary/20 transition-all duration-500 overflow-hidden"
               >
-                <div className="text-3xl mb-2">📖</div>
-                <div className="font-semibold text-sm group-hover:text-primary transition-colors">
-                  {game.title} Strategy
+                {/* Gradient bg on hover */}
+                <div
+                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br ${feature.gradient}`}
+                />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {feature.desc}
+                  </p>
                 </div>
-              </a>
+              </motion.div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <a
-              href="/play/2048"
-              className="text-sm text-primary hover:underline"
-            >
-              View all game guides →
-            </a>
-          </div>
         </div>
-      </section>
+      </motion.section>
+
+      {/* ===== CTA Section ===== */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="py-20 md:py-32 relative overflow-hidden"
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-primary/5 blur-[150px]" />
+        </div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6"
+          >
+            Ready to Play?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto"
+          >
+            Join thousands of players enjoying free HTML5 games. No ads interrupting your fun.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <GlowButton href="#all-games" className="text-lg px-12 py-5">
+              🎮 Browse All Games
+            </GlowButton>
+          </motion.div>
+        </div>
+      </motion.section>
 
       {/* ===== Footer ===== */}
-      <footer className="border-t py-12 bg-muted/50">
+      <footer className="border-t border-white/[0.04] py-16 bg-card/30 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-lg mb-3">Craftisle Games</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="font-bold text-lg mb-4 bg-gradient-to-r from-primary to-brand-cyan bg-clip-text text-transparent">
+                Craftisle Games
+              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Curated free HTML5 games. No download, click to play. Supports mobile, tablet, and desktop.
               </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3">Categories</h4>
-              <div className="space-y-1 text-sm">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <h4 className="font-semibold mb-4 text-foreground">Categories</h4>
+              <div className="space-y-2 text-sm">
                 {categories.map((cat) => (
-                  <a key={cat} href={`#cat-${cat}`} className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a
+                    key={cat}
+                    href={`#cat-${cat}`}
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
                     {categoryNames[cat]}
                   </a>
                 ))}
               </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3">Related Sites</h4>
-              <div className="space-y-1 text-sm">
-                <a href="https://crazygames.com" target="_blank" rel="noopener noreferrer" className="block text-muted-foreground hover:text-primary transition-colors">
-                  CrazyGames
-                </a>
-                <a href="https://poki.com" target="_blank" rel="noopener noreferrer" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Poki Games
-                </a>
-                <a href="https://neal.fun" target="_blank" rel="noopener noreferrer" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Neal.fun
-                </a>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <h4 className="font-semibold mb-4 text-foreground">Related Sites</h4>
+              <div className="space-y-2 text-sm">
+                {[
+                  { name: "CrazyGames", url: "https://crazygames.com" },
+                  { name: "Poki Games", url: "https://poki.com" },
+                  { name: "Neal.fun", url: "https://neal.fun" },
+                ].map((site) => (
+                  <a
+                    key={site.name}
+                    href={site.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {site.name}
+                  </a>
+                ))}
               </div>
-            </div>
+            </motion.div>
           </div>
-          <div className="border-t pt-6 text-center text-sm text-muted-foreground">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="border-t border-white/[0.04] pt-8 text-center text-sm text-muted-foreground"
+          >
             © 2026 Craftisle Games. Free online HTML5 games platform.
-          </div>
+          </motion.div>
         </div>
       </footer>
     </div>

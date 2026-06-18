@@ -1,26 +1,250 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ===== Custom Theme Variables (Eldora-inspired dark premium) ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: oklch(0.08 0.02 280);
+  --foreground: oklch(0.95 0.01 280);
+  --card: oklch(0.12 0.03 280);
+  --card-foreground: oklch(0.95 0.01 280);
+  --popover: oklch(0.12 0.03 280);
+  --popover-foreground: oklch(0.95 0.01 280);
+  --primary: oklch(0.65 0.25 295);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.18 0.04 280);
+  --secondary-foreground: oklch(0.95 0.01 280);
+  --muted: oklch(0.18 0.04 280);
+  --muted-foreground: oklch(0.65 0.02 280);
+  --accent: oklch(0.18 0.04 280);
+  --accent-foreground: oklch(0.95 0.01 280);
+  --destructive: oklch(0.55 0.25 25);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.12);
+  --ring: oklch(0.65 0.25 295);
+  --radius: 0.75rem;
+
+  /* Custom brand colors */
+  --brand-purple: oklch(0.65 0.25 295);
+  --brand-cyan: oklch(0.75 0.18 210);
+  --brand-pink: oklch(0.70 0.22 350);
+  --glow-purple: oklch(0.50 0.30 295 / 0.4);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --background: oklch(0.06 0.02 280);
+  --foreground: oklch(0.95 0.01 280);
+  --card: oklch(0.10 0.03 280);
+  --card-foreground: oklch(0.95 0.01 280);
+  --popover: oklch(0.10 0.03 280);
+  --popover-foreground: oklch(0.95 0.01 280);
+  --primary: oklch(0.65 0.25 295);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.16 0.04 280);
+  --secondary-foreground: oklch(0.95 0.01 280);
+  --muted: oklch(0.16 0.04 280);
+  --muted-foreground: oklch(0.60 0.02 280);
+  --accent: oklch(0.16 0.04 280);
+  --accent-foreground: oklch(0.95 0.01 280);
+  --border: oklch(1 0 0 / 0.06);
+  --input: oklch(1 0 0 / 0.10);
+  --ring: oklch(0.65 0.25 295);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ===== Custom Animation Keyframes ===== */
+@keyframes meteor {
+  0% {
+    transform: rotate(var(--angle, 215deg)) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle, 215deg)) translateX(-500px);
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -5px var(--glow-purple);
+  }
+  50% {
+    box-shadow: 0 0 35px 5px var(--glow-purple);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes border-glow {
+  0%, 100% {
+    border-color: oklch(0.65 0.25 295 / 0.3);
+    box-shadow: 0 0 15px -5px oklch(0.65 0.25 295 / 0.3);
+  }
+  50% {
+    border-color: oklch(0.65 0.25 295 / 0.6);
+    box-shadow: 0 0 25px -5px oklch(0.65 0.25 295 / 0.5);
+  }
+}
+
+@keyframes text-gradient {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: 100% 50%;
+  }
+}
+
+/* ===== Animation Utility Classes ===== */
+.animate-meteor {
+  animation: meteor var(--duration, 5s) linear infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 6s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+.animate-border-glow {
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+.animate-text-gradient {
+  animation: text-gradient 6s ease infinite;
+}
+
+/* ===== Custom Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(0.10 0.02 280);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(0.65 0.25 295 / 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.65 0.25 295 / 0.6);
+}
+
+/* ===== Selection Color ===== */
+::selection {
+  background: oklch(0.65 0.25 295 / 0.3);
+  color: oklch(1 0 0);
+}
+
+/* ===== Base Layer ===== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, oklch(0.65 0.25 295 / 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 100%, oklch(0.75 0.18 210 / 0.05), transparent);
+    background-attachment: fixed;
+  }
+
+  /* Smooth focus outlines */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary/50 rounded-md;
+  }
+}
+
+/* ===== Tailwind Theme Inline ===== */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-pink: var(--brand-pink);
+  --font-sans: var(--font-geist-sans, "Inter", system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, "Fira Code", monospace);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* Custom animation definitions for Tailwind */
+  --animate-meteor: meteor var(--duration, 5s) linear infinite;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-gradient-shift: gradient-shift 6s ease infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-border-glow: border-glow 3s ease-in-out infinite;
 }
