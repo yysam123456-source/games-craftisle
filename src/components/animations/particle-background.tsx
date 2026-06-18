@@ -31,6 +31,12 @@ export function ParticleBackground({
   } | null>(null);
   const [isClient, setIsClient] = useState(false);
 
+  // 移动端自适应：窄屏减半粒子数
+  const getParticleCount = () => {
+    if (typeof window === "undefined") return particleCount;
+    return window.innerWidth < 768 ? Math.floor(particleCount / 2) : particleCount;
+  };
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -41,6 +47,7 @@ export function ParticleBackground({
     const container = containerRef.current;
     const width = container.clientWidth;
     const height = container.clientHeight;
+    const actualParticleCount = getParticleCount();
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -61,13 +68,13 @@ export function ParticleBackground({
 
     // Particles geometry
     const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
+    const positions = new Float32Array(actualParticleCount * 3);
+    const colors = new Float32Array(actualParticleCount * 3);
     
     // Parse color
     const color = new THREE.Color(particleColor);
     
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < actualParticleCount; i++) {
       // Random positions
       positions[i * 3] = (Math.random() - 0.5) * 10;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
