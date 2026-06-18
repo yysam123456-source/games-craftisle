@@ -1,21 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PWARegistration } from "@/components/pwa/PWARegistration";
 import { Navigation } from "@/components/layout/Navigation";
 import { PageTransition } from "@/components/animations/page-transition";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+// 使用系统字体，避免 Google Fonts 网络依赖
+const fontSans = { variable: "--font-sans" };
+const fontMono = { variable: "--font-mono" };
 
 export const metadata: Metadata = {
   title: {
@@ -93,7 +84,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased font-sans">
         <Navigation />
         <main className="flex-1">
           <PageTransition>{children}</PageTransition>
