@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PWARegistration } from "@/components/pwa/PWARegistration";
 import { Navigation } from "@/components/layout/Navigation";
+import { PageTransition } from "@/components/animations/page-transition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -94,7 +95,9 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navigation />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <PWARegistration />
       </body>
     </html>
