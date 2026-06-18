@@ -20,7 +20,6 @@ export function GameIframe({ game, width = "100%" }: GameIframeProps) {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === "game-resize" && typeof event.data.height === "number") {
-        // Clamp to reasonable bounds (min: 300px, max: 95vh)
         const newHeight = Math.max(300, Math.min(event.data.height, window.innerHeight * 0.95));
         setIframeHeight(newHeight);
       }
