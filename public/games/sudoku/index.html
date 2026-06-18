@@ -288,37 +288,46 @@
   
 
 
+</script>
+<script>
 // Auto-resize iframe to fit game content perfectly
 (function() {
   function sendHeight() {
     var h = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight,
-      document.body.clientHeight
+      document.body?.scrollHeight || 0,
+      document.documentElement?.scrollHeight || 0,
+      document.body?.offsetHeight || 0,
+      document.documentElement?.offsetHeight || 0,
+      document.body?.clientHeight || 0
     );
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'game-resize', height: h + 20 }, '*');
+    if (h > 100) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'game-resize', height: h + 20 }, '*');
+      }
     }
   }
-  // Send height on load, after short delay for rendering
-  setTimeout(sendHeight, 100);
-  setTimeout(sendHeight, 500);
-  setTimeout(sendHeight, 1000);
-  // Also send on resize and DOM changes
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(sendHeight, 100);
+      setTimeout(sendHeight, 500);
+      setTimeout(sendHeight, 1000);
+    });
+  } else {
+    setTimeout(sendHeight, 100);
+    setTimeout(sendHeight, 500);
+    setTimeout(sendHeight, 1000);
+  }
   window.addEventListener('resize', sendHeight);
   if (typeof MutationObserver !== 'undefined') {
     var observer = new MutationObserver(function() {
       clearTimeout(observer._timer);
       observer._timer = setTimeout(sendHeight, 200);
     });
-    observer.observe(document.documentElement || document.body, { 
-      childList: true, subtree: true, attributes: true 
+    observer.observe(document.body || document.documentElement, {
+      childList: true, subtree: true, attributes: true
     });
   }
 })();
-
 </script>
 </body>
 </html>
