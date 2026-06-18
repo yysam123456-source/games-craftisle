@@ -401,6 +401,33 @@ export function GameDetailClient({
                 >
                   🤖 Reddit
                 </a>
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Check out ${game.title} - Free online game! https://games.craftisle.com/play/${game.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition text-center border border-[#25D366]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
+                >
+                  💬 WhatsApp
+                </a>
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}&text=${encodeURIComponent(game.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#0088cc]/10 text-[#0088cc] hover:bg-[#0088cc]/20 transition text-center border border-[#0088cc]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
+                >
+                  ✈️ Telegram
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/20 transition text-center border border-[#0A66C2]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
+                >
+                  💼 LinkedIn
+                </a>
               </div>
             </motion.section>
           </div>
