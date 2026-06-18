@@ -3,7 +3,7 @@
 import { getAllGames, getGamesByCategory } from "@/data/games";
 import { GameCard } from "@/components/games/GameCard";
 import { AnimatedWordsAdvanced, CharacterPop, Typewriter } from "@/components/animations/text-animate";
-import { MeteorBackground } from "@/components/animations/meteor-background";
+import { ParticleBackground } from "@/components/animations/particle-background";
 import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
 import { TiltCard } from "@/components/animations/mouse-follower";
 import { motion, type Variants } from "motion/react";
@@ -51,8 +51,15 @@ export default function HomePage() {
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* ===== Hero Section ===== */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Meteor background */}
-        <MeteorBackground count={20} className="opacity-40" />
+        {/* Three.js Particle Background */}
+        <ParticleBackground 
+          particleCount={150}
+          particleColor="#8b5cf6"
+          particleSize={2}
+          speed={0.5}
+          mouseInteraction={true}
+          className="absolute inset-0 z-0"
+        />
 
         {/* Gradient orbs */}
         <div className="absolute inset-0 pointer-events-none">

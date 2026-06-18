@@ -1,13 +1,15 @@
 "use client";
 
 import { GameIframe } from "@/components/games/GameIframe";
-import { AnimatedWords } from "@/components/animations/animated-text";
+import { CharacterPop, AnimatedWordsAdvanced } from "@/components/animations/text-animate";
 import { MeteorBackground } from "@/components/animations/meteor-background";
-import { GlowButton } from "@/components/animations/shimmer-button";
+import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
+import { MouseGlow } from "@/components/animations/mouse-follower";
 import { motion, type Variants } from "motion/react";
 import type { Game } from "@/types/game";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useState, useEffect } from "react";
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -69,7 +71,7 @@ export function GameDetailClient({
           <div className="flex flex-wrap items-center gap-4 mb-4">
             <h1 className="text-4xl md:text-5xl font-extrabold">
               <span className="bg-gradient-to-r from-primary via-brand-cyan to-brand-pink bg-clip-text text-transparent">
-                {game.title}
+                <CharacterPop text={game.title} delay={0.2} />
               </span>
             </h1>
             <div className="flex items-center gap-2">
