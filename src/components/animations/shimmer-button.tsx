@@ -1,49 +1,74 @@
 "use client";
 
-import { motion, type HTMLMotionProps } from "motion/react";
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { motion, type Variants } from "motion/react";
+import { ReactNode } from "react";
+import { MouseGlow, MagneticWrapper } from "./mouse-follower";
 
-type ShimmerButtonProps = {
+interface ShimmerButtonProps {
   children: ReactNode;
-  className?: string;
   href?: string;
-} & HTMLMotionProps<"button">;
+  variant?: "primary" | "secondary";
+  className?: string;
+  onClick?: () => void;
+}
 
-export function ShimmerButton({
-  children,
+// 高级光泽按钮（改进版）
+export function GlowButton({ 
+  children, 
+  href, 
+  variant = "primary", 
   className = "",
-  href,
-  className: _cn,
-  ...props
+  onClick 
 }: ShimmerButtonProps) {
-  const baseClass = cn(
-    "relative overflow-hidden rounded-lg font-semibold transition-all",
-    "bg-primary text-primary-foreground",
-    "hover:shadow-[0_0_30px_-10px_var(--primary)]",
-    className
-  );
-
+  const baseClasses = "relative inline-flex items-center justify-center px-8 py-3.5 rounded-2xl font-bold text-base transition-all duration-500 group overflow-hidden";
+  
+  const variants = {
+    primary: "bg-primary text-primary-foreground shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:shadow-[0_0_50px_rgba(139,92,246,0.6)]",
+    secondary: "bg-card/80 backdrop-blur-sm text-foreground border border-white/10 hover:border-primary/30",
+  };
+  
   const content = (
-    <motion.button
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      className={baseClass}
-      {...props}
-    >
-      {/* Shimmer effect */}
-      <span
-        className="absolute inset-0 -translate-x-full animate-[shimmer_3s_ease-in-out_infinite]"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)",
-          width: "200%",
+    <MagneticWrapper strength={0.2} className={`${baseClasses} ${variants[variant]} ${className}`}>
+      {/* 光泽扫过效果 */}
+      <motion.div
+        initial={{ x: "-100%" }}
+        animate={{ x: "100%" }}
+        transition={{
+          repeat: Infinity,
+          repeatDelay: 3,
+          duration: 1.5,
+          ease: "easeInOut",
         }}
-      />
-      <span className="relative z-10">{children}</span>
-    </motion.button>
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div className="w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      </motion.div>
+      
+      {/* 鼠标跟随光晕 */}
+      <MouseGlow glowColor={variant === "primary" ? "rgba(139, 92, 246, 0.3)" : "rgba(255, 255, 255, 0.1)"}>
+        <span className="relative z-10 flex items-center gap-2">
+          {children}
+        </span>
+      </MouseGlow>
+      
+      {/* 外发光 */}
+      {variant === "primary" && (
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.5, 0.8, 0.5],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 2,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 -z-10 rounded-2xl bg-primary/50 blur-[20px]"
+        />
+      )}
+    </MagneticWrapper>
   );
-
+  
   if (href) {
     return (
       <a href={href} className="inline-block">
@@ -51,55 +76,93 @@ export function ShimmerButton({
       </a>
     );
   }
+  
+  return (
+    <button onClick={onClick} className="inline-block">
+      {content}
+    </button>
+  );
+}
+
+// 脉冲按钮（带呼吸效果）
+export function PulseButton({ 
+  children, 
+  href,
+  className = "",
+  onClick 
+}: ShimmerButtonProps) {
+  const content = (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`relative inline-flex items-center justify-center px-8 py-3.5 rounded-2xl font-bold text-base bg-primary text-primary-foreground overflow-hidden ${className}`}
+      onClick={onClick}
+    >
+      {/* 脉冲光环 */}
+      <motion.div
+        animate={{
+          scale: [1, 1.4, 1],
+          opacity: [0.5, 0, 0.5],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 2,
+          ease: "easeInOut",
+        }}
+        className="absolute inset-0 rounded-2xl border-2 border-primary"
+      />
+      
+      {/* 光泽 */}
+      <motion.div
+        initial={{ x: "-100%" }}
+        animate={{ x: "100%" }}
+        transition={{
+          repeat: Infinity,
+          repeatDelay: 3,
+          duration: 1.5,
+        }}
+        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/20 to-transparent"
+      />
+      
+      <span className="relative z-10">{children}</span>
+    </motion.div>
+  );
+  
+  if (href) {
+    return <a href={href}>{content}</a>;
+  }
+  
   return content;
 }
 
-type GlowButtonProps = {
-  children: ReactNode;
-  href?: string;
-  className?: string;
-  variant?: "primary" | "secondary";
-};
-
-export function GlowButton({
-  children,
+// 浮动标签按钮（带向上浮动效果）
+export function FloatingButton({ 
+  children, 
   href,
   className = "",
-  variant = "primary",
-}: GlowButtonProps) {
-  const baseClass = cn(
-    "relative inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-bold text-lg overflow-hidden transition-all duration-300",
-    variant === "primary"
-      ? "bg-primary text-primary-foreground hover:shadow-[0_0_40px_-10px_oklch(0.65_0.25_295/0.6)]"
-      : "bg-card/80 text-foreground border border-white/10 hover:border-primary/50",
-    className
-  );
-
+  onClick 
+}: ShimmerButtonProps) {
   const content = (
-    <motion.span
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={baseClass}
-      style={{ willChange: "transform" } as React.CSSProperties}
+    <motion.div
+      animate={{
+        y: [0, -8, 0],
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: 3,
+        ease: "easeInOut",
+      }}
+      whileHover={{ scale: 1.1 }}
+      className={`inline-flex items-center justify-center px-8 py-3.5 rounded-2xl font-bold text-base bg-gradient-to-r from-primary to-purple-600 text-white shadow-[0_10px_30px_rgba(139,92,246,0.4)] hover:shadow-[0_20px_40px_rgba(139,92,246,0.6)] transition-shadow duration-300 ${className}`}
+      onClick={onClick}
     >
-      {/* Glow background on hover */}
-      <motion.span
-        className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 100%, oklch(0.65 0.25 295/0.2), transparent 70%)",
-        } as React.CSSProperties}
-      />
-      <span className="relative z-10">{children}</span>
-    </motion.span>
+      {children}
+    </motion.div>
   );
-
+  
   if (href) {
-    return (
-      <a href={href} className="inline-block">
-        {content}
-      </a>
-    );
+    return <a href={href}>{content}</a>;
   }
+  
   return content;
 }

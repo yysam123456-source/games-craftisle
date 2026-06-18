@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Game } from "@/types/game";
 import { cn } from "@/lib/utils";
+import { TiltCard, MouseGlow } from "@/components/animations/mouse-follower";
 
 interface GameCardProps {
   game: Game;
@@ -22,26 +23,26 @@ export function GameCard({ game, index = 0 }: GameCardProps) {
         delay: index * 0.08,
         ease: [0.2, 0.65, 0.3, 0.9],
       }}
-      whileHover={{
-        y: -6,
-        transition: { duration: 0.3, ease: "easeOut" },
-      }}
-      className="group"
     >
-      <Link href={`/play/${game.slug}`} className="block">
-        {/* Card with glow border */}
-        <div
-          className={cn(
-            "relative rounded-2xl overflow-hidden",
-            "bg-card/80 backdrop-blur-sm",
-            "border border-white/[0.06]",
-            "transition-all duration-500",
-            "hover:border-primary/30",
-            "before:absolute before:inset-0 before:rounded-2xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
-            "before:bg-[radial-gradient(ellipse_at_50%_0%,oklch(0.65_0.25_295/0.15),transparent_70%)]"
-          )}
-          style={{ willChange: "transform" }}
-        >
+      <TiltCard 
+        tiltStrength={10} 
+        className="group perspective-[1000px]"
+      >
+        <Link href={`/play/${game.slug}`} className="block">
+          {/* Card with glow border */}
+          <div
+            className={cn(
+              "relative rounded-2xl overflow-hidden",
+              "bg-card/80 backdrop-blur-sm",
+              "border border-white/[0.06]",
+              "transition-all duration-500",
+              "hover:border-primary/30",
+              "hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]",
+              "before:absolute before:inset-0 before:rounded-2xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
+              "before:bg-[radial-gradient(ellipse_at_50%_0%,oklch(0.65_0.25_295/0.15),transparent_70%)]"
+            )}
+            style={{ willChange: "transform" }}
+          >
           {/* Thumbnail */}
           <div className="aspect-video overflow-hidden relative">
             <motion.div
@@ -123,6 +124,7 @@ export function GameCard({ game, index = 0 }: GameCardProps) {
           />
         </div>
       </Link>
+    </TiltCard>
     </motion.div>
   );
 }

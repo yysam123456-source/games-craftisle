@@ -2,10 +2,12 @@
 
 import { getAllGames, getGamesByCategory } from "@/data/games";
 import { GameCard } from "@/components/games/GameCard";
-import { AnimatedText, AnimatedWords } from "@/components/animations/animated-text";
+import { AnimatedWordsAdvanced, CharacterPop, Typewriter } from "@/components/animations/text-animate";
 import { MeteorBackground } from "@/components/animations/meteor-background";
-import { GlowButton } from "@/components/animations/shimmer-button";
+import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
+import { TiltCard } from "@/components/animations/mouse-follower";
 import { motion, type Variants } from "motion/react";
+import { useState, useEffect } from "react";
 
 const categoryNames: Record<string, string> = {
   puzzle: "🧩 Puzzle",
@@ -69,10 +71,10 @@ export default function HomePage() {
             🎮
           </motion.div>
 
-          {/* Animated title */}
+          {/* Animated title - 使用高级字符弹跳动画 */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 leading-[1.1]">
             <span className="block text-foreground">
-              <AnimatedText text="Free Online" delay={0.2} />
+              <CharacterPop text="Free Online" delay={0.2} />
             </span>
             <span
               className="block mt-2"
@@ -83,32 +85,41 @@ export default function HomePage() {
                 backgroundClip: "text",
               }}
             >
-              <AnimatedText text="HTML5 Games" delay={0.5} />
+              <CharacterPop text="HTML5 Games" delay={0.5} />
             </span>
           </h1>
 
-          {/* Animated description */}
+          {/* Animated description - 使用高级单词淡入 */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.0 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            No download needed, play directly in your browser!
-            <span className="text-primary font-semibold"> Click and play</span>
-            , supports mobile, tablet, and desktop.
+            <AnimatedWordsAdvanced 
+              text="No download needed, play directly in your browser!" 
+              delay={1.2} 
+            />
+            <br />
+            <span className="text-primary font-semibold">
+              <Typewriter 
+                texts={["Click and play", "Supports all devices", "100% Free"]} 
+                delay={2} 
+                className="inline-block"
+              />
+            </span>
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - 使用脉冲和浮动效果 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.3 }}
             className="flex flex-wrap justify-center gap-4 mb-16"
           >
-            <GlowButton href="#all-games" className="text-lg px-10 py-4">
+            <PulseButton href="#all-games" className="text-lg px-10 py-4">
               🎮 Start Playing
-            </GlowButton>
+            </PulseButton>
             <GlowButton
               href="#categories"
               variant="secondary"
@@ -180,7 +191,7 @@ export default function HomePage() {
               EXPLORE CATEGORIES
             </motion.div>
             <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
-              <AnimatedWords text="Game Categories" delay={0.2} />
+              <AnimatedWordsAdvanced text="Game Categories" delay={0.2} />
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Choose your favorite game type and start challenging!
