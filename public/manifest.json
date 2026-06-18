@@ -4,8 +4,8 @@
   "description": "Play the best free HTML5 games online! No download required, play directly in your browser.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0a0a0f",
+  "theme_color": "#8b5cf6",
   "orientation": "any",
   "icons": [
     {
@@ -35,5 +35,34 @@
   ],
   "creator": "Craftisle Games",
   "publisher": "Craftisle Games",
-  "lang": "en"
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Play 2048",
+      "short_name": "2048",
+      "description": "Play 2048 puzzle game",
+      "url": "/play/2048",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Browse All Games",
+      "short_name": "Games",
+      "description": "Browse all free HTML5 games",
+      "url": "/#all-games",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
 }

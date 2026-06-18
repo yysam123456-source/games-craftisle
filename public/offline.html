@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - Craftisle Games</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #fafafa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 400px;
+    }
+    
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    p {
+      color: #a1a1aa;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #8b5cf6;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    
+    .button:hover {
+      background: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>You're Offline</h1>
+    <p>
+      It looks like you've lost your internet connection. 
+      Don't worry, you can still play some games that are cached!
+    </p>
+    <a href="/" class="button">Go to Homepage</a>
+  </div>
+</body>
+</html>
