@@ -214,16 +214,21 @@ export function GameDetailClient({
         >
           {game.description}
         </motion.p>
+      </div>
 
-        {/* Game Iframe - 沉浸式体验 */}
+      {/* 游戏 iframe - 全宽沉浸式，突破容器限制 */}
+      <div className="w-full px-2 md:px-4 mb-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="mb-12"
         >
           <GameIframe game={game} />
         </motion.div>
+      </div>
+
+      {/* 下方内容回到容器宽度 */}
+      <div className="container mx-auto px-4 max-w-6xl">
 
         {/* Game Guide Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
