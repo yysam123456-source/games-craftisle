@@ -3,6 +3,7 @@
 import { motion, type Variants } from "motion/react";
 import { ReactNode } from "react";
 import { MouseGlow, MagneticWrapper } from "./mouse-follower";
+import { soundManager } from "@/lib/sound-effects";
 
 interface ShimmerButtonProps {
   children: ReactNode;
@@ -25,6 +26,11 @@ export function GlowButton({
   const variants = {
     primary: "bg-primary text-primary-foreground shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:shadow-[0_0_50px_rgba(139,92,246,0.6)]",
     secondary: "bg-card/80 backdrop-blur-sm text-foreground border border-white/10 hover:border-primary/30",
+  };
+  
+  const handleClick = () => {
+    soundManager.play("buttonClick");
+    if (onClick) onClick();
   };
   
   const content = (
@@ -71,14 +77,14 @@ export function GlowButton({
   
   if (href) {
     return (
-      <a href={href} className="inline-block">
+      <a href={href} className="inline-block" onClick={handleClick}>
         {content}
       </a>
     );
   }
   
   return (
-    <button onClick={onClick} className="inline-block">
+    <button onClick={handleClick} className="inline-block">
       {content}
     </button>
   );
