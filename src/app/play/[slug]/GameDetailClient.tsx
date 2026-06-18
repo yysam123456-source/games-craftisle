@@ -215,23 +215,14 @@ export function GameDetailClient({
           {game.description}
         </motion.p>
 
-        {/* Game Iframe - with glow border */}
+        {/* Game Iframe - 沉浸式体验 */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="mb-12 relative"
+          className="mb-12"
         >
-          {/* Glow border wrapper */}
-          <div className="relative rounded-2xl overflow-hidden border border-white/[0.06] bg-card/30 backdrop-blur-sm">
-            {/* Top glow line */}
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-            <div className="p-1 md:p-2">
-              <GameIframe game={game} />
-            </div>
-            {/* Bottom glow line */}
-            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-          </div>
+          <GameIframe game={game} />
         </motion.div>
 
         {/* Game Guide Section */}
