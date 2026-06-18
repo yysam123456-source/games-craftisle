@@ -480,6 +480,95 @@ export default function HomePage() {
         </div>
       </motion.section>
 
+      {/* ===== Player Reviews ===== */}
+      <section className="py-20 md:py-28 border-t border-white/[0.04] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-brand-cyan/3 blur-[150px]" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+            >
+              PLAYER REVIEWS
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              What Players Say
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Real reviews from our gaming community.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                name: "GamerPro",
+                avatar: "🧑‍💻",
+                rating: 5,
+                review: "Best free gaming site ever! No ads, no downloads, just pure gaming fun. The games are addictive!",
+                game: "2048",
+              },
+              {
+                name: "GameLover",
+                avatar: "🎮",
+                rating: 5,
+                review: "I love the variety of games. From puzzles to action, there's something for everyone. Highly recommended!",
+                game: "Tetris",
+              },
+              {
+                name: "CasualPlayer",
+                avatar: "😊",
+                rating: 4,
+                review: "Perfect for killing time. The games load instantly and run smoothly on my phone. Great job!",
+                game: "Flappy Wings",
+              },
+            ].map((review, i) => (
+              <motion.div
+                key={review.name}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.2, 0.65, 0.3, 0.9] }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                <GlassCard className="p-6">
+                  {/* Rating */}
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <span key={i} className="text-amber-400 text-lg">⭐</span>
+                    ))}
+                    {[...Array(5 - review.rating)].map((_, i) => (
+                      <span key={i} className="text-gray-600 text-lg">⭐</span>
+                    ))}
+                  </div>
+                  
+                  {/* Review text */}
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic">
+                    "{review.review}"
+                  </p>
+                  
+                  {/* Author */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl">
+                      {review.avatar}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm">{review.name}</div>
+                      <div className="text-xs text-muted-foreground">Played {review.game}</div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===== Footer ===== */}
       <footer className="border-t border-white/[0.04] py-16 bg-card/30 backdrop-blur-sm">
         <div className="container mx-auto px-4">
