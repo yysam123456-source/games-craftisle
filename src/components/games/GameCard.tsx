@@ -6,6 +6,9 @@ import Link from "next/link";
 import type { Game } from "@/types/game";
 import { cn } from "@/lib/utils";
 import { TiltCard, MouseGlow } from "@/components/animations/mouse-follower";
+import { Heart } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { sounds } from "@/lib/sound-effects";
 import { soundManager } from "@/lib/sound-effects";
 
 interface GameCardProps {
@@ -14,10 +17,42 @@ interface GameCardProps {
 }
 
 export function GameCard({ game, index = 0 }: GameCardProps) {
+  // 收藏功能
+  const [isFavorite, setIsFavorite] = useState(false);
+  
+  // 初始化收藏状态
+  useEffect(() => {
+    try {
+      const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
+      setIsFavorite(favorites.includes(game.slug));
+    } catch {
+      // Ignore
+    }
+  }, [game.slug]);
+  
+  // 切换收藏状态
+  const toggleFavorite = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
+      const newFavorites = isFavorite
+        ? favorites.filter((slug: string) => slug !== game.slug)
+        : [...favorites, game.slug];
+      
+      localStorage.setItem('craftisle-favorites', JSON.stringify(newFavorites));
+      setIsFavorite(!isFavorite);
+      sounds.buttonClick();
+    } catch (error) {
+      console.warn('Failed to toggle favorite:', error);
+    }
+  }, [isFavorite, game.slug]);
+  
   const handleMouseEnter = () => {
-    soundManager.play("buttonHover");
+    sounds.buttonHover();
   };
-
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -49,22 +84,35 @@ export function GameCard({ game, index = 0 }: GameCardProps) {
             )}
             style={{ willChange: "transform" }}
           >
-          {/* Thumbnail */}
-          <div className="aspect-video overflow-hidden relative">
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              transition={{ duration: 0.6, ease: [0.2, 0.65, 0.3, 0.9] }}
-              className="w-full h-full"
-            >
-              <Image
-                src={game.thumbnail}
-                alt={`${game.title} game thumbnail`}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover"
-                unoptimized
-              />
-            </motion.div>
+            {/* Thumbnail */}
+            <div className="aspect-video overflow-hidden relative">
+              {/* 收藏按钮 */}
+              <button
+                onClick={toggleFavorite}
+                className={`absolute top-2 right-2 z-20 p-2 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+                  isFavorite
+                    ? 'bg-red-500/80 text-white scale-110'
+                    : 'bg-black/50 text-white/70 hover:bg-black/70 hover:text-white'
+                }`}
+                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              >
+                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-white' : ''}`} />
+              </button>
+              
+              <motion.div
+                whileHover={{ scale: 1.08 }}
+                transition={{ duration: 0.6, ease: [0.2, 0.65, 0.3, 0.9] }}
+                className="w-full h-full"
+              >
+                <Image
+                  src={game.thumbnail}
+                  alt={`${game.title} game thumbnail`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover"
+                  unoptimized
+                />
+              </motion.div>
 
             {/* Gradient overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

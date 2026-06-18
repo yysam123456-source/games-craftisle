@@ -9,7 +9,9 @@ import { motion, type Variants } from "motion/react";
 import type { Game } from "@/types/game";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { Share2, Heart, Check } from "lucide-react";
+import { sounds } from "@/lib/sound-effects";
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -33,6 +35,76 @@ export function GameDetailClient({
   relatedGames,
   jsonLd,
 }: GameDetailClientProps) {
+  // 收藏功能
+  const [isFavorite, setIsFavorite] = useState(false);
+  
+  // 初始化收藏状态和记录最近游玩
+  useEffect(() => {
+    try {
+      const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
+      setIsFavorite(favorites.includes(game.slug));
+    } catch {
+      // Ignore
+    }
+    
+    // 记录最近游玩
+    try {
+      const recent = JSON.parse(localStorage.getItem('craftisle-recent') || '[]');
+      const newRecent = [
+        { slug: game.slug, title: game.title, thumbnail: game.thumbnail, playedAt: new Date().toISOString() },
+        ...recent.filter((g: any) => g.slug !== game.slug)
+      ].slice(0, 20); // 最多保留20个
+      
+      localStorage.setItem('craftisle-recent', JSON.stringify(newRecent));
+    } catch (error) {
+      console.warn('Failed to record recent play:', error);
+    }
+  }, [game.slug]);
+  
+  // 切换收藏状态
+  const toggleFavorite = useCallback(() => {
+    try {
+      const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
+      const newFavorites = isFavorite
+        ? favorites.filter((slug: string) => slug !== game.slug)
+        : [...favorites, game.slug];
+      
+      localStorage.setItem('craftisle-favorites', JSON.stringify(newFavorites));
+      setIsFavorite(!isFavorite);
+      sounds.buttonClick();
+    } catch (error) {
+      console.warn('Failed to toggle favorite:', error);
+    }
+  }, [isFavorite, game.slug]);
+  
+  // 分享功能
+  const shareGame = useCallback(() => {
+    const shareData = {
+      title: game.title,
+      text: game.description,
+      url: `https://games.craftisle.com/play/${game.slug}`,
+    };
+    
+    if (navigator.share) {
+      navigator.share(shareData).catch(err => console.log('Share cancelled:', err));
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareData.url).then(() => {
+        alert('Link copied to clipboard!');
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = shareData.url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Link copied to clipboard!');
+      });
+    }
+    sounds.buttonClick();
+  }, [game]);
+  
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Subtle meteor background */}
@@ -83,6 +155,28 @@ export function GameDetailClient({
                   ⭐ Featured
                 </span>
               )}
+            </div>
+            
+            {/* 收藏和分享按钮 */}
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                onClick={toggleFavorite}
+                className={`p-2.5 rounded-xl transition-all duration-300 ${
+                  isFavorite
+                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    : 'bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04]'
+                }`}
+                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              >
+                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-400' : ''}`} />
+              </button>
+              <button
+                onClick={shareGame}
+                className="p-2.5 rounded-xl bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04] transition-all duration-300"
+                title="Share this game"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
@@ -272,20 +366,40 @@ export function GameDetailClient({
               className="relative rounded-2xl p-6 bg-card/60 backdrop-blur-sm border border-white/[0.04]"
             >
               <h3 className="text-xl font-bold mb-4">Share This Game</h3>
-              <div className="flex gap-3">
-                <a
-                  href={`mailto:?subject=Check out ${game.title}&body=Play free online: https://games.craftisle.com/play/${game.slug}`}
-                  className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground transition text-center border border-white/[0.04]"
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={shareGame}
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground transition text-center border border-white/[0.04] flex items-center justify-center gap-2"
                 >
-                  📧 Email
-                </a>
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
                 <a
-                  href={`https://twitter.com/intent/tweet?text=Check out ${game.title} - free online!&url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${game.title} - free online!`)}&url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 transition text-center border border-[#1DA1F2]/20"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 transition text-center border border-[#1DA1F2]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
                 >
                   🐦 Twitter
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 transition text-center border border-[#1877F2]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
+                >
+                  📘 Facebook
+                </a>
+                <a
+                  href={`https://www.reddit.com/submit?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}&title=${encodeURIComponent(game.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#FF4500]/10 text-[#FF4500] hover:bg-[#FF4500]/20 transition text-center border border-[#FF4500]/20 flex items-center justify-center gap-2"
+                  onClick={() => sounds.buttonClick()}
+                >
+                  🤖 Reddit
                 </a>
               </div>
             </motion.section>

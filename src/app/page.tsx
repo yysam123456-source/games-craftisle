@@ -48,6 +48,20 @@ const stats = [
 export default function HomePage() {
   const games = getAllGames().filter((g) => g.isActive);
   const categories = [...new Set(games.map((g) => g.category))];
+  const [recentGames, setRecentGames] = useState<any[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  // 从 localStorage 加载最近游玩记录
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      const recent = JSON.parse(localStorage.getItem('craftisle-recent') || '[]');
+      // 只显示最近5个
+      setRecentGames(recent.slice(0, 5));
+    } catch (error) {
+      console.warn('Failed to load recent games:', error);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -367,6 +381,53 @@ export default function HomePage() {
           </div>
         </div>
       </motion.section>
+
+      {/* ===== Recent Games ===== */}
+      {isClient && recentGames.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="py-20 md:py-28 border-t border-white/[0.04] relative"
+        >
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-14">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+              >
+                RECENT
+              </motion.div>
+              <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+                Recently Played
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+                Games you've played recently. Click to play again!
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {recentGames.map((recent: any, i: number) => {
+                const game = games.find((g: any) => g.slug === recent.slug);
+                if (!game) return null;
+                return (
+                  <motion.div
+                    key={recent.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <GameCard game={game} index={i} />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.section>
+      )}
 
       {/* ===== Why Choose Us ===== */}
       <motion.section
