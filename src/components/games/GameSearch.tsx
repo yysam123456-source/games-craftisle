@@ -6,6 +6,7 @@ import { Search, X, Gamepad2 } from "lucide-react";
 import { getAllGames } from "@/data/games";
 import type { Game } from "@/types/game";
 import { cn } from "@/lib/utils";
+import { GameCard } from "@/components/games/GameCard";
 
 interface GameSearchProps {
   onSelect?: (game: Game) => void;
@@ -174,29 +175,7 @@ export function SearchResults({ query }: { query: string }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.05 }}
         >
-          {/* 这里应该复用 GameCard 组件，但为了避免循环依赖，我直接创建一个简单的卡片 */}
-          <a
-            href={`/play/${game.slug}`}
-            className="block group"
-          >
-            <div className="rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-white/[0.06] hover:border-primary/30 transition-all duration-500">
-              <div className="aspect-video overflow-hidden">
-                <img
-                  src={game.thumbnail}
-                  alt={game.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
-                  {game.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {game.category}
-                </p>
-              </div>
-            </div>
-          </a>
+          <GameCard game={game} index={index} />
         </motion.div>
       ))}
     </div>
