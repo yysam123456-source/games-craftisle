@@ -190,3 +190,93 @@ export function Typewriter({ texts, delay = 0, className = "" }: TypewriterProps
     </span>
   );
 }
+
+// 文字模糊清除效果（从模糊到清晰）
+interface BlurRevealProps {
+  text: string;
+  delay?: number;
+  className?: string;
+}
+
+export function BlurReveal({ text, delay = 0, className = "" }: BlurRevealProps) {
+  const words = text.split(/\s+/);
+  
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, filter: "blur(20px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.8,
+            delay: delay + i * 0.1,
+            ease: [0.2, 0.65, 0.3, 0.9],
+          }}
+          className="inline-block mr-2"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+// 文字渐变填充动画（从空心到实心）
+interface GradientFillProps {
+  text: string;
+  className?: string;
+  gradientColors?: string;
+}
+
+export function GradientFill({ 
+  text, 
+  className = "",
+  gradientColors = "from-primary via-brand-cyan to-brand-pink"
+}: GradientFillProps) {
+  return (
+    <motion.span
+      initial={{ backgroundSize: "0% 100%" }}
+      whileInView={{ backgroundSize: "100% 100%" }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.2, ease: [0.2, 0.65, 0.3, 0.9] }}
+      className={`inline-block bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent bg-no-repeat`}
+      style={{ backgroundSize: "0% 100%" }}
+    >
+      {text}
+    </motion.span>
+  );
+}
+
+// 文字波浪动画（每个字符上下波动）
+interface WaveTextProps {
+  text: string;
+  className?: string;
+  delay?: number;
+}
+
+export function WaveText({ text, className = "", delay = 0 }: WaveTextProps) {
+  const characters = text.split("");
+  
+  return (
+    <span className={className}>
+      {characters.map((char, i) => (
+        <motion.span
+          key={i}
+          animate={{ y: [0, -10, 0] }}
+          transition={{
+            repeat: Infinity,
+            duration: 1.5,
+            delay: delay + i * 0.1,
+            ease: "easeInOut",
+          }}
+          className="inline-block"
+          style={{ originY: 0.7 }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
