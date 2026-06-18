@@ -17,13 +17,14 @@ export function AnimatedText({
   delay = 0,
 }: AnimatedTextProps) {
   const variants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 1, y: 0 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
+      scale: [0.95, 1],
       transition: {
         delay: delay + i * 0.03,
-        duration: 0.5,
+        duration: 0.4,
         ease: [0.2, 0.65, 0.3, 0.9],
       },
     }),
@@ -42,7 +43,7 @@ export function AnimatedText({
           custom={i}
           variants={variants}
           className="inline-block"
-          style={{ willChange: "transform, opacity" }}
+          style={{ willChange: "transform", opacity: 1 }}
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>

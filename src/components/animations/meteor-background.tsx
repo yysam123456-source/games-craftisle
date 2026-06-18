@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
+import { useState, useEffect } from "react";
 
 interface MeteorBackgroundProps {
   count?: number;
@@ -22,6 +23,18 @@ export function MeteorBackground({
   maxDelay = 5,
   className = "",
 }: MeteorBackgroundProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} />
+    );
+  }
+
   const meteors = Array.from({ length: count }, (_, i) => ({
     id: i,
     top: `${Math.random() * 100}%`,
