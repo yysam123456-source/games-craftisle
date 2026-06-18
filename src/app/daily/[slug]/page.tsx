@@ -58,7 +58,7 @@ export default async function DailyPage({ params }: DailyPageProps) {
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Breadcrumb */}
         <div className="text-sm text-muted-foreground mb-4">
           <a href="/" className="hover:underline">Home</a> / 

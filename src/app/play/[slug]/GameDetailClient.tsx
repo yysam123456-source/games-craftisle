@@ -110,7 +110,7 @@ export function GameDetailClient({
       {/* Subtle meteor background */}
       <MeteorBackground count={8} className="opacity-20" />
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
+      <div className="container mx-auto px-4 py-8 max-w-7xl relative z-10">
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
@@ -228,7 +228,7 @@ export function GameDetailClient({
       </div>
 
       {/* 下方内容回到容器宽度 */}
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container mx-auto px-4 max-w-7xl">
 
         {/* Game Guide Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
