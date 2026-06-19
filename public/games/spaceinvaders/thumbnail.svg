@@ -1,30 +1,130 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#000000"/>
-      <stop offset="100%" style="stop-color:#1a1a2e"/>
-    </linearGradient>
+    <radialGradient id="space" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="60%" stop-color="#0d0618"/>
+      <stop offset="100%" stop-color="#030108"/>
+    </radialGradient>
+    <filter id="glow2"><feGaussianBlur stdDeviation="2"/></filter>
+    <pattern id="starField" width="80" height="80" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="12" r="0.8" fill="#fff" opacity="0.5"/>
+      <circle cx="35" cy="6" r="0.5" fill="#fff" opacity="0.3"/>
+      <circle cx="60" cy="20" r="1" fill="#fff" opacity="0.6"/>
+      <circle cx="18" cy="45" r="0.6" fill="#fff" opacity="0.4"/>
+      <circle cx="50" cy="55" r="0.7" fill="#fff" opacity="0.35"/>
+      <circle cx="72" cy="40" r="0.5" fill="#fff" opacity="0.3"/>
+    </pattern>
   </defs>
-  <rect width="400" height="300" fill="url(#bg)"/>
-  <circle cx="200" cy="260" r="3" fill="#22c55e" opacity="0.9"/>
-  <rect x="197" y="245" width="6" height="15" fill="#22c55e" opacity="0.9"/>
-  <rect x="40" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="90" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="140" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="240" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="290" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="340" y="60" width="20" height="15" fill="#22c55e" opacity="0.8"/>
-  <rect x="40" y="90" width="20" height="15" fill="#22c55e" opacity="0.6"/>
-  <rect x="140" y="90" width="20" height="15" fill="#22c55e" opacity="0.6"/>
-  <rect x="240" y="90" width="20" height="15" fill="#22c55e" opacity="0.6"/>
-  <rect x="340" y="90" width="20" height="15" fill="#22c55e" opacity="0.6"/>
-  <rect x="90" y="120" width="20" height="15" fill="#22c55e" opacity="0.4"/>
-  <rect x="290" y="120" width="20" height="15" fill="#22c55e" opacity="0.4"/>
-  <rect x="60" y="150" width="280" height="4" fill="#6b7280" opacity="0.3"/>
-  <rect x="185" y="40" width="30" height="8" fill="#ef4444" opacity="0.9"/>
-  <rect x="195" y="30" width="10" height="10" fill="#ef4444" opacity="0.9"/>
-  <rect x="190" y="48" width="20" height="3" fill="#fbbf24" opacity="0.8"/>
-  <circle cx="200" cy="180" r="1.5" fill="#fbbf24" opacity="0.6"/>
-  <circle cx="200" cy="200" r="1" fill="#fbbf24" opacity="0.4"/>
-  <text x="200" y="280" font-family="Arial,sans-serif" font-size="28" font-weight="bold" fill="#22c55e" text-anchor="middle">SPACE INVADERS</text>
+
+  <!-- Space background -->
+  <rect width="640" height="360" fill="url(#space)"/>
+  <rect width="640" height="360" fill="url(#starField)"/>
+
+  <!-- Bright stars with twinkle -->
+  <g filter="url(#glow2)">
+    <circle cx="80" cy="50" r="1.5" fill="#fff" opacity="0.8"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="3s"/></circle>
+    <circle cx="200" cy="30" r="2" fill="#fef3c7" opacity="0.7"><animate attributeName="opacity" values="0.7;0.2;0.7" dur="4s"/></circle>
+    <circle cx="400" cy="45" r="1.5" fill="#bfdbfe" opacity="0.65"><animate attributeName="opacity" values="0.65;0.15;0.65" dur="2.5s"/></circle>
+    <circle cx="550" cy="60" r="1.8" fill="#fff" opacity="0.75"><animate attributeName="opacity" values="0.75;0.2;0.75" dur="3.5s"/></circle>
+    <circle cx="120" cy="150" r="1.2" fill="#fecdd3" opacity="0.6"><animate attributeName="opacity" values="0.6;0.15;0.6" dur="4.2s"/></circle>
+    <circle cx="520" cy="140" r="1.5" fill="#fff" opacity="0.7"><animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s"/></circle>
+    <circle cx="300" cy="100" r="1" fill="#e0e7ff" opacity="0.55"><animate attributeName="opacity" values="0.55;0.1;0.55" dur="2.8s"/></circle>
+    <circle cx="600" cy="200" r="1.3" fill="#fef3c7" opacity="0.6"><animate attributeName="opacity" values="0.6;0.15;0.6" dur="3.8s"/></circle>
+  </g>
+
+  <!-- Player ship (bottom center) -->
+  <g transform="translate(308, 300)">
+    <!-- Ship body -->
+    <path d="M12,0 L24,35 L12,30 L0,35 Z" fill="#60a5fa" opacity="0.9"/>
+    <path d="M12,0 L12,30" stroke="#93c5fd" stroke-width="1" opacity="0.5"/>
+    <!-- Engine glow -->
+    <ellipse cx="12" cy="36" rx="6" ry="3" fill="#3b82f6" opacity="0.6" filter="url(#glow2)"/>
+    <!-- Ship core glow -->
+    <circle cx="12" cy="18" r="3" fill="#bfdbfe" opacity="0.7"/>
+  </g>
+
+  <!-- Alien invaders (rows of pixel art style) -->
+  <g fill="#ef4444" opacity="0.85">
+    <!-- Row 1 -->
+    <g transform="translate(140, 70)">
+      <rect width="12" height="12" rx="2"/><rect x="20" width="12" height="12" rx="2"/>
+      <rect x="40" width="12" height="12" rx="2"/><rect x="60" width="12" height="12" rx="2"/>
+      <rect x="80" width="12" height="12" rx="2"/><rect x="100" width="12" height="12" rx="2"/>
+      <rect x="120" width="12" height="12" rx="2"/><rect x="140" width="12" height="12" rx="2"/>
+      <rect x="160" width="12" height="12" rx="2"/><rect x="180" width="12" height="12" rx="2"/>
+      <rect x="200" width="12" height="12" rx="2"/><rect x="220" width="12" height="12" rx="2"/>
+      <rect x="240" width="12" height="12" rx="2"/><rect x="260" width="12" height="12" rx="2"/>
+      <rect x="280" width="12" height="12" rx="2"/><rect x="300" width="12" height="12" rx="2"/>
+      <rect x="320" width="12" height="12" rx="2"/><rect x="340" width="12" height="12" rx="2"/>
+      <rect x="360" width="12" height="12" rx="2"/>
+    </g>
+    <!-- Row 2 body -->
+    <g transform="translate(128, 86)">
+      <rect y="0" width="364" height="12" rx="2"/>
+    </g>
+    <!-- Row 3 arms -->
+    <g transform="translate(128, 98)">
+      <rect width="16" height="12" rx="2"/><rect x="44" width="16" height="12" rx="2"/>
+      <rect x="104" width="16" height="12" rx="2"/><rect x="164" width="16" height="12" rx="2"/>
+      <rect x="224" width="16" height="12" rx="2"/><rect x="284" width="16" height="12" rx="2"/>
+      <rect x="344" width="16" height="12" rx="2"/>
+    </g>
+    <!-- Row 4 bottom -->
+    <g transform="translate(144, 110)">
+      <rect y="0" width="332" height="12" rx="2"/>
+    </g>
+    <!-- Row 5 legs -->
+    <g transform="translate(156, 122)">
+      <rect width="12" height="12" rx="2"/><rect x="40" width="12" height="12" rx="2"/>
+      <rect x="120" width="12" height="12" rx="2"/><rect x="160" width="12" height="12" rx="2"/>
+      <rect x="240" width="12" height="12" rx="2"/><rect x="280" width="12" height="12" rx="2"/>
+    </g>
+  </g>
+
+  <!-- Player bullets (laser beams going up) -->
+  <g fill="#60a5fa" filter="url(#glow2)">
+    <rect x="306" y="260" width="3" height="18" rx="1.5" opacity="0.9">
+      <animate attributeName="y" values="260;120;260" dur="0.8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="330" y="240" width="3" height="18" rx="1.5" opacity="0.8">
+      <animate attributeName="y" values="240;100;240" dur="1s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Enemy bullets coming down -->
+  <g fill="#ef4444" opacity="0.7">
+    <circle cx="200" cy="160" r="2.5">
+      <animate attributeName="cy" values="160;280;160" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="180" r="2.5">
+      <animate attributeName="cy" values="180;290;180" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="150" r="2">
+      <animate attributeName="cy" values="150;270;150" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- UFO bonus at top right -->
+  <g transform="translate(530, 35)" opacity="0.8">
+    <ellipse cx="25" cy="18" rx="25" ry="8" fill="#22c55e"/>
+    <ellipse cx="25" cy="12" rx="14" ry="10" fill="#4ade80"/>
+    <!-- UFO lights blinking -->
+    <circle cx="10" cy="20" r="2" fill="#fef08a"><animate attributeName="opacity" values="1;0.2;1" dur="0.5s"/></circle>
+    <circle cx="25" cy="22" r="2" fill="#fef08a"><animate attributeName="opacity" values="0.2;1;0.2" dur="0.5s"/></circle>
+    <circle cx="40" cy="20" r="2" fill="#fef08a"><animate attributeName="opacity" values="1;0.2;1" dur="0.5s"/></circle>
+  </g>
+
+  <!-- Score / HUD bar -->
+  <rect x="0" y="0" width="640" height="28" fill="#000" opacity="0.6"/>
+  <text x="20" y="19" fill="#e0e7ff" font-family="monospace" font-size="13" font-weight="700">SCORE: 2,480</text>
+  <text x="200" y="19" fill="#22c55e" font-family="monospace" font-size="13" font-weight="700">HI-SCORE: 15,200</text>
+  <text x="400" y="19" fill="#ef4444" font-family="monospace" font-size="13" font-weight="700">LIVES: ❤️❤️</text>
+  <text x="540" y="19" fill="#a5b4fc" font-family="monospace" font-size="13" font-weight="700">WAVE 3</text>
+
+  <!-- Bottom label -->
+  <text x="320" y="348" text-anchor="middle" fill="#e0e7ff" font-family="system-ui" font-size="16" font-weight="800" letter-spacing="2">SPACE INVADERS</text>
+
+  <!-- Category badge -->
+  <rect x="16" y="334" width="62" height="20" rx="10" fill="#ef4444" opacity="0.85"/>
+  <text x="47" y="348" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="9" font-weight="700">arcade</text>
 </svg>

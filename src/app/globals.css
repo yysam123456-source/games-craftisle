@@ -118,6 +118,12 @@
   }
 }
 
+@keyframes loading-bar {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
 @keyframes text-gradient {
   0%, 100% {
     background-size: 200% 200%;
@@ -252,4 +258,5 @@
   --animate-gradient-shift: gradient-shift 6s ease infinite;
   --animate-shimmer: shimmer 3s linear infinite;
   --animate-border-glow: border-glow 3s ease-in-out infinite;
+  --animate-loading-bar: loading-bar 1.5s ease-in-out infinite;
 }

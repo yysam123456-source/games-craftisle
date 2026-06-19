@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Loader2, Maximize2, Minimize2, Volume2, VolumeX, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Loader2, Maximize2, Minimize2, Volume2, VolumeX, X } from "lucide-react";
 import type { Game } from "@/types/game";
 import { sounds } from "@/lib/sound-effects";
 
@@ -22,96 +22,67 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // 音效
   const playGameStart = () => sounds.gameStart();
   const playButtonClick = () => sounds.buttonClick();
 
-  // 自动隐藏控制栏（全屏模式下）
+  // 自动隐藏控制栏
   const resetControlsTimer = useCallback(() => {
     if (!isFullscreen) return;
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
     controlsTimeoutRef.current = setTimeout(() => {
-      if (isFullscreen && !controlsHovered) {
-        setShowControls(false);
-      }
+      if (isFullscreen && !controlsHovered) setShowControls(false);
     }, 3000);
   }, [isFullscreen, controlsHovered]);
 
   // 全屏功能
   const toggleFullscreen = useCallback(() => {
     playButtonClick();
-
     if (!document.fullscreenElement) {
-      if (containerRef.current) {
-        containerRef.current.requestFullscreen().then(() => {
-          setIsFullscreen(true);
-          onFullscreenChange?.(true);
-        }).catch(err => {
-          console.error("全屏失败:", err);
-        });
-      }
+      containerRef.current?.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+        onFullscreenChange?.(true);
+      }).catch(console.error);
     } else {
       document.exitFullscreen().then(() => {
         setIsFullscreen(false);
         onFullscreenChange?.(false);
-      }).catch(err => {
-        console.error("退出全屏失败:", err);
-      });
+      }).catch(console.error);
     }
   }, [playButtonClick, onFullscreenChange]);
 
-  // 监听全屏变化
   useEffect(() => {
     const handleFullscreenChange = () => {
-      const isCurrentlyFullscreen = !!document.fullscreenElement;
-      setIsFullscreen(isCurrentlyFullscreen);
-      onFullscreenChange?.(isCurrentlyFullscreen);
-      if (isCurrentlyFullscreen) {
-        resetControlsTimer();
-      } else {
-        setShowControls(true);
-      }
+      const fs = !!document.fullscreenElement;
+      setIsFullscreen(fs);
+      onFullscreenChange?.(fs);
+      if (fs) resetControlsTimer(); else setShowControls(true);
     };
-
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, [onFullscreenChange, resetControlsTimer]);
 
-  // 双击全屏
   const handleDoubleClick = useCallback(() => {
-    if (!isFullscreen) {
-      toggleFullscreen();
-    }
+    if (!isFullscreen) toggleFullscreen();
   }, [isFullscreen, toggleFullscreen]);
 
-  // 键盘快捷键：F = 全屏切换，ESC 由浏览器处理
+  // F键全屏
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // F 键切换全屏
       if (e.key.toLowerCase() === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        // 检查焦点是否在输入框中
-        const target = e.target as HTMLElement;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
-          return;
-        }
+        const t = e.target as HTMLElement;
+        if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable) return;
         e.preventDefault();
         toggleFullscreen();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleFullscreen]);
 
-  // 自动隐藏loader
+  // 超时自动隐藏loader
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isLoading) {
-        setIsLoading(false);
-        playGameStart();
-      }
-    }, 4000);
+    const timer = setTimeout(() => { if (isLoading) { setIsLoading(false); playGameStart(); } }, 4000);
     return () => clearTimeout(timer);
   }, [isLoading, playGameStart]);
 
@@ -123,32 +94,84 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
     );
   }
 
+  // 根据游戏类型选择背景样式
+  const getBackgroundStyle = (): React.CSSProperties & { backgroundImage?: string; backgroundSize?: string; backgroundPosition?: string } => {
+    if (game.backgroundImage) {
+      return {
+        backgroundImage: `url(${game.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
+    
+    // 默认根据分类生成CSS图案背景
+    const patterns: Record<string, string> = {
+      puzzle: `radial-gradient(circle at 20% 50%, rgba(99,102,241,0.08) 0%, transparent 50%), 
+               radial-gradient(circle at 80% 50%, rgba(236,72,153,0.06) 0%, transparent 50%)`,
+      action: `radial-gradient(circle at 30% 20%, rgba(239,68,68,0.1) 0%, transparent 40%),
+               radial-gradient(circle at 70% 80%, rgba(59,130,246,0.08) 0%, transparent 40%)`,
+      arcade: `radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.12) 0%, transparent 60%)`,
+      strategy: `linear-gradient(135deg, rgba(34,197,94,0.05) 0%, rgba(59,130,246,0.05) 100%)`,
+      casual: `radial-gradient(circle at 80% 20%, rgba(251,191,36,0.08) 0%, transparent 40%)`,
+      building: `conic-gradient(from 45deg at 10% 90%, rgba(99,102,241,0.05) 0%, transparent 50%)`,
+    };
+    
+    return { backgroundImage: patterns[game.category] || patterns.arcade };
+  };
+
+  const bgStyle = getBackgroundStyle();
+
   return (
     <div 
       ref={containerRef}
-      className={`relative group/game ${isFullscreen ? 'fixed inset-0 z-[9999] bg-black' : ''}`}
+      className={`relative group/game ${isFullscreen ? 'fixed inset-0 z-[9999]' : ''}`}
       style={{ width: isFullscreen ? '100vw' : width }}
       onMouseMove={resetControlsTimer}
     >
-      {/* 游戏iframe容器 - 无边框无padding，纯净体验 */}
-      <div 
-        className={`relative bg-black ${isFullscreen ? 'h-screen' : 'aspect-[4/3] md:aspect-video'}`}
+      {/* ===== 游戏主容器：带装饰背景的全屏区域 ===== */}
+      <div
+        className={`relative overflow-hidden ${isFullscreen ? 'h-screen' : 'aspect-video'}`}
+        style={{
+          ...bgStyle,
+          backgroundColor: '#000',
+          backgroundRepeat: 'no-repeat',
+        }}
         onDoubleClick={handleDoubleClick}
       >
+        {/* 装饰性边框光晕 - 模拟截图3的效果 */}
+        {!isFullscreen && (
+          <>
+            {/* 四角装饰 */}
+            <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/20 rounded-tl-xl pointer-events-none z-10" />
+            <div className="absolute top-0 right-0 w-16 h-16 border-r-2 border-t-2 border-primary/20 rounded-tr-xl pointer-events-none z-10" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-primary/20 rounded-bl-xl pointer-events-none z-10" />
+            <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/20 rounded-br-xl pointer-events-none z-10" />
+            
+            {/* 微妙的内发光边缘 */}
+            <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/[0.04] pointer-events-none z-10" />
+          </>
+        )}
+
         {/* Loading Overlay */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-20 transition-opacity duration-500">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/92 z-20 backdrop-blur-sm transition-opacity duration-500">
             <div className="text-center">
-              <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-              <p className="text-lg text-white/80 font-medium">Loading {game.title}...</p>
-              <div className="mt-4 w-56 h-1.5 bg-white/10 rounded-full overflow-hidden mx-auto">
-                <div className="h-full bg-gradient-to-r from-primary to-brand-cyan rounded-full animate-pulse" style={{ width: '65%' }} />
+              {/* 游戏图标动画 */}
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-brand-pink p-[2px] animate-pulse">
+                <div className="w-full h-full rounded-2xl bg-black/90 flex items-center justify-center text-3xl">
+                  🎮
+                </div>
               </div>
+              <p className="text-white font-semibold text-lg mb-3">Loading {game.title}...</p>
+              <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden mx-auto">
+                <div className="h-full bg-gradient-to-r from-primary via-brand-cyan to-brand-pink rounded-full animate-loading-bar" style={{ width: '65%' }} />
+              </div>
+              <p className="text-xs text-white/40 mt-3">Double-click for fullscreen mode</p>
             </div>
           </div>
         )}
 
-        {/* Iframe - 占满整个容器 */}
+        {/* Iframe - 占满整个容器，无间隙无白边 */}
         <iframe
           ref={iframeRef}
           src={game.sourceUrl}
@@ -163,18 +186,13 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
             left: 0,
             width: "100%",
             height: "100%",
+            zIndex: 1,
           }}
           sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
           allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          onLoad={() => setTimeout(() => {
-            setIsLoading(false);
-            playGameStart();
-          }, 500)}
-          onError={() => {
-            setIsLoading(false);
-            setError("Game failed to load. Click Retry.");
-          }}
+          onLoad={() => setTimeout(() => { setIsLoading(false); playGameStart(); }, 500)}
+          onError={() => { setIsLoading(false); setError("Failed to load. Click Retry."); }}
         />
 
         {/* Error Overlay */}
@@ -183,20 +201,14 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
             <div className="text-center p-8">
               <p className="text-red-400 mb-6 text-lg font-semibold">{error}</p>
               <button
-                onClick={() => {
-                  playButtonClick();
-                  setError(null);
-                  setIsLoading(true);
-                }}
-                className="px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 font-medium text-base transition-all hover:scale-105"
-              >
-                Retry Loading
-              </button>
+                onClick={() => { playButtonClick(); setError(null); setIsLoading(true); }}
+                className="px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 font-medium transition-all hover:scale-105"
+              >Retry Loading</button>
             </div>
           </div>
         )}
 
-        {/* 悬浮控制栏 - 底部半透明 */}
+        {/* ===== 底部控制栏 ===== */}
         <div 
           className={`absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out ${
             showControls || !isFullscreen || controlsHovered
@@ -206,80 +218,48 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           onMouseEnter={() => setControlsHovered(true)}
           onMouseLeave={() => setControlsHovered(false)}
         >
-          {/* 渐变遮罩背景 */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
           
           <div className="relative flex items-center justify-between px-4 py-3 md:py-3">
-            {/* 左侧：游戏名称 */}
-            <div className="flex items-center gap-2 min-w-0">
-              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                isLoading ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'
-              }`} />
-              <span className="text-sm font-medium text-white/90 truncate max-w-[200px] md:max-w-none">
-                {game.title}
-              </span>
+            {/* 左侧状态 */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isLoading ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]'}`} />
+              <span className="text-sm font-medium text-white/90 truncate max-w-[180px] md:max-w-[300px]">{game.title}</span>
             </div>
             
-            {/* 右侧：操作按钮 */}
-            <div className="flex items-center gap-1 md:gap-2">
-              {/* 音效开关 */}
-              <button
-                onClick={() => {
-                  playButtonClick();
-                  setSoundEnabled(!soundEnabled);
-                }}
-                className="p-2 rounded-lg hover:bg-white/20 transition-all duration-200 text-white/70 hover:text-white"
-                title={soundEnabled ? "Mute" : "Unmute"}
-              >
-                {soundEnabled ? (
-                  <Volume2 className="w-5 h-5" />
-                ) : (
-                  <VolumeX className="w-5 h-5" />
-                )}
+            {/* 右侧操作按钮 */}
+            <div className="flex items-center gap-1 md:gap-1.5">
+              <button onClick={() => { playButtonClick(); setSoundEnabled(!soundEnabled); }} className="p-2 rounded-lg hover:bg-white/15 transition-all duration-200 text-white/60 hover:text-white" title={soundEnabled ? "Mute" : "Unmute"}>
+                {soundEnabled ? <Volume2 className="w-[18px] h-[18px]" /> : <VolumeX className="w-[18px] h-[18px]" />}
               </button>
               
-              {/* 全屏按钮 */}
-              <button
-                onClick={toggleFullscreen}
-                className="p-2 rounded-lg hover:bg-white/20 transition-all duration-200 text-white/70 hover:text-white"
-                title={isFullscreen ? "Exit fullscreen (ESC)" : "Fullscreen"}
-              >
-                {isFullscreen ? (
-                  <Minimize2 className="w-5 h-5" />
-                ) : (
-                  <Maximize2 className="w-5 h-5" />
-                )}
+              <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/15 transition-all duration-200 text-white/60 hover:text-white" title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}>
+                {isFullscreen ? <Minimize2 className="w-[18px] h-[18px]" /> : <Maximize2 className="w-[18px] h-[18px]" />}
               </button>
               
-              {/* ESC提示（仅全屏模式显示） */}
               {isFullscreen && (
-                <span className="hidden md:inline text-xs text-white/50 ml-2">Press ESC to exit</span>
+                <span className="hidden sm:inline text-[11px] text-white/40 ml-1">ESC to exit</span>
               )}
             </div>
           </div>
         </div>
 
-        {/* 全屏模式下的关闭提示 */}
+        {/* 全屏关闭按钮 */}
         {isFullscreen && (
           <button
-            onClick={() => {
-              if (document.fullscreenElement) {
-                document.exitFullscreen();
-              }
-            }}
-            className="absolute top-4 right-4 z-30 p-2 rounded-lg bg-black/50 hover:bg-black/70 text-white/70 hover:text-white opacity-0 group-hover/game:opacity-100 transition-all duration-200"
-            title="Exit fullscreen"
+            onClick={() => document.fullscreenElement && document.exitFullscreen()}
+            className="absolute top-4 right-4 z-30 p-2 rounded-lg bg-black/60 hover:bg-black/80 text-white/60 hover:text-white opacity-0 group-hover/game:opacity-100 focus:opacity-100 transition-all duration-200 backdrop-blur-sm"
           >
             <X className="w-5 h-5" />
           </button>
         )}
       </div>
 
-      {/* 非全屏模式：底部提示条 */}
+      {/* 非全屏提示条 */}
       {!isFullscreen && (
-        <div className="mt-3 flex items-center justify-between px-1 text-xs text-muted-foreground/60">
-          <span>Click fullscreen button or double-click game for immersive mode</span>
-          <span className="opacity-60">Press F for fullscreen</span>
+        <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-muted-foreground/50">
+          <span>🖱️ Double-click or press F for immersive fullscreen</span>
+          <span>⌨️ F = Fullscreen</span>
         </div>
       )}
     </div>

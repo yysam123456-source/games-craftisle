@@ -1,26 +1,13 @@
 "use client";
 
 import { GameIframe } from "@/components/games/GameIframe";
-import { CharacterPop, AnimatedWordsAdvanced } from "@/components/animations/text-animate";
-import { MeteorBackground } from "@/components/animations/meteor-background";
-import { GlowButton, PulseButton } from "@/components/animations/shimmer-button";
-import { MouseGlow } from "@/components/animations/mouse-follower";
-import { motion, type Variants } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import type { Game } from "@/types/game";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useState, useEffect, useCallback } from "react";
-import { Share2, Heart, Check } from "lucide-react";
+import { Share2, Heart, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { sounds } from "@/lib/sound-effects";
-
-const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] },
-  },
-};
 
 interface GameDetailClientProps {
   game: Game;
@@ -35,17 +22,15 @@ export function GameDetailClient({
   relatedGames,
   jsonLd,
 }: GameDetailClientProps) {
-  // 收藏功能
   const [isFavorite, setIsFavorite] = useState(false);
+  const [infoExpanded, setInfoExpanded] = useState(false);
   
-  // 初始化收藏状态和记录最近游玩
+  // 收藏功能
   useEffect(() => {
     try {
       const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
       setIsFavorite(favorites.includes(game.slug));
-    } catch {
-      // Ignore
-    }
+    } catch { /* ignore */ }
     
     // 记录最近游玩
     try {
@@ -53,377 +38,246 @@ export function GameDetailClient({
       const newRecent = [
         { slug: game.slug, title: game.title, thumbnail: game.thumbnail, playedAt: new Date().toISOString() },
         ...recent.filter((g: any) => g.slug !== game.slug)
-      ].slice(0, 20); // 最多保留20个
-      
+      ].slice(0, 20);
       localStorage.setItem('craftisle-recent', JSON.stringify(newRecent));
-    } catch (error) {
-      console.warn('Failed to record recent play:', error);
-    }
+    } catch { /* ignore */ }
   }, [game.slug]);
-  
-  // 切换收藏状态
+
   const toggleFavorite = useCallback(() => {
     try {
       const favorites = JSON.parse(localStorage.getItem('craftisle-favorites') || '[]');
       const newFavorites = isFavorite
         ? favorites.filter((slug: string) => slug !== game.slug)
         : [...favorites, game.slug];
-      
       localStorage.setItem('craftisle-favorites', JSON.stringify(newFavorites));
       setIsFavorite(!isFavorite);
       sounds.buttonClick();
-    } catch (error) {
-      console.warn('Failed to toggle favorite:', error);
-    }
+    } catch { /* ignore */ }
   }, [isFavorite, game.slug]);
-  
-  // 分享功能
+
   const shareGame = useCallback(() => {
-    const shareData = {
-      title: game.title,
-      text: game.description,
-      url: `https://games.craftisle.com/play/${game.slug}`,
-    };
-    
+    const shareData = { title: game.title, text: game.description, url: `https://games.craftisle.com/play/${game.slug}` };
     if (navigator.share) {
-      navigator.share(shareData).catch(err => console.log('Share cancelled:', err));
+      navigator.share(shareData).catch(() => {});
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareData.url).then(() => {
-        alert('Link copied to clipboard!');
-      }).catch(() => {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = shareData.url;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert('Link copied to clipboard!');
-      });
+        alert('Link copied!');
+      }).catch(() => {});
     }
     sounds.buttonClick();
   }, [game]);
-  
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Subtle meteor background */}
-      <MeteorBackground count={8} className="opacity-20" />
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl relative z-10">
-        {/* JSON-LD Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-
-        {/* Breadcrumb */}
-        <motion.nav
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6 text-sm text-muted-foreground"
-        >
-          <a href="/" className="hover:text-primary transition-colors">Home</a>
-          <span className="mx-2">/</span>
-          <a href={`#${game.category}`} className="hover:text-primary transition-colors">
-            {game.category.charAt(0).toUpperCase() + game.category.slice(1)}
-          </a>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{game.title}</span>
-        </motion.nav>
-
-        {/* Game Title & Meta Info */}
+      {/* ===== HERO: 全屏游戏区域 ===== */}
+      <div className="relative w-full">
+        <GameIframe game={game} />
+        
+        {/* 紧贴游戏上方的信息条 - 半透明浮动 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-8"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative z-10 mx-3 md:mx-6 -mt-6"
         >
-          <div className="flex flex-wrap items-center gap-4 mb-4">
-            <h1 className="text-4xl md:text-5xl font-extrabold">
-              <span className="bg-gradient-to-r from-primary via-brand-cyan to-brand-pink bg-clip-text text-transparent">
-                <CharacterPop text={game.title} delay={0.2} />
-              </span>
-            </h1>
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20">
-                {game.category}
-              </span>
-              {game.featured && (
-                <span className="px-3 py-1 rounded-full text-sm font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  ⭐ Featured
+          {/* 游戏标题卡片 */}
+          <div className="bg-card/90 backdrop-blur-xl rounded-2xl border border-white/[0.08] shadow-2xl shadow-black/40 overflow-hidden">
+            {/* 主信息行 */}
+            <div className="px-5 py-4 flex flex-wrap items-center gap-3">
+              {/* 左：标题 */}
+              <h1 className="text-xl md:text-2xl font-extrabold flex items-center gap-3 min-w-0 flex-1">
+                <span className="bg-gradient-to-r from-primary via-brand-cyan to-brand-pink bg-clip-text text-transparent truncate">
+                  {game.title}
                 </span>
+              </h1>
+
+              {/* 标签组 */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                  {game.category}
+                </span>
+                {game.featured && (
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    ⭐ Featured
+                  </span>
+                )}
+              </div>
+
+              {/* 操作按钮 */}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <button
+                  onClick={toggleFavorite}
+                  className={`p-2 rounded-xl transition-all duration-300 ${
+                    isFavorite
+                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                      : 'bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.06]'
+                  }`}
+                  title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-400' : ''}`} />
+                </button>
+                <button
+                  onClick={shareGame}
+                  className="p-2 rounded-xl bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.06] transition-all duration-300"
+                  title="Share this game"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+                
+                {/* 展开/收起详情 */}
+                <button
+                  onClick={() => { setInfoExpanded(!infoExpanded); sounds.buttonClick(); }}
+                  className="p-2 rounded-xl bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.06] transition-all duration-300 flex items-center gap-1.5"
+                  title={infoExpanded ? "Hide details" : "Show details"}
+                >
+                  <Info className="w-4 h-4" />
+                  {infoExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* 可折叠的详细信息区 */}
+            <AnimatePresence mode="wait">
+              {infoExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-5 pb-5 pt-2 border-t border-white/[0.06] space-y-4">
+                    {/* Meta 信息 */}
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                      <span>⭐ <strong className="text-foreground">{game.rating}</strong>/5.0</span>
+                      <span>🎮 {game.playCount.toLocaleString()} plays</span>
+                      {game.difficulty && <span>📊 {game.difficulty}</span>}
+                      {game.estimatedTime && <span>⏱️ {game.estimatedTime}</span>}
+                    </div>
+                    
+                    {/* 描述 */}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {game.description}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {game.tags.map((tag: string) => (
+                        <span key={tag} className="px-2.5 py-0.5 text-xs rounded-md bg-primary/5 text-primary/70 border border-primary/10 font-medium hover:bg-primary/10 cursor-default transition-colors">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
               )}
-            </div>
-            
-            {/* 收藏和分享按钮 */}
-            <div className="flex items-center gap-2 ml-auto">
-              <button
-                onClick={toggleFavorite}
-                className={`p-2.5 rounded-xl transition-all duration-300 ${
-                  isFavorite
-                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                    : 'bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04]'
-                }`}
-                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
-              >
-                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-400' : ''}`} />
-              </button>
-              <button
-                onClick={shareGame}
-                className="p-2.5 rounded-xl bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04] transition-all duration-300"
-                title="Share this game"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
+            </AnimatePresence>
           </div>
-
-          {/* Meta Info */}
-          <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="text-amber-400">⭐</span>
-              <span><strong className="text-foreground">{game.rating}</strong> / 5.0</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>🎮</span>
-              <span>{game.playCount.toLocaleString()} plays</span>
-            </div>
-            {game.difficulty && (
-              <div className="flex items-center gap-2">
-                <span>📊</span>
-                <span>Difficulty: {game.difficulty}</span>
-              </div>
-            )}
-            {game.estimatedTime && (
-              <div className="flex items-center gap-2">
-                <span>⏱️</span>
-                <span>{game.estimatedTime}</span>
-              </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Short Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-3xl"
-        >
-          {game.description}
-        </motion.p>
-      </div>
-
-      {/* 游戏 iframe - 全宽沉浸式，突破容器限制 */}
-      <div className="w-full px-2 md:px-4 mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-        >
-          <GameIframe game={game} />
         </motion.div>
       </div>
 
-      {/* 下方内容回到容器宽度 */}
-      <div className="container mx-auto px-4 max-w-7xl">
+      {/* ===== 下方内容区域 ===== */}
+      <div className="container mx-auto px-4 max-w-7xl mt-8">
 
-        {/* Game Guide Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Main Content: Instructions & Long Description */}
-          <div className="lg:col-span-2 space-y-8">
+        {/* Game Guide & Controls Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
             {/* How to Play */}
             <motion.section
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
               className="relative rounded-2xl p-6 md:p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] overflow-hidden"
             >
-              {/* Glow decoration */}
               <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-full blur-[60px]" />
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 relative z-10">
-                <span>📖</span> How to Play
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2 relative z-10">
+                📖 How to Play
               </h2>
-              <div className="prose prose-sm max-w-none prose-invert">
-                <p className="text-lg leading-relaxed text-muted-foreground">{game.instructions}</p>
-              </div>
+              <p className="text-base leading-relaxed text-muted-foreground">{game.instructions}</p>
             </motion.section>
 
-            {/* Detailed Game Guide (Markdown) */}
+            {/* Detailed Guide */}
             {gameGuide && (
               <motion.section
-                variants={sectionVariants}
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
                 className="relative rounded-2xl p-6 md:p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-48 h-48 bg-brand-cyan/5 rounded-full blur-[80px]" />
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 relative z-10">
-                  <span>📚</span> Complete Game Guide
+                <h2 className="text-xl font-bold mb-6 flex items-center gap-2 relative z-10">
+                  📚 Complete Game Guide
                 </h2>
-                <div className="prose prose-sm max-w-none prose-invert prose-headings:font-bold prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3 prose-p:leading-relaxed prose-a:text-primary prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {gameGuide}
-                  </ReactMarkdown>
+                <div className="prose prose-sm max-w-none prose-invert prose-headings:font-bold prose-h2:text-lg prose-p:leading-relaxed">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{gameGuide}</ReactMarkdown>
                 </div>
               </motion.section>
             )}
           </div>
 
-          {/* Sidebar: Controls & Info */}
+          {/* Sidebar */}
           <div className="space-y-6">
             {/* Controls */}
             <motion.section
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="relative rounded-2xl p-6 bg-card/60 backdrop-blur-sm border border-white/[0.04] overflow-hidden"
             >
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-[50px]" />
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2 relative z-10">
-                <span>🎮</span> Controls
-              </h3>
-              <div className="space-y-4">
+              <h3 className="text-lg font-bold mb-4">🎮 Controls</h3>
+              <div className="space-y-3">
                 {game.controls.keyboard && (
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                    <span className="text-2xl">⌨️</span>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                    <span className="text-xl">⌨️</span>
                     <div>
-                      <div className="font-medium text-sm">Keyboard</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">
-                        {Array.isArray(game.controls.keyboard)
-                          ? game.controls.keyboard.join(", ")
-                          : "Supported"}
+                      <div className="text-sm font-medium">Keyboard</div>
+                      <div className="text-xs text-muted-foreground">
+                        {Array.isArray(game.controls.keyboard) ? game.controls.keyboard.join(", ") : "Supported"}
                       </div>
                     </div>
                   </div>
                 )}
                 {game.controls.mouse && (
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                    <span className="text-2xl">🖱️</span>
-                    <div>
-                      <div className="font-medium text-sm">Mouse</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">Supported</div>
-                    </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                    <span className="text-xl">🖱️</span><div><div className="text-sm font-medium">Mouse</div><div className="text-xs text-muted-foreground">Supported</div></div>
                   </div>
                 )}
                 {game.controls.touch && (
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                    <span className="text-2xl">📱</span>
-                    <div>
-                      <div className="font-medium text-sm">Touch</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">Mobile friendly</div>
-                    </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                    <span className="text-xl">📱</span><div><div className="text-sm font-medium">Touch</div><div className="text-xs text-muted-foreground">Mobile friendly</div></div>
                   </div>
                 )}
                 {game.controls.gamepad && (
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                    <span className="text-2xl">🎮</span>
-                    <div>
-                      <div className="font-medium text-sm">Gamepad</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">Controller supported</div>
-                    </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                    <span className="text-xl">🎮</span><div><div className="text-sm font-medium">Gamepad</div><div className="text-xs text-muted-foreground">Controller supported</div></div>
                   </div>
                 )}
-              </div>
-            </motion.section>
-
-            {/* Tags */}
-            <motion.section
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="relative rounded-2xl p-6 bg-card/60 backdrop-blur-sm border border-white/[0.04]"
-            >
-              <h3 className="text-xl font-bold mb-4">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {game.tags.map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-lg text-sm font-medium bg-primary/5 text-primary/70 border border-primary/10 hover:bg-primary/10 hover:text-primary transition-all cursor-pointer"
-                  >
-                    {tag}
-                  </span>
-                ))}
               </div>
             </motion.section>
 
             {/* Share */}
             <motion.section
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="relative rounded-2xl p-6 bg-card/60 backdrop-blur-sm border border-white/[0.04]"
             >
-              <h3 className="text-xl font-bold mb-4">Share This Game</h3>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={shareGame}
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground transition text-center border border-white/[0.04] flex items-center justify-center gap-2"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </button>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${game.title} - free online!`)}&url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 transition text-center border border-[#1DA1F2]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  🐦 Twitter
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 transition text-center border border-[#1877F2]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  📘 Facebook
-                </a>
-                <a
-                  href={`https://www.reddit.com/submit?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}&title=${encodeURIComponent(game.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#FF4500]/10 text-[#FF4500] hover:bg-[#FF4500]/20 transition text-center border border-[#FF4500]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  🤖 Reddit
-                </a>
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`Check out ${game.title} - Free online game! https://games.craftisle.com/play/${game.slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition text-center border border-[#25D366]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  💬 WhatsApp
-                </a>
-                <a
-                  href={`https://t.me/share/url?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}&text=${encodeURIComponent(game.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#0088cc]/10 text-[#0088cc] hover:bg-[#0088cc]/20 transition text-center border border-[#0088cc]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  ✈️ Telegram
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[120px] py-2.5 rounded-xl text-sm font-medium bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2]/20 transition text-center border border-[#0A66C2]/20 flex items-center justify-center gap-2"
-                  onClick={() => sounds.buttonClick()}
-                >
-                  💼 LinkedIn
-                </a>
+              <h3 className="text-lg font-bold mb-4">Share This Game</h3>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={shareGame} className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04] flex items-center justify-center gap-1.5"><Share2 className="w-3.5 h-3.5" /> Share</button>
+                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${game.title}!`)}&url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 border border-[#1DA1F2]/20 text-center" onClick={() => sounds.buttonClick()}>🐦 Twitter</a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 border border-[#1877F2]/20 text-center" onClick={() => sounds.buttonClick()}>📘 Facebook</a>
+                <a href={`https://wa.me/?text=${encodeURIComponent(`${game.title} - Free online!`)} ${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 border border-[#25D366]/20 text-center" onClick={() => sounds.buttonClick()}>💬 WhatsApp</a>
               </div>
             </motion.section>
           </div>
@@ -437,45 +291,29 @@ export function GameDetailClient({
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-2">
-              <span>🎮</span> Related Games
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedGames.map((relatedGame: Game, i: number) => (
-                <motion.div
-                  key={relatedGame.id}
-                  initial={{ opacity: 0, y: 20 }}
+            <h2 className="text-2xl font-bold mb-6">🎮 Related Games</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {relatedGames.map((rg: Game, i: number) => (
+                <motion.a
+                  key={rg.id}
+                  href={`/play/${rg.slug}`}
+                  initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.06 }}
+                  className="group block rounded-xl overflow-hidden bg-card/60 backdrop-blur-sm border border-white/[0.04] hover:border-primary/30 transition-all duration-300"
                 >
-                  <a
-                    href={`/play/${relatedGame.slug}`}
-                    className="group block relative rounded-2xl overflow-hidden bg-card/60 backdrop-blur-sm border border-white/[0.04] hover:border-primary/30 transition-all duration-500"
-                  >
-                    <div className="aspect-video overflow-hidden relative">
-                      <img
-                        src={relatedGame.thumbnail}
-                        alt={relatedGame.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                      />
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4">
-                        <span className="text-white font-bold text-lg">Play Now →</span>
-                      </div>
+                  <div className="aspect-video overflow-hidden relative">
+                    <img src={rg.thumbnail} alt={rg.title} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-xs font-semibold">Play →</span>
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">
-                        {relatedGame.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {relatedGame.description}
-                      </p>
-                    </div>
-                    {/* Hover glow */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-primary/5 to-transparent" />
-                  </a>
-                </motion.div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-bold text-sm truncate group-hover:text-primary transition-colors">{rg.title}</h3>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{rg.description}</p>
+                  </div>
+                </motion.a>
               ))}
             </div>
           </motion.section>
@@ -483,21 +321,13 @@ export function GameDetailClient({
 
         {/* Comments Placeholder */}
         <motion.section
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-2xl p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] text-center"
+          className="relative rounded-2xl p-8 bg-card/60 backdrop-blur-sm border border-white/[0.04] text-center mb-8"
         >
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/3 rounded-full blur-[100px]" />
-          </div>
-          <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2 relative z-10">
-            <span>💬</span> Comments
-          </h2>
-          <div className="relative z-10">
-            <p className="text-muted-foreground mb-2">Comments coming soon!</p>
-            <p className="text-sm text-muted-foreground">Sign in to leave a comment and rate this game.</p>
-          </div>
+          <h2 className="text-xl font-bold mb-3">💬 Comments</h2>
+          <p className="text-muted-foreground text-sm">Coming soon! Sign in to leave a comment.</p>
         </motion.section>
       </div>
     </div>

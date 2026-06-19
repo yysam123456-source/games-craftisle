@@ -29,6 +29,10 @@ export interface Game {
   source: GameSource;
   sourceUrl?: string;
   thumbnail: string;
+  /** Decorative background image URL for the game player page */
+  backgroundImage?: string;
+  /** CSS gradient or pattern class for game page theme */
+  themeGradient?: string;
   instructions: string;
   controls: GameControls;
   isOriginal: boolean;

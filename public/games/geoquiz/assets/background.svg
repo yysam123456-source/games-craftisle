@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a1040" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#0d0825" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#060310" stop-opacity="1"/>
+    </radialGradient>
+    <!-- Globe glow -->
+    <radialGradient id="globeGlow" cx="50%" cy="45%" r="35%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.15"/>
+      <stop offset="70%" stop-color="#7c3aed" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Grid pattern -->
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(99,102,241,0.06)" stroke-width="1"/>
+    </pattern>
+    <!-- Latitude lines -->
+    <pattern id="lats" width="1920" height="120" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="1920" y2="0" stroke="rgba(99,102,241,0.04)" stroke-width="1"/>
+    </pattern>
+    <!-- Dot pattern -->
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="rgba(99,102,241,0.15)"/>
+    </pattern>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <rect width="1920" height="1080" fill="url(#lats)"/>
+
+  <!-- Globe glow center -->
+  <ellipse cx="960" cy="486" rx="500" ry="350" fill="url(#globeGlow)"/>
+
+  <!-- Stylized world map outline (simplified continents) -->
+  <g transform="translate(960,486)" opacity="0.12" fill="none" stroke="#818cf8" stroke-width="2" filter="blur(0.5)">
+    <!-- North America -->
+    <path d="M-380,-200 C-360,-220 -300,-200 -280,-180 C-260,-160 -240,-140 -250,-100 C-260,-70 -290,-50 -320,-30 C-340,-10 -350,20 -330,40 C-310,60 -280,50 -270,70 C-260,90 -300,110 -320,130 C-340,150 -330,170 -310,190" stroke-width="2.5"/>
+    <!-- South America -->
+    <path d="M-230,160 C-210,150 -190,160 -180,190 C-170,220 -180,260 -190,300 C-200,340 -220,370 -210,400 C-200,430 -180,450 -170,480" stroke-width="2"/>
+    <!-- Europe -->
+    <path d="M-40,-160 C-10,-170 20,-150 40,-140 C60,-130 80,-120 70,-90 C60,-60 40,-50 20,-55 C0,-60 -20,-50 -30,-70 C-40,-90 -60,-100 -70,-120" stroke-width="2"/>
+    <!-- Africa -->
+    <path d="M-20,-20 C10,-30 50,-10 70,30 C90,70 85,130 70,180 C55,230 30,280 10,300 C-10,320 -30,290 -40,250 C-50,210 -60,150 -50,100 C-40,50 -50,10 -20,-20" stroke-width="2.5"/>
+    <!-- Asia -->
+    <path d="M80,-140 C120,-150 180,-130 220,-100 C260,-70 300,-50 340,-30 C380,-10 420,10 440,50 C460,90 450,130 420,150 C390,170 340,160 300,140 C260,120 220,100 180,95 C140,90 100,70 80,40 C60,10 50,-30 60,-70 C70,-110 60,-130 80,-140" stroke-width="2.5"/>
+    <!-- Australia -->
+    <path d="M340,200 C370,190 410,200 430,230 C450,260 440,300 420,320 C400,340 360,330 340,310 C320,290 310,250 320,225 C330,200 320,205 340,200" stroke-width="2"/>
+  </g>
+
+  <!-- Decorative dots (city markers) -->
+  <g fill="#818cf8" opacity="0.25">
+    <circle cx="620" cy="340" r="3"><animate attributeName="opacity" values="0.25;0.6;0.25" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="800" cy="380" r="2.5"><animate attributeName="opacity" values="0.25;0.5;0.25" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="1020" cy="350" r="3"><animate attributeName="opacity" values="0.25;0.7;0.25" dur="4s" repeatCount="indefinite"/></circle>
+    <circle cx="1180" cy="400" r="2.5"><animate attributeName="opacity" values="0.25;0.5;0.25" dur="3.5s" repeatCount="indefinite"/></circle>
+    <circle cx="900" cy="520" r="2"/><circle cx="750" cy="480" r="2"/>
+    <circle cx="1150" cy="480" r="2"/><circle cx="600" cy="450" r="1.5"/>
+    <circle cx="1280" cy="550" r="2"/><circle cx="700" cy="550" r="1.5"/>
+  </g>
+
+  <!-- Longitude curves -->
+  <g stroke="rgba(129,140,248,0.04)" stroke-width="1" fill="none">
+    <ellipse cx="960" cy="540" rx="200" ry="500"/>
+    <ellipse cx="960" cy="540" rx="400" ry="520"/>
+    <ellipse cx="960" cy="540" rx="700" ry="540"/>
+    <ellipse cx="960" cy="540" rx="1000" ry="560"/>
+  </g>
+
+  <!-- Corner accents -->
+  <g opacity="0.15">
+    <path d="M0,0 L200,0 L0,200 Z" fill="rgba(99,102,241,0.05)"/>
+    <path d="M1920,0 L1720,0 L1920,200 Z" fill="rgba(99,102,241,0.05)"/>
+    <path d="M0,1080 L200,1080 L0,880 Z" fill="rgba(99,102,241,0.05)"/>
+    <path d="M1920,1080 L1720,1080 L1920,880 Z" fill="rgba(99,102,241,0.05)"/>
+  </g>
+
+  <!-- Subtle scan line effect -->
+  <rect width="1920" height="1080" fill="url(#dots)" opacity="0.3"/>
+</svg>

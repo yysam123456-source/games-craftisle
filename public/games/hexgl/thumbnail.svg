@@ -1,27 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="100%" style="stop-color:#6366f1"/>
+    <linearGradient id="hBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f0728"/>
+      <stop offset="50%" stop-color="#1a0a3e"/>
+      <stop offset="100%" stop-color="#0a0518"/>
     </linearGradient>
-    <linearGradient id="track" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#06b6d4"/>
-      <stop offset="50%" style="stop-color:#8b5cf6"/>
-      <stop offset="100%" style="stop-color:#ec4899"/>
+    <linearGradient id="trackLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="30%" stop-color="#00f5ff" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#ff00e6" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#00f5ff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="transparent"/>
     </linearGradient>
+    <filter id="neonBlur"><feGaussianBlur stdDeviation="4"/></filter>
   </defs>
-  <rect width="400" height="300" fill="url(#bg)"/>
-  <rect x="0" y="140" width="400" height="3" fill="url(#track)" rx="2"/>
-  <rect x="0" y="160" width="400" height="3" fill="url(#track)" rx="2"/>
-  <line x1="0" y1="145" x2="400" y2="145" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
-  <line x1="0" y1="165" x2="400" y2="165" stroke="#ec4899" stroke-width="1" opacity="0.5"/>
-  <polygon points="200,120 220,150 250,155 225,175 235,210 200,190 165,210 175,175 150,155 180,150" fill="#8b5cf6" opacity="0.9"/>
-  <polygon points="200,120 215,142 240,146 220,165 228,190 200,175 172,190 180,165 160,146 185,142" fill="#a78bfa" opacity="0.7"/>
-  <circle cx="100" cy="80" r="2" fill="#06b6d4" opacity="0.8"/>
-  <circle cx="300" cy="60" r="1.5" fill="#8b5cf6" opacity="0.8"/>
-  <circle cx="350" cy="100" r="1" fill="#ec4899" opacity="0.8"/>
-  <circle cx="50" cy="100" r="1.5" fill="#06b6d4" opacity="0.6"/>
-  <circle cx="150" cy="50" r="1" fill="#8b5cf6" opacity="0.6"/>
-  <text x="200" y="250" font-family="Arial,sans-serif" font-size="32" font-weight="bold" fill="#e2e8f0" text-anchor="middle">HexGL</text>
-  <text x="200" y="275" font-family="Arial,sans-serif" font-size="14" fill="#8b5cf6" text-anchor="middle">FUTURISTIC RACING</text>
+
+  <!-- Dark background -->
+  <rect width="640" height="360" fill="url(#hBg)"/>
+
+  <!-- Perspective racing tracks (vanishing point center-bottom) -->
+  <g filter="url(#neonBlur)">
+    <polygon points="320,360 40,0 600,0" fill="none" stroke="url(#trackLine)" stroke-width="2" opacity="0.5"/>
+    <polygon points="320,360 120,0 520,0" fill="none" stroke="url(#trackLine)" stroke-width="1.5" opacity="0.4"/>
+    <polygon points="320,360 180,0 460,0" fill="none" stroke="url(#trackLine)" stroke-width="1" opacity="0.3"/>
+
+    <!-- Horizontal speed lines -->
+    <line x1="0" y1="80" x2="640" y2="80" stroke="#00f5ff" stroke-width="1.5" opacity="0.3"/>
+    <line x1="0" y1="150" x2="640" y2="150" stroke="#ff00e6" stroke-width="1" opacity="0.25"/>
+    <line x1="0" y1="220" x2="640" y2="220" stroke="#00f5ff" stroke-width="1.5" opacity="0.35"/>
+    <line x1="0" y1="290" x2="640" y2="290" stroke="#ff00e6" stroke-width="2" opacity="0.4"/>
+  </g>
+
+  <!-- Hex grid decoration -->
+  <g stroke="#00f5ff" stroke-width="0.5" fill="none" opacity="0.08">
+    <polygon points="50,40 66,49.2 66,67.6 50,76.8 34,67.6 34,49.2"/>
+    <polygon points="580,30 598,40.4 598,61.2 580,71.6 562,61.2 562,40.4"/>
+    <polygon points="40,290 56,299.2 56,317.6 40,326.8 24,317.6 24,299.2" stroke="#ff00e6"/>
+    <polygon points="590,280 606,289.2 606,307.6 590,316.8 574,307.6 574,289.2" stroke="#ff00e6"/>
+  </g>
+
+  <!-- Racing car silhouette (center track) -->
+  <g transform="translate(290, 210) scale(0.8)" filter="url(#neonBlur)">
+    <!-- Car body -->
+    <path d="M10,40 L20,15 L50,8 L65,12 L72,25 L75,40 L70,48 L15,48 Z" fill="#00f5ff" opacity="0.8"/>
+    <!-- Windshield -->
+    <path d="M26,16 L46,11 L58,18 L55,28 L28,28 Z" fill="#1a0a3e" opacity="0.8"/>
+    <!-- Wheels -->
+    <ellipse cx="22" cy="48" rx="8" ry="5" fill="#ff00e6" opacity="0.7"/>
+    <ellipse cx="63" cy="48" rx="8" ry="5" fill="#ff00e6" opacity="0.7"/>
+    <!-- Speed lines behind car -->
+    <g stroke="#00f5ff" stroke-width="2" opacity="0.5">
+      <line x1="-10" y1="30" x2="5" y2="33"/><line x1="-15" y1="38" x2="5" y2="39"/>
+      <line x1="-8" y1="44" x2="5" y2="44"/>
+    </g>
+  </g>
+
+  <!-- Speed particles -->
+  <g fill="#00f5ff" opacity="0.5" filter="url(#neonBlur)">
+    <circle cx="200" cy="180" r="2"><animate attributeName="cx" values="200;180;200" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="450" cy="240" r="1.5" fill="#ff00e6"><animate attributeName="cx" values="450;430;450" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="150" cy="280" r="2"><animate attributeName="cx" values="150;130;150" dur="1.8s" repeatCount="indefinite"/></circle>
+    <circle cx="500" cy="150" r="1.5" fill="#ff00e6"><animate attributeName="cx" values="500;480;500" dur="2.2s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- HUD elements -->
+  <g>
+    <!-- Speed display -->
+    <rect x="16" y="290" width="90" height="36" rx="8" fill="#000" opacity="0.6"/>
+    <text x="61" y="315" text-anchor="middle" fill="#00f5ff" font-family="monospace" font-size="18" font-weight="800">287</text>
+    <text x="88" y="314" fill="#00f5ff" font-family="sans-serif" font-size="10" opacity="0.6">km/h</text>
+
+    <!-- Position -->
+    <rect x="116" y="290" width="60" height="36" rx="8" fill="#000" opacity="0.6"/>
+    <text x="146" y="315" text-anchor="middle" fill="#ff00e6" font-family="monospace" font-size="16" font-weight="800">1ST</text>
+
+    <!-- Lap time -->
+    <rect x="534" y="290" width="90" height="36" rx="8" fill="#000" opacity="0.6"/>
+    <text x="579" y="314" text-anchor="middle" fill="#a5b4fc" font-family="monospace" font-size="14" font-weight="700">01:23.456</text>
+  </g>
+
+  <!-- Bottom title area -->
+  <rect x="0" y="330" width="640" height="30" fill="#000" opacity="0.5"/>
+  <text x="320" y="350" text-anchor="middle" fill="#e0e7ff" font-family="system-ui" font-size="16" font-weight="800" letter-spacing="1">HEXGL</text>
+
+  <!-- Category badge -->
+  <rect x="16" y="12" width="56" height="22" rx="11" fill="#00f5ff" opacity="0.85"/>
+  <text x="44" y="27" text-anchor="middle" fill="#000" font-family="system-ui" font-size="10" font-weight="700">action</text>
 </svg>

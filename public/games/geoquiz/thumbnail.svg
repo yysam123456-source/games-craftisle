@@ -1,12 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
     </linearGradient>
+    <radialGradient id="mapGlow" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
   </defs>
-  <rect width="640" height="360" fill="url(#bg)" />
-  <text x="320" y="160" font-family="Arial,sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle">🌍 GEO QUIZ</text>
-  <text x="320" y="220" font-family="Arial,sans-serif" font-size="24" fill="rgba(255,255,255,0.8)" text-anchor="middle">Type & Match Instantly</text>
-  <text x="320" y="270" font-family="Arial,sans-serif" font-size="18" fill="rgba(255,255,255,0.6)" text-anchor="middle">Sporcle-style Geography Game</text>
+
+  <!-- Background -->
+  <rect width="640" height="360" fill="url(#gBg)"/>
+  
+  <!-- Globe glow -->
+  <ellipse cx="320" cy="162" rx="200" ry="140" fill="url(#mapGlow)"/>
+
+  <!-- Stylized world map -->
+  <g transform="translate(320,162) scale(0.42)" opacity="0.25" fill="#a5b4fc" stroke="#c7d2fe" stroke-width="2">
+    <path d="M-380,-180 C-350,-200 -300,-185 -280,-165 C-260,-145 -240,-130 -250,-95 C-260,-65 -290,-48 -320,-28 C-340,-8 -350,18 -330,38 C-310,58 -280,48 -270,68 C-260,88 -300,105 -320,125 C-340,145 -330,165 -310,185" />
+    <path d="M-230,145 C-210,135 -190,145 -180,175 C-170,205 -180,245 -190,285 C-200,325 -220,355 -210,385"/>
+    <path d="M-40,-145 C-10,-155 20,-135 40,-125 C60,-115 80,-105 70,-75 C60,-45 40,-35 20,-40 C0,-45 -20,-35 -30,-55 C-40,-75 -60,-85 -70,-105"/>
+    <path d="M-20,-5 C10,-15 50,5 70,45 C90,85 85,145 70,195 C55,245 30,295 10,315 C-10,335 -30,305 -40,265 C-50,225 -60,165 -50,115 C-40,65 -50,25 -20,-5"/>
+    <path d="M80,-125 C120,-135 180,-115 220,-85 C260,-55 300,-35 340,-15 C380,5 420,25 440,65 C460,105 450,145 420,165 C390,185 340,175 300,155 C260,135 220,115 180,110 C140,105 100,85 80,55 C60,25 50,-15 60,-55 C70,-95 60,-115 80,-125"/>
+    <path d="M340,185 C370,175 410,185 430,215 C450,245 440,285 420,305 C400,325 360,315 340,295 C320,275 310,235 320,210 C330,185 320,190 340,185"/>
+  </g>
+
+  <!-- Grid lines -->
+  <g stroke="#6366f1" stroke-width="0.5" opacity="0.12">
+    <line x1="120" y1="30" x2="520" y2="30"/><line x1="120" y1="80" x2="520" y2="80"/>
+    <line x1="120" y1="130" x2="520" y2="130"/><line x1="120" y1="180" x2="520" y2="180"/>
+    <line x1="120" y1="230" x2="520" y2="230"/><line x1="120" y1="280" x2="520" y2="280"/>
+    <line x1="120" y1="330" x2="520" y2="330"/>
+    <line x1="170" y1="22" x2="170" y2="338"/><line x1="250" y1="22" x2="250" y2="338"/>
+    <line x1="390" y1="22" x2="390" y2="338"/><line x1="470" y1="22" x2="470" y2="338"/>
+  </g>
+
+  <!-- Quiz UI mockup: answer boxes lighting up -->
+  <g transform="translate(160, 195)">
+    <rect x="0" y="0" width="110" height="32" rx="6" fill="#4f46e5" opacity="0.7"/>
+    <text x="55" y="21" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="600">France ✓</text>
+    
+    <rect x="120" y="0" width="110" height="32" rx="6" fill="#22c55e" opacity="0.8"/>
+    <text x="175" y="21" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="600">Brazil ✓</text>
+    
+    <rect x="240" y="0" width="110" height="32" rx="6" fill="#3b82f6" opacity="0.6"/>
+    <text x="295" y="21" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="600">Japan ✓</text>
+  </g>
+
+  <!-- Title bar at bottom -->
+  <rect x="0" y="310" width="640" height="50" fill="url(#gBg)" opacity="0.9"/>
+  <text x="320" y="342" text-anchor="middle" fill="#e0e7ff" font-family="system-ui" font-size="22" font-weight="800" letter-spacing="-0.5">GeoQuiz</text>
+
+  <!-- Category badge -->
+  <rect x="16" y="16" width="58" height="24" rx="12" fill="#4f46e5" opacity="0.9"/>
+  <text x="45" y="33" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="11" font-weight="600">puzzle</text>
+
+  <!-- Score indicator -->
+  <g transform="translate(540, 18)">
+    <text x="42" y="17" text-anchor="end" fill="#a5b4fc" font-family="system-ui" font-size="14" font-weight="700">12/54</text>
+    <circle cx="52" cy="13" r="18" fill="none" stroke="#818cf8" stroke-width="3" stroke-dasharray="80 113" stroke-linecap="round" opacity="0.6" transform="rotate(-90 52 13)"/>
+  </g>
 </svg>

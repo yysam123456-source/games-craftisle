@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a001a"/>
+      <stop offset="50%" stop-color="#0f0029"/>
+      <stop offset="100%" stop-color="#050010"/>
+    </linearGradient>
+    <!-- Neon cyan glow -->
+    <radialGradient id="neonGlow" cx="50%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#0066ff" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <!-- Track gradient -->
+    <linearGradient id="trackGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="20%" stop-color="#00f5ff" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#ff00e6" stop-opacity="0.2"/>
+      <stop offset="80%" stop-color="#00f5ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+    <!-- Hex grid -->
+    <pattern id="hexGrid" width="60" height="103.923" patternUnits="userSpaceOnUse" patternTransform="scale(0.8)">
+      <path d="M30,0 L60,17.32 L60,51.96 L30,69.28 L0,51.96 L0,17.32 Z M30,103.92 L60,86.6 L60,51.96 L30,69.28 L0,51.96 L0,86.6 Z" fill="none" stroke="rgba(0,245,255,0.03)" stroke-width="1"/>
+    </pattern>
+    <!-- Speed lines -->
+    <pattern id="speedLines" width="400" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="2" x2="400" y2="2" stroke="url(#trackGrad)" stroke-width="1.5" opacity="0.3"/>
+    </pattern>
+    <!-- Glow blur -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#hexGrid)"/>
+
+  <!-- Center neon glow -->
+  <rect width="1920" height="1080" fill="url(#neonGlow)"/>
+
+  <!-- Perspective racing tracks -->
+  <g opacity="0.2" filter="url(#glow)">
+    <!-- Vanishing point at center-bottom -->
+    <polygon points="960,1080 200,0 1720,0" fill="none" stroke="url(#trackGrad)" stroke-width="3"/>
+    <polygon points="960,1080 400,0 1520,0" fill="none" stroke="url(#trackGrad)" stroke-width="2"/>
+    <polygon points="960,1080 600,0 1320,0" fill="none" stroke="url(#trackGrad)" stroke-width="1.5"/>
+    
+    <!-- Horizontal speed lines -->
+    <g transform="translate(0, 200)">
+      <rect width="1920" height="3" fill="url(#speedLines)" opacity="0.4"/>
+    </g>
+    <g transform="translate(0, 400)">
+      <rect width="1920" height="2" fill="url(#speedLines)" opacity="0.3"/>
+    </g>
+    <g transform="translate(0, 650)">
+      <rect width="1920" height="2.5" fill="url(#speedLines)" opacity="0.35"/>
+    </g>
+    <g transform="translate(0, 850)">
+      <rect width="1920" height="3" fill="url(#speedLines)" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Hexagonal shapes decoration -->
+  <g fill="none" stroke="rgba(0,245,255,0.06)" stroke-width="1.5">
+    <polygon points="150,100 180,117.3 180,151.9 150,169.3 120,151.9 120,117.3" />
+    <polygon points="1750,80 1790,103 1790,149 1750,172 1710,149 1710,103" />
+    <polygon points="100,900 140,923 140,969 100,992 60,969 60,923" stroke="rgba(255,0,230,0.06)"/>
+    <polygon points="1800,800 1830,817.3 1830,851.9 1800,869.3 1770,851.9 1770,817.3" stroke="rgba(255,0,230,0.06)"/>
+  </g>
+
+  <!-- Glowing particles / data nodes -->
+  <g>
+    <circle cx="300" cy="300" r="2" fill="#00f5ff" opacity="0.5" filter="url(#glow)">
+      <animate attributeName="cy" values="300;280;300" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1600" cy="250" r="2.5" fill="#ff00e6" opacity="0.4" filter="url(#glow)">
+      <animate attributeName="cy" values="250;270;250" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="700" r="2" fill="#00f5ff" opacity="0.3" filter="url(#glow)">
+      <animate attributeName="cx" values="450;470;450" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1450" cy="750" r="1.8" fill="#ff00e6" opacity="0.4" filter="url(#glow)">
+      <animate attributeName="cx" values="1450;1430;1450" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="960" cy="200" r="3" fill="#00f5ff" opacity="0.3" filter="url(#glow)">
+      <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Grid overlay at bottom (road surface effect) -->
+  <g transform="translate(960, 1080)" opacity="0.08">
+    <line x1="-960" y1="0" x2="960" y2="0" stroke="#00f5ff" stroke-width="1"/>
+    <line x1="-800" y1="-100" x2="800" y2="-100" stroke="#00f5ff" stroke-width="0.8"/>
+    <line x1="-600" y1="-200" x2="600" y2="-200" stroke="#00f5ff" stroke-width="0.6"/>
+    <line x1="-400" y1="-300" x2="400" y2="-300" stroke="#00f5ff" stroke-width="0.5"/>
+    <line x1="-200" y1="-400" x2="200" y2="-400" stroke="#00f5ff" stroke-width="0.4"/>
+  </g>
+
+  <!-- Corner frame -->
+  <g opacity="0.1">
+    <polyline points="0,80 0,0 80,0" fill="none" stroke="#00f5ff" stroke-width="2"/>
+    <polyline points="1840,0 1920,0 1920,80" fill="none" stroke="#ff00e6" stroke-width="2"/>
+    <polyline points="0,1000 0,1080 80,1080" fill="none" stroke="#ff00e6" stroke-width="2"/>
+    <polyline points="1840,1080 1920,1080 1920,1000" fill="none" stroke="#00f5ff" stroke-width="2"/>
+  </g>
+</svg>
