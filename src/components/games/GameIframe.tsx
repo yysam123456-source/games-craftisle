@@ -251,7 +251,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
         {/* ===== IFRAME (game content) ===== */}
         {phase !== "start" && (
           <iframe ref={iframeRef} src={iframeSrc || undefined} title={game.title} width="100%" height="100%"
-                  style={{ border: "none", display: "block", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 }}
+                  style={{ border: "none", display: "block", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, background: "transparent" }}
                   sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
                   allow="fullscreen;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
                   allowFullScreen onLoad={onIframeLoad}
@@ -271,11 +271,11 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
         {/* ===== TOP BAR (immersive mode only): Exit + Title ===== */}
         {isImmersive && (
-          <div className={"absolute top-0 left-0 right-0 z-30 transition-all duration-300 " + (showControls ? "opacity-100" : "opacity-0 pointer-events-none")}>
-            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent">
+          <div className={"absolute top-0 left-0 right-0 z-30 transition-all duration-300 " + (showControls ? "opacity-100" : "opacity-0")}>
+            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
               <div className="flex items-center gap-3">
                 <button onClick={handleExitImmersive}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-sm font-medium transition-all backdrop-blur-sm"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-sm font-medium transition-all backdrop-blur-sm pointer-events-auto"
                         title="Back to menu">
                   <ArrowLeft className="w-4 h-4" /> Back
                 </button>
@@ -284,13 +284,13 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
               <div className="flex items-center gap-1.5">
                 <span className={"px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gradient-to-r " + (DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.color || "") + " text-white/90"}>{selectedDifficulty}</span>
                 <button onClick={() => { sounds.buttonClick(); setSoundEnabled(!soundEnabled); }}
-                        className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">
+                        className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white pointer-events-auto">
                   {soundEnabled ? <Volume2 className="w-[18px]" /> : <VolumeX className="w-[18px]" />}
                 </button>
-                <button onClick={handleRestart} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white" title="Restart">
+                <button onClick={handleRestart} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white pointer-events-auto" title="Restart">
                   <RotateCcw className="w-[18px]" />
                 </button>
-                <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">
+                <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white pointer-events-auto">
                   {isFullscreen ? <Minimize2 className="w-[18px]" /> : <Maximize2 className="w-[18px]" />}
                 </button>
               </div>
@@ -300,10 +300,10 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
         {/* ===== BOTTOM CONTROLS (immersive mode only) ===== */}
         {isImmersive && (
-          <div className={"absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out " + (showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none")}
+          <div className={"absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out " + (showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2")}
                onMouseEnter={() => setControlsHovered(true)} onMouseLeave={() => setControlsHovered(false)}>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-            <div className="relative flex items-center justify-center px-4 py-3">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
+            <div className="relative flex items-center justify-center px-4 py-3 pointer-events-none">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className={"w-2 h-2 rounded-full flex-shrink-0 " + (isLoading ? "bg-amber-400 animate-pulse" : "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]")} />
                 <span className="text-sm font-medium text-white/90 truncate max-w-[200px] md:max-w-[400px]">{game.title}</span>
