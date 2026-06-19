@@ -135,22 +135,35 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
   // === IMMERSIVE MODE: playing = fixed fullscreen overlay ===
   const isImmersive = phase === 'playing';
 
+  // Container class — MUST NOT have both `relative` and `fixed`
+  const containerClassName = [
+    "group/game transition-all duration-500",
+    isImmersive || isFullscreen
+      ? "fixed inset-0 z-[9999]"
+      : "relative",
+  ].join(" ");
+
+  // Viewport class
+  const viewportClassName = [
+    isImmersive || isFullscreen ? "h-screen w-screen" : "aspect-video",
+    "relative overflow-hidden",
+  ].join(" ");
+
   return (
     <div ref={containerRef}
-         className={
-           "relative group/game" +
-           (isImmersive ? " fixed inset-0 z-[9999]" : "") +
-           (isFullscreen ? " fixed inset-0 z-[9999]" : "")
+         className={containerClassName}
+         style={
+           isImmersive || isFullscreen
+             ? (bgImage
+                 ? { backgroundImage: bgImage, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }
+                 : { backgroundColor: "#000" }
+             )
+             : (width ? { width } : undefined)
          }
-         style={{ width: isImmersive ? "100vw" : (isFullscreen ? "100vw" : width) }}
          onMouseMove={resetControlsTimer}>
 
-      {/* Game viewport */}
-      <div className={
-            (isImmersive || isFullscreen ? "h-screen w-screen" : "aspect-video") +
-            " relative overflow-hidden transition-all duration-500"
-          }
-           style={bgImage ? { backgroundImage: bgImage, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" } : { backgroundColor: "#000" }}
+      {/* Game viewport — background is on the container div */}
+      <div className={viewportClassName}
            onDoubleClick={() => { if (isImmersive && !isFullscreen) toggleFullscreen(); }}>
 
         {/* ===== START SCREEN ===== */}
@@ -222,7 +235,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
         {/* ===== LOADING SCREEN ===== */}
         {(phase === "loading" || isLoading) && phase !== "start" && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/92 z-20 backdrop-blur-sm transition-opacity duration-500">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/65 z-20 backdrop-blur-sm transition-opacity duration-500">
             <div className="text-center">
               <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-brand-pink p-[2px] animate-pulse">
                 <div className="w-full h-full rounded-2xl bg-black/90 flex items-center justify-center text-3xl">🎮</div>
