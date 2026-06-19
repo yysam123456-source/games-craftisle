@@ -1,1 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#16213e"/></linearGradient><filter id="neon1"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="800" height="450" fill="url(#tg)"/><line x1="0" y1="0" x2="800" y2="450" stroke="#00d4ff" stroke-width="0.5" opacity="0.1"/><line x1="800" y1="0" x2="0" y2="450" stroke="#ff00ff" stroke-width="0.5" opacity="0.08"/><g transform="translate(300,80)" opacity="0.7"><rect x="0" y="0" width="28" height="28" rx="3" fill="#00f0ff" filter="url(#neon1)"/><rect x="28" y="0" width="28" height="28" rx="3" fill="#00f0ff" filter="url(#neon1)"/><rect x="56" y="0" width="28" height="28" rx="3" fill="#00f0ff" filter="url(#neon1)"/><rect x="84" y="0" width="28" height="28" rx="3" fill="#00f0ff" filter="url(#neon1)"/><rect x="0" y="28" width="28" height="28" rx="3" fill="#00f0ff" filter="url(#neon1)"/></g><g transform="translate(480,180)" opacity="0.5"><rect x="0" y="0" width="28" height="28" rx="3" fill="#ff00ff" filter="url(#neon1)"/><rect x="0" y="28" width="28" height="28" rx="3" fill="#ff00ff" filter="url(#neon1)"/><rect x="28" y="28" width="28" height="28" rx="3" fill="#ff00ff" filter="url(#neon1)"/><rect x="56" y="28" width="28" height="28" rx="3" fill="#ff00ff" filter="url(#neon1)"/></g><g transform="translate(120,250)" opacity="0.4"><rect x="0" y="0" width="28" height="28" rx="3" fill="#ffff00" filter="url(#neon1)"/><rect x="28" y="0" width="28" height="28" rx="3" fill="#ffff00" filter="url(#neon1)"/><rect x="0" y="28" width="28" height="28" rx="3" fill="#ffff00" filter="url(#neon1)"/><rect x="28" y="28" width="28" height="28" rx="3" fill="#ffff00" filter="url(#neon1)"/></g><text x="400" y="420" text-anchor="middle" font-family="monospace" font-size="14" fill="#00d4ff" opacity="0.3" letter-spacing="8">TETRIS</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0a1a"/><stop offset="100%" stop-color="#1a0a30"/></linearGradient>
+    <filter id="neon"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="neonStrong"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <!-- Grid lines -->
+  <g stroke="#00d4ff" stroke-width="0.5" opacity="0.08">
+    <line x1="0" y1="50" x2="800" y2="50"/><line x1="0" y1="100" x2="800" y2="100"/><line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="200" x2="800" y2="200"/><line x1="0" y1="250" x2="800" y2="250"/><line x1="0" y1="300" x2="800" y2="300"/><line x1="0" y1="350" x2="800" y2="350"/><line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="50" y1="0" x2="50" y2="450"/><line x1="100" y1="0" x2="100" y2="450"/><line x1="150" y1="0" x2="150" y2="450"/><line x1="200" y1="0" x2="200" y2="450"/><line x1="250" y1="0" x2="250" y2="450"/>
+    <line x1="550" y1="0" x2="550" y2="450"/><line x1="600" y1="0" x2="600" y2="450"/><line x1="650" y1="0" x2="650" y2="450"/><line x1="700" y1="0" x2="700" y2="450"/><line x1="750" y1="0" x2="750" y2="450"/>
+  </g>
+  <!-- Large T-piece (cyan, center-left) -->
+  <g transform="translate(180,60)" filter="url(#neon)" opacity="0.7">
+    <rect x="0" y="0" width="40" height="40" rx="4" fill="#00f0ff"/><rect x="40" y="0" width="40" height="40" rx="4" fill="#00f0ff"/>
+    <rect x="80" y="0" width="40" height="40" rx="4" fill="#00f0ff"/><rect x="40" y="40" width="40" height="40" rx="4" fill="#00f0ff"/>
+  </g>
+  <!-- Large L-piece (orange, right side) -->
+  <g transform="translate(520,120)" filter="url(#neon)" opacity="0.55">
+    <rect x="0" y="0" width="36" height="36" rx="4" fill="#ffa500"/><rect x="0" y="36" width="36" height="36" rx="4" fill="#ffa500"/>
+    <rect x="0" y="72" width="36" height="36" rx="4" fill="#ffa500"/><rect x="36" y="72" width="36" height="36" rx="4" fill="#ffa500"/>
+  </g>
+  <!-- Square piece (yellow, bottom left) -->
+  <g transform="translate(80,280)" filter="url(#neon)" opacity="0.5">
+    <rect x="0" y="0" width="38" height="38" rx="4" fill="#ffff00"/><rect x="38" y="0" width="38" height="38" rx="4" fill="#ffff00"/>
+    <rect x="0" y="38" width="38" height="38" rx="4" fill="#ffff00"/><rect x="38" y="38" width="38" height="38" rx="4" fill="#ffff00"/>
+  </g>
+  <!-- S-piece (green) -->
+  <g transform="translate(340,260)" filter="url(#neon)" opacity="0.45">
+    <rect x="34" y="0" width="34" height="34" rx="4" fill="#00ff00"/><rect x="68" y="0" width="34" height="34" rx="4" fill="#00ff00"/>
+    <rect x="0" y="34" width="34" height="34" rx="4" fill="#00ff00"/><rect x="34" y="34" width="34" height="34" rx="4" fill="#00ff00"/>
+  </g>
+  <!-- Long I-piece (purple, vertical right edge) -->
+  <g transform="translate(700,100)" filter="url(#neon)" opacity="0.4">
+    <rect x="0" y="0" width="32" height="32" rx="4" fill="#ff00ff"/><rect x="0" y="32" width="32" height="32" rx="4" fill="#ff00ff"/>
+    <rect x="0" y="64" width="32" height="32" rx="4" fill="#ff00ff"/><rect x="0" y="96" width="32" height="32" rx="4" fill="#ff00ff"/>
+  </g>
+  <!-- Glow spots -->
+  <circle cx="400" cy="225" r="150" fill="#00d4ff" opacity="0.03" filter="url(#neonStrong)"/>
+  <circle cx="200" cy="350" r="100" fill="#ff00ff" opacity="0.03" filter="url(#neonStrong)"/>
+  <text x="400" y="430" text-anchor="middle" font-family="monospace" font-size="14" fill="#00d4ff" opacity="0.25" letter-spacing="10">TETRIS</text>
+</svg>

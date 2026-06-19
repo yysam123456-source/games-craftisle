@@ -155,13 +155,15 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
         {/* ===== START SCREEN ===== */}
         {phase === "start" && (
-          <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/95 backdrop-blur-md">
-            {/* Animated background particles */}
-            <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 z-40 flex items-center justify-center">
+            {/* Themed background shows through with subtle darkening */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+            {/* Animated floating particles */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-primary/10 blur-[100px] animate-pulse" />
               <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-brand-pink/10 blur-[100px] animate-pulse" style={{ animationDelay: "1s" }} />
               {[0,1,2,3,4,5].map(i => (
-                <div key={i} className="absolute w-1 h-1 rounded-full bg-white/20 animate-bounce"
+                <div key={i} className="absolute w-1 h-1 rounded-full bg-white/30 animate-bounce"
                      style={{ left: (15+i*15) + "%", top: (20+(i%3)*30) + "%", animationDelay: (i*0.4) + "s", animationDuration: (2+i*0.5) + "s" }} />
               ))}
             </div>
@@ -176,14 +178,14 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
                 </div>
               </motion.div>
 
-              <h2 className="text-3xl md:text-4xl font-extrabold mb-2">
-                <span className="bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">{game.title}</span>
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <span className="bg-gradient-to-r from-white via-white to-white/90 bg-clip-text text-transparent">{game.title}</span>
               </h2>
-              <p className="text-sm text-white/40 mb-8 max-w-xs mx-auto">{game.description.slice(0,80)}...</p>
+              <p className="text-sm text-white/60 mb-8 max-w-xs mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">{game.description.slice(0,80)}...</p>
 
               {/* Difficulty selector */}
               <div className="mb-8">
-                <p className="text-xs uppercase tracking-widest text-white/30 mb-3 flex items-center justify-center gap-2">
+                <p className="text-xs uppercase tracking-widest text-white/50 mb-3 flex items-center justify-center gap-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   <Settings className="w-3.5 h-3.5" /> Difficulty
                 </p>
                 <div className="flex gap-2 justify-center">
@@ -210,7 +212,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               </button>
 
-              <div className="mt-6 flex items-center justify-center gap-4 text-[11px] text-white/20">
+              <div className="mt-6 flex items-center justify-center gap-4 text-[11px] text-white/40 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                 <span>{game.controls.keyboard ? (Array.isArray(game.controls.keyboard) ? game.controls.keyboard.join(", ") : "Keyboard") : "Mouse/Touch"}</span>
                 <span>{game.estimatedTime}</span>
               </div>

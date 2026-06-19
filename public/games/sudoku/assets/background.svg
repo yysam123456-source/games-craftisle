@@ -1,1 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><defs><linearGradient id="sug" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fefefe"/><stop offset="100%" stop-color="#f0f0f0"/></linearGradient></defs><rect width="800" height="450" fill="url(#sug)"/><g transform="translate(275,50)"><!-- 9x9 Grid --><rect width="250" height="250" fill="none" stroke="#333" stroke-width="2"/><line x1="83.33" y1="0" x2="83.33" y2="250" stroke="#ccc" stroke-width="1"/><line x1="166.67" y1="0" x2="166.67" y2="250" stroke="#ccc" stroke-width="1"/><line x1="0" y1="83.33" x2="250" y2="83.33" stroke="#ccc" stroke-width="1"/><line x1="0" y1="166.67" x2="250" y2="166.67" stroke="#ccc" stroke-width="1"/><line x1="83.33" y1="0" x2="83.33" y2="250" stroke="#333" stroke-width="2"/><line x1="166.67" y1="0" x2="166.67" y2="250" stroke="#333" stroke-width="2"/><line x1="0" y1="83.33" x2="250" y2="83.33" stroke="#333" stroke-width="2"/><line x1="0" y1="166.67" x2="250" y2="166.67" stroke="#333" stroke-width="2"/><!-- Numbers --><text x="42" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#222">5</text><text x="125" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1a73e8">3</text><text x="208" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#222">7</text><text x="42" y="138" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#222">6</text><text x="208" y="138" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#222">1</text><text x="125" y="222" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1a73e8">9</text><text x="208" y="222" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#222">4</text></g><text x="400" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#1a73e8" opacity="0.4" font-style="italic">SUDOKU</text><text x="400" y="370" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666" opacity="0.35">Logic · Numbers · Brain Training</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fefefe"/><stop offset="100%" stop-color="#e8e8e8"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <!-- Large 9x9 Grid centered -->
+  <g transform="translate(275,45)" filter="url(#shadow)">
+    <rect width="250" height="270" fill="white" stroke="#333" stroke-width="2.5" rx="4"/>
+    <!-- Thin lines -->
+    <path d="M27.78 0v270 M55.56 0v270 M83.33 0v270 M111.11 0v270 M138.89 0v270 M166.67 0v270 M194.44 0v270 M222.22 0v270" stroke="#ccc" stroke-width="1"/>
+    <path d="M0 30h250 M0 60h250 M0 90h250 M0 120h250 M0 150h250 M0 180h250 M0 210h250 M0 240h250" stroke="#ccc" stroke-width="1"/>
+    <!-- Thick lines (3x3 boxes) -->
+    <path d="M83.33 0v270 M166.67 0v270 M0 90h250 M0 180h250" stroke="#333" stroke-width="2.5"/>
+    <!-- Numbers -->
+    <g font-family="Georgia,serif" font-size="22" font-weight="bold" fill="#1a73e8">
+      <text x="41.67" y="65" text-anchor="middle">5</text>
+      <text x="125" y="65" text-anchor="middle" fill="#d93025">3</text>
+      <text x="208.33" y="65" text-anchor="middle" fill="#333">7</text>
+      <text x="41.67" y="125" text-anchor="middle" fill="#333">6</text>
+      <text x="125" y="125" text-anchor="middle" fill="#333">1</text>
+      <text x="208.33" y="125" text-anchor="middle" fill="#333">9</text>
+      <text x="125" y="185" text-anchor="middle" fill="#333">8</text>
+      <text x="41.67" y="245" text-anchor="middle" fill="#333">4</text>
+      <text x="208.33" y="245" text-anchor="middle" fill="#333">2</text>
+      <text x="125" y="245" text-anchor="middle" fill="#1a73e8">9</text>
+    </g>
+  </g>
+  <!-- Decorative floating numbers -->
+  <g font-family="Georgia,serif" font-weight="bold" opacity="0.08" font-size="60">
+    <text x="60" y="380" fill="#1a73e8">1</text>
+    <text x="720" y="100" fill="#d93025">9</text>
+    <text x="680" y="400" fill="#1a73e8">3</text>
+  </g>
+  <text x="400" y="360" text-anchor="middle" font-family="Georgia,serif" font-size="26" fill="#1a73e8" opacity="0.3" font-style="italic">SUDOKU</text>
+  <text x="400" y="388" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666" opacity="0.3">Logic · Numbers · Brain Training</text>
+</svg>
