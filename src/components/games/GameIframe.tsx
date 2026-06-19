@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Maximize2, Minimize2, Volume2, VolumeX, X, Play, Settings, RotateCcw } from "lucide-react";
+import { Maximize2, Minimize2, Volume2, VolumeX, X, Play, Settings, RotateCcw, ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import type { Game } from "@/types/game";
 import { sounds } from "@/lib/sound-effects";
@@ -35,6 +35,8 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ===== CALLBACKS (must be declared before effects that use them) =====
+
   const handleStartGame = useCallback(() => {
     sounds.gameStart();
     setPhase('loading');
@@ -51,59 +53,78 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
     setIframeSrc(null);
   }, []);
 
-  const resetControlsTimer = useCallback(() => {
-    if (!isFullscreen) return;
-    setShowControls(true);
-    if (controlsTimerRef.current) clearTimeout(controlsTimerRef.current);
-    controlsTimerRef.current = setTimeout(() => {
-      if (isFullscreen && !controlsHovered) setShowControls(false);
-    }, 3000);
-  }, [isFullscreen, controlsHovered]);
+  const handleExitImmersive = useCallback(() => {
+    sounds.buttonClick();
+    setPhase('start');
+    setIsLoading(false);
+    setError(null);
+    setIframeSrc(null);
+    if (isFullscreen && document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    setIsFullscreen(false);
+  }, [isFullscreen]);
 
   const toggleFullscreen = useCallback(() => {
-    sounds.buttonClick();
+    if (!containerRef.current) return;
     if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().then(() => {
-        setIsFullscreen(true); onFullscreenChange?.(true);
-      }).catch(() => {});
+      containerRef.current.requestFullscreen().then(() => { setIsFullscreen(true); onFullscreenChange?.(true); }).catch(() => {});
     } else {
-      document.exitFullscreen().then(() => {
-        setIsFullscreen(false); onFullscreenChange?.(false);
-      }).catch(() => {});
+      document.exitFullscreen().then(() => { setIsFullscreen(false); onFullscreenChange?.(false); }).catch(() => {});
     }
   }, [onFullscreenChange]);
 
-  useEffect(() => {
-    const handler = () => {
-      const f = !!document.fullscreenElement;
-      setIsFullscreen(f); onFullscreenChange?.(f);
-      if (f) resetControlsTimer(); else setShowControls(true);
-    };
-    document.addEventListener('fullscreenchange', handler);
-    return () => document.removeEventListener('fullscreenchange', handler);
-  }, [onFullscreenChange, resetControlsTimer]);
-
-  useEffect(() => {
-    const kb = (e: KeyboardEvent) => {
-      if (e.key === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const t = e.target as HTMLElement;
-        if (['INPUT','TEXTAREA'].includes(t.tagName) || t.isContentEditable) return;
-        e.preventDefault(); toggleFullscreen();
-      }
-    };
-    window.addEventListener('keydown', kb);
-    return () => window.removeEventListener('keydown', kb);
-  }, [toggleFullscreen]);
-
-  useEffect(() => {
-    if (phase !== 'loading') return;
-    const t = setTimeout(() => { if (isLoading) { setIsLoading(false); setPhase('playing'); } }, 5000);
-    return () => clearTimeout(t);
-  }, [phase, isLoading]);
+  const resetControlsTimer = useCallback(() => {
+    setShowControls(true);
+    if (controlsTimerRef.current) clearTimeout(controlsTimerRef.current);
+    controlsTimerRef.current = setTimeout(() => { setShowControls(false); }, 3000);
+  }, []);
 
   const onIframeLoad = useCallback(() => {
     setTimeout(() => { setIsLoading(false); setPhase('playing'); sounds.gameStart(); }, 500);
   }, []);
+
+  // ===== EFFECTS =====
+
+  // Lock body scroll when in playing mode (immersive)
+  useEffect(() => {
+    if (phase === 'playing') {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('game-playing');
+    } else {
+      document.body.style.overflow = '';
+      document.body.classList.remove('game-playing');
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('game-playing');
+    };
+  }, [phase]);
+
+  // ESC key to exit immersive mode
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && phase === 'playing') { handleExitImmersive(); }
+      if ((e.key === 'f' || e.key === 'F') && phase === 'playing' && !e.metaKey && !e.ctrlKey) { toggleFullscreen(); }
+      if ((e.key === 'r' || e.key === 'R') && phase === 'playing' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleRestart(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [phase, handleExitImmersive, toggleFullscreen, handleRestart]);
+
+  // Listen for fullscreen change events
+  useEffect(() => {
+    const handler = () => { setIsFullscreen(!!document.fullscreenElement); onFullscreenChange?.(!!document.fullscreenElement); };
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, [onFullscreenChange]);
+
+  // Auto-complete loading after timeout
+  useEffect(() => {
+    if (phase !== 'loading' || !isLoading) return;
+    const t = setTimeout(() => { if (isLoading) { setIsLoading(false); setPhase('playing'); } }, 5000);
+    return () => clearTimeout(t);
+  }, [phase, isLoading]);
 
   if (!game.sourceUrl) {
     return <div className="flex items-center justify-center h-[500px] bg-muted/30 rounded-xl"><p className="text-muted-foreground">Game source URL not configured</p></div>;
@@ -111,17 +132,31 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
   const bgImage = game.backgroundImage ? "url(" + game.backgroundImage + ")" : undefined;
 
+  // === IMMERSIVE MODE: playing = fixed fullscreen overlay ===
+  const isImmersive = phase === 'playing';
+
   return (
-    <div ref={containerRef} className={"relative group/game" + (isFullscreen ? " fixed inset-0 z-[9999]" : "")} style={{ width: isFullscreen ? "100vw" : width }} onMouseMove={resetControlsTimer}>
+    <div ref={containerRef}
+         className={
+           "relative group/game" +
+           (isImmersive ? " fixed inset-0 z-[9999]" : "") +
+           (isFullscreen ? " fixed inset-0 z-[9999]" : "")
+         }
+         style={{ width: isImmersive ? "100vw" : (isFullscreen ? "100vw" : width) }}
+         onMouseMove={resetControlsTimer}>
 
       {/* Game viewport */}
-      <div className={(isFullscreen ? "h-screen" : "aspect-video") + " relative overflow-hidden transition-all duration-500"}
+      <div className={
+            (isImmersive || isFullscreen ? "h-screen w-screen" : "aspect-video") +
+            " relative overflow-hidden transition-all duration-500"
+          }
            style={bgImage ? { backgroundImage: bgImage, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" } : { backgroundColor: "#000" }}
-           onDoubleClick={() => { if (!isFullscreen && phase === "playing") toggleFullscreen(); }}>
+           onDoubleClick={() => { if (isImmersive && !isFullscreen) toggleFullscreen(); }}>
 
-        {/* START SCREEN */}
+        {/* ===== START SCREEN ===== */}
         {phase === "start" && (
           <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/95 backdrop-blur-md">
+            {/* Animated background particles */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-primary/10 blur-[100px] animate-pulse" />
               <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-brand-pink/10 blur-[100px] animate-pulse" style={{ animationDelay: "1s" }} />
@@ -132,6 +167,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
             </div>
 
             <div className="relative z-10 text-center max-w-md mx-auto px-6">
+              {/* Game thumbnail */}
               <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                           transition={{ type: "spring", stiffness: 200, damping: 15 }}
                           className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary via-brand-cyan to-brand-pink p-[2px] shadow-2xl shadow-primary/20">
@@ -145,6 +181,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
               </h2>
               <p className="text-sm text-white/40 mb-8 max-w-xs mx-auto">{game.description.slice(0,80)}...</p>
 
+              {/* Difficulty selector */}
               <div className="mb-8">
                 <p className="text-xs uppercase tracking-widest text-white/30 mb-3 flex items-center justify-center gap-2">
                   <Settings className="w-3.5 h-3.5" /> Difficulty
@@ -166,6 +203,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
                 <p className="text-[11px] text-white/25 mt-2">{DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.desc}</p>
               </div>
 
+              {/* START button */}
               <button onClick={handleStartGame}
                       className="group relative px-12 py-4 rounded-2xl bg-gradient-to-r from-primary via-brand-cyan to-brand-pink text-white font-bold text-lg shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden">
                 <span className="relative z-10 flex items-center gap-3"><Play className="w-6 h-6 fill-white" /> START GAME</span>
@@ -180,7 +218,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           </div>
         )}
 
-        {/* LOADING */}
+        {/* ===== LOADING SCREEN ===== */}
         {(phase === "loading" || isLoading) && phase !== "start" && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/92 z-20 backdrop-blur-sm transition-opacity duration-500">
             <div className="text-center">
@@ -195,7 +233,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           </div>
         )}
 
-        {/* IFRAME */}
+        {/* ===== IFRAME (game content) ===== */}
         {phase !== "start" && (
           <iframe ref={iframeRef} src={iframeSrc || undefined} title={game.title} width="100%" height="100%"
                   style={{ border: "none", display: "block", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 }}
@@ -205,7 +243,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
                   onError={() => { setIsLoading(false); setError("Failed to load. Click Retry."); }} />
         )}
 
-        {/* ERROR */}
+        {/* ===== ERROR STATE ===== */}
         {error && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/95 z-20">
             <div className="text-center p-8">
@@ -216,54 +254,51 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           </div>
         )}
 
-        {/* CONTROLS BAR (playing only) */}
-        {phase === "playing" && (
-          <div className={"absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out " + (showControls || !isFullscreen || controlsHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none")}
-               onMouseEnter={() => setControlsHovered(true)} onMouseLeave={() => setControlsHovered(false)}>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-            <div className="relative flex items-center justify-between px-4 py-3">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className={"w-2 h-2 rounded-full flex-shrink-0 " + (isLoading ? "bg-amber-400 animate-pulse" : "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]")} />
-                <span className="text-sm font-medium text-white/90 truncate max-w-[180px] md:max-w-[300px]">{game.title}</span>
-                <span className={"px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gradient-to-r " + (DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.color || "") + " text-white/90"}>{selectedDifficulty}</span>
+        {/* ===== TOP BAR (immersive mode only): Exit + Title ===== */}
+        {isImmersive && (
+          <div className={"absolute top-0 left-0 right-0 z-30 transition-all duration-300 " + (showControls ? "opacity-100" : "opacity-0 pointer-events-none")}>
+            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent">
+              <div className="flex items-center gap-3">
+                <button onClick={handleExitImmersive}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-sm font-medium transition-all backdrop-blur-sm"
+                        title="Back to menu">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <span className="text-sm font-semibold text-white/90 hidden sm:inline">{game.title}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <button onClick={() => { sounds.buttonClick(); setSoundEnabled(!soundEnabled); }} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">{soundEnabled ? <Volume2 className="w-[18px]" /> : <VolumeX className="w-[18px]" />}</button>
-                <button onClick={handleRestart} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white" title="Restart"><RotateCcw className="w-[18px]" /></button>
-                <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">{isFullscreen ? <Minimize2 className="w-[18px]" /> : <Maximize2 className="w-[18px]" />}</button>
+              <div className="flex items-center gap-1.5">
+                <span className={"px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gradient-to-r " + (DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.color || "") + " text-white/90"}>{selectedDifficulty}</span>
+                <button onClick={() => { sounds.buttonClick(); setSoundEnabled(!soundEnabled); }}
+                        className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">
+                  {soundEnabled ? <Volume2 className="w-[18px]" /> : <VolumeX className="w-[18px]" />}
+                </button>
+                <button onClick={handleRestart} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white" title="Restart">
+                  <RotateCcw className="w-[18px]" />
+                </button>
+                <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white">
+                  {isFullscreen ? <Minimize2 className="w-[18px]" /> : <Maximize2 className="w-[18px]" />}
+                </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Fullscreen close */}
-        {isFullscreen && phase === "playing" && (
-          <button onClick={() => document.fullscreenElement && document.exitFullscreen()}
-                  className="absolute top-4 right-4 z-30 p-2 rounded-lg bg-black/60 hover:bg-black/80 text-white/60 hover:text-white opacity-0 group-hover/game:opacity-100 focus:opacity-100 transition-all duration-200 backdrop-blur-sm">
-            <X className="w-5 h-5" />
-          </button>
+        {/* ===== BOTTOM CONTROLS (immersive mode only) ===== */}
+        {isImmersive && (
+          <div className={"absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out " + (showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none")}
+               onMouseEnter={() => setControlsHovered(true)} onMouseLeave={() => setControlsHovered(false)}>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+            <div className="relative flex items-center justify-center px-4 py-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className={"w-2 h-2 rounded-full flex-shrink-0 " + (isLoading ? "bg-amber-400 animate-pulse" : "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]")} />
+                <span className="text-sm font-medium text-white/90 truncate max-w-[200px] md:max-w-[400px]">{game.title}</span>
+                <span className="text-xs text-white/40 hidden sm:inline">Press ESC or click Back to exit</span>
+              </div>
+            </div>
+          </div>
         )}
 
-        {/* Corner decorations */}
-        {phase !== "start" && !isFullscreen && (
-          <>
-            <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/20 rounded-tl-xl pointer-events-none z-10" />
-            <div className="absolute top-0 right-0 w-16 h-16 border-r-2 border-t-2 border-primary/20 rounded-tr-xl pointer-events-none z-10" />
-            <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-primary/20 rounded-bl-xl pointer-events-none z-10" />
-            <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/20 rounded-br-xl pointer-events-none z-10" />
-            <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/[0.04] pointer-events-none z-10" />
-          </>
-        )}
       </div>
-
-      {/* Hint bar */}
-      {!isFullscreen && phase === "playing" && (
-        <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-muted-foreground/50">
-          <span>Double-click or F for fullscreen</span>
-          <span>F = Fullscreen | R = Restart</span>
-        </div>
-      )}
-
     </div>
   );
 }

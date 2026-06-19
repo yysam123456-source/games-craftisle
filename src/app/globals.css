@@ -260,3 +260,18 @@
   --animate-border-glow: border-glow 3s ease-in-out infinite;
   --animate-loading-bar: loading-bar 1.5s ease-in-out infinite;
 }
+
+/* ===== Immersive Game Mode ===== */
+/* When game is playing, hide site navigation and lock scroll */
+body.game-playing {
+  overflow: hidden !important;
+}
+body.game-playing header,
+body.game-playing nav,
+body.game-playing [data-nav],
+body.game-playing .sticky.top-0 {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-100%) !important;
+  transition: opacity 0.3s, transform 0.3s !important;
+}
