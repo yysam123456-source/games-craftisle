@@ -51,6 +51,15 @@ export default function HomePage() {
   const categories = [...new Set(games.map((g) => g.category))];
   const [recentGames, setRecentGames] = useState<any[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [dailyGame, setDailyGame] = useState<any>(null);
+
+  // 计算每日游戏（基于日期 deterministic）
+  useEffect(() => {
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+    const index = dayOfYear % games.length;
+    setDailyGame(games[index]);
+  }, [games]);
 
   // 从 localStorage 加载最近游玩记录
   useEffect(() => {
@@ -404,6 +413,52 @@ export default function HomePage() {
           </motion.section>
         );
       })}
+
+      {/* ===== Daily Challenge ===== */}
+      {dailyGame && (
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="py-20 md:py-28 border-b border-white/[0.04] relative overflow-hidden"
+        >
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-[10%] w-[400px] h-[400px] rounded-full bg-amber-500/5 blur-[100px]" />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center mb-14">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
+              >
+                📅 DAILY CHALLENGE
+              </motion.div>
+              <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+                <AnimatedWordsAdvanced text="Game of the Day" delay={0.2} />
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+                A new challenge every day. Come back daily for a fresh game!
+              </p>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] }}
+              className="max-w-2xl mx-auto"
+            >
+              <GameCard game={dailyGame} index={0} />
+              <p className="text-center text-sm text-muted-foreground mt-6">
+                Challenge resets at midnight. Share your score with friends!
+              </p>
+            </motion.div>
+          </div>
+        </motion.section>
+      )}
 
       {/* ===== Featured Games ===== */}
       <motion.section
