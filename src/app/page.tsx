@@ -40,7 +40,7 @@ const sectionVariants: Variants = {
 };
 
 const stats = [
-  { value: "10+", label: "Free Games", icon: "🎮" },
+  { value: "15+", label: "Free Games", icon: "🎮" },
   { value: "0", label: "No Download", icon: "⬇️" },
   { value: "100%", label: "Free to Play", icon: "💯" },
   { value: "📱", label: "Multi-Device", icon: "" },
@@ -221,7 +221,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
-              { value: 10, suffix: "+", label: "Free Games", icon: "🎮" },
+              { value: 15, suffix: "+", label: "Free Games", icon: "🎮" },
               { value: 50, suffix: "K+", label: "Active Players", icon: "👥" },
               { value: 48, suffix: "/5", label: "Average Rating", icon: "⭐" },
               { value: 6, suffix: "", label: "Game Categories", icon: "📂" },
@@ -359,6 +359,117 @@ export default function HomePage() {
           </motion.section>
         );
       })}
+
+      {/* ===== Featured Games ===== */}
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 border-b border-white/[0.04] relative"
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
+            >
+              ⭐ FEATURED
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              Editor's Choice
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Hand-picked favorites by our team. Don't miss these!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {games.filter(g => g.featured).slice(0, 8).map((game, i) => (
+              <GameCard key={game.id} game={game} index={i} />
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ===== New Games ===== */}
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 border-b border-white/[0.04] relative"
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-[-5%] w-[500px] h-[500px] rounded-full bg-emerald-500/3 blur-[120px]" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-4"
+            >
+              🆕 NEW GAMES
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              Fresh Arrivals
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Brand new games just added. Be the first to play!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...games]
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              .slice(0, 8)
+              .map((game, i) => (
+                <GameCard key={game.id} game={game} index={i} />
+              ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ===== Popular Games ===== */}
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-20 md:py-28 border-b border-white/[0.04] relative"
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20 mb-4"
+            >
+              🔥 POPULAR
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              Most Played
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              The games everyone's talking about. Join the fun!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...games]
+              .sort((a, b) => b.playCount - a.playCount)
+              .slice(0, 8)
+              .map((game, i) => (
+                <GameCard key={game.id} game={game} index={i} />
+              ))}
+          </div>
+        </div>
+      </motion.section>
 
       {/* ===== All Games ===== */}
       <motion.section
