@@ -64,8 +64,53 @@ export default function HomePage() {
     }
   }, []);
 
+  // Schema.org JSON-LD
+  const schemaWebSite = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Craftisle Games",
+    "url": "https://games.craftisle.com",
+    "description": "Play 15+ free HTML5 games online! No download required, play directly in your browser.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://games.craftisle.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  });
+
+  const schemaItemList = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Free Online HTML5 Games",
+    "description": "Curated list of free HTML5 games",
+    "numberOfItems": games.length,
+    "itemListElement": games.slice(0, 10).map((game, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": {
+        "@type": "VideoGame",
+        "name": game.title,
+        "description": game.description,
+        "url": `https://games.craftisle.com/play/${game.slug}`,
+        "image": `https://games.craftisle.com${game.thumbnail}`,
+        "genre": game.category,
+        "gamePlatform": "Web Browser",
+        "operatingSystem": "Any",
+        "applicationCategory": "Game",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": game.rating,
+          "ratingCount": game.playCount
+        }
+      }
+    }))
+  });
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Schema.org JSON-LD */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaWebSite }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaItemList }} />
       {/* ===== Hero Section ===== */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Three.js Particle Background */}

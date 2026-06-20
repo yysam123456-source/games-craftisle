@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: "Craftisle Games - Free Online HTML5 Games",
     template: "%s | Craftisle Games",
   },
-  description: "Play the best free HTML5 games online! No download required, play directly in your browser. Including 2048, Snake, Tetris, Sudoku, Minesweeper and more classic games.",
+  description: "Play 15+ free HTML5 games online! No download required, play directly in your browser. Puzzle, arcade, strategy, action, building games and more classic favorites.",
   keywords: ["free games", "online games", "HTML5 games", "browser games", "2048", "Snake", "Tetris", "Sudoku", "Minesweeper", "puzzle games", "arcade games"],
   authors: [{ name: "Craftisle Games" }],
   creator: "Craftisle Games",
