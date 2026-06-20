@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="60%" stop-color="#B3E5FC"/>
+      <stop offset="100%" stop-color="#E1F5FE"/>
+    </linearGradient>
+    <radialGradient id="sun1" cx="85%" cy="15%">
+      <stop offset="0%" stop-color="#FFF9C4"/>
+      <stop offset="60%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#FF9800" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky1)"/>
+  <circle cx="1632" cy="162" r="200" fill="url(#sun1)"/>
+  <circle cx="1632" cy="162" r="60" fill="#FFD600" opacity="0.95"/>
+  <!-- clouds -->
+  <ellipse cx="300" cy="150" rx="140" ry="50" fill="white" opacity="0.75"/>
+  <ellipse cx="380" cy="130" rx="100" ry="40" fill="white" opacity="0.8"/>
+  <ellipse cx="700" cy="100" rx="120" ry="45" fill="white" opacity="0.7"/>
+  <ellipse cx="1500" cy="180" rx="110" ry="42" fill="white" opacity="0.65"/>
+  <!-- sea -->
+  <rect y="720" width="1920" height="360" fill="#1565C0"/>
+  <rect y="720" width="1920" height="360" fill="url(#sky1)" opacity="0.18"/>
+  <!-- waves -->
+  <path d="M0 780 Q240 760 480 780 T960 780 T1440 780 T1920 780" fill="none" stroke="#42A5F5" stroke-width="2" opacity="0.4"/>
+  <path d="M0 820 Q240 800 480 820 T960 820 T1440 820 T1920 820" fill="none" stroke="#1E88E5" stroke-width="2" opacity="0.35"/>
+  <path d="M0 870 Q240 850 480 870 T960 870 T1440 870 T1920 870" fill="none" stroke="#1565C0" stroke-width="1.5" opacity="0.3"/>
+  <!-- island center -->
+  <ellipse cx="960" cy="720" rx="420" ry="140" fill="#F5DEB3"/>
+  <ellipse cx="960" cy="720" rx="420" ry="140" fill="#E8D5B7" opacity="0.5"/>
+  <!-- buildings -->
+  <polygon points="820,680 860,660 900,680 860,700" fill="#FAFAFA" stroke="#bbb" stroke-width="1"/>
+  <polygon points="820,680 860,700 840,710 800,690" fill="#EEE" stroke="#bbb" stroke-width="1"/>
+  <polygon points="900,680 860,700 840,710 880,690" fill="#E0E0E0" stroke="#bbb" stroke-width="1"/>
+  <polygon points="920,670 960,650 1000,670 960,690" fill="#90CAF9" stroke="#64B5F6" stroke-width="1"/>
+  <polygon points="920,670 960,690 940,700 900,680" fill="#64B5F6" stroke="#42A5F5" stroke-width="1"/>
+  <polygon points="1000,670 960,690 940,700 980,680" fill="#42A5F5" stroke="#2196F3" stroke-width="1"/>
+  <polygon points="1000,660 1040,640 1080,660 1040,680" fill="#FFCC80" stroke="#FFB74D" stroke-width="1"/>
+  <polygon points="1000,660 1040,680 1020,690 980,670" fill="#FFB74D" stroke="#FF9800" stroke-width="1"/>
+  <polygon points="1080,660 1040,680 1020,690 1060,670" fill="#FF9800" stroke="#F57C00" stroke-width="1"/>
+  <!-- church -->
+  <polygon points="1100,650 1140,630 1180,650 1140,670" fill="#ECEFF1" stroke="#B0BEC5" stroke-width="1"/>
+  <polygon points="1100,650 1140,670 1120,680 1080,660" fill="#CFD8DC" stroke="#B0BEC5" stroke-width="1"/>
+  <polygon points="1180,650 1140,670 1120,680 1160,660" fill="#B0BEC5" stroke="#90A4AE" stroke-width="1"/>
+  <circle cx="1140" cy="630" r="18" fill="#ECEFF1" stroke="#B0BEC5" stroke-width="1"/>
+  <!-- trees -->
+  <circle cx="860" cy="665" r="16" fill="#4CAF50"/>
+  <circle cx="980" cy="655" r="14" fill="#66BB6A"/>
+  <circle cx="1060" cy="645" r="13" fill="#81C784"/>
+  <circle cx="750" cy="690" r="18" fill="#388E3C"/>
+  <!-- path -->
+  <path d="M960 720 Q920 750 880 770 Q840 790 860 810 Q880 830 920 810 Q960 790 960 760" fill="none" stroke="#D2B48C" stroke-width="8" opacity="0.6"/>
+  <!-- boat -->
+  <polygon points="1300,750 1340,745 1360,755 1320,760" fill="#795548"/>
+  <polygon points="1330,745 1345,735 1355,745" fill="white" opacity="0.9"/>
+  <line x1="1340" y1="735" x2="1340" y2="755" stroke="#5D4037" stroke-width="1.5"/>
+  <!-- birds -->
+  <path d="M500 300 Q510 290 520 300" fill="none" stroke="#424242" stroke-width="2" opacity="0.5"/>
+  <path d="M540 310 Q550 300 560 310" fill="none" stroke="#424242" stroke-width="2" opacity="0.5"/>
+  <path d="M560 280 Q570 270 580 280" fill="none" stroke="#424242" stroke-width="1.5" opacity="0.4"/>
+  <path d="M600 290 Q610 280 620 290" fill="none" stroke="#424242" stroke-width="1.5" opacity="0.4"/>
+  <!-- title -->
+  <text x="960" y="980" text-anchor="middle" font-family="Georgia,serif" font-size="56" font-weight="bold" fill="white" opacity="0.12">Island Builder</text>
+</svg>

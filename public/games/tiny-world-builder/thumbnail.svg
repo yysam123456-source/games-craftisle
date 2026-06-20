@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0D47A1"/>
+      <stop offset="100%" stop-color="#4A148C"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky2)"/>
+  <!-- stars -->
+  <circle cx="50" cy="40" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="120" cy="70" r="1" fill="white" opacity="0.6"/>
+  <circle cx="200" cy="30" r="1.8" fill="white" opacity="0.9"/>
+  <circle cx="280" cy="60" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="350" cy="45" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="80" cy="120" r="1" fill="white" opacity="0.5"/>
+  <circle cx="320" cy="110" r="1.8" fill="white" opacity="0.9"/>
+  <!-- ground -->
+  <rect y="220" width="400" height="80" fill="#4CAF50"/>
+<rect x="0" y="230" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="40" y="220" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="80" y="230" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="120" y="220" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="160" y="230" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="200" y="220" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="240" y="230" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="280" y="220" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="320" y="230" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="360" y="220" width="40" height="20" fill="#66BB6A" stroke="#43A047" stroke-width="0.5"/>
+<rect x="0" y="250" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="40" y="240" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="80" y="250" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="120" y="240" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="160" y="250" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="200" y="240" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="240" y="250" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="280" y="240" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="320" y="250" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>
+<rect x="360" y="240" width="40" height="20" fill="#8D6E63" stroke="#6D4C41" stroke-width="0.5"/>  <!-- voxel house -->
+  <rect x="160" y="200" width="80" height="40" fill="#EF5350" stroke="#C62828" stroke-width="1"/>
+  <rect x="160" y="200" width="80" height="20" fill="#E53935" opacity="0.5"/>
+  <polygon points="155,200 200,175 245,200" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+  <rect x="190" y="215" width="20" height="25" fill="#5D4037" stroke="#3E2723" stroke-width="0.5"/>
+  <rect x="175" y="210" width="12" height="12" fill="#FFF9C4" stroke="#F57F17" stroke-width="0.5"/>
+  <rect x="213" y="210" width="12" height="12" fill="#FFF9C4" stroke="#F57F17" stroke-width="0.5"/>
+  <!-- voxel person -->
+  <rect x="260" y="208" width="12" height="12" fill="#42A5F5"/>
+  <rect x="258" y="220" width="16" height="20" fill="#1976D2"/>
+  <!-- title -->
+  <text x="200" y="285" text-anchor="middle" font-family="monospace" font-size="16" font-weight="bold" fill="#76FF03" stroke="#000" stroke-width="3" paint-order="stroke">Tiny World Builder</text>
+</svg>

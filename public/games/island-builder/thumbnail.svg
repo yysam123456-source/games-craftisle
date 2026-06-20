@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="100%" stop-color="#1a6bb5"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5DEB3"/>
+      <stop offset="100%" stop-color="#D2B48C"/>
+    </linearGradient>
+  </defs>
+  <!-- sky -->
+  <rect width="400" height="300" fill="url(#sea)"/>
+  <!-- sun -->
+  <circle cx="320" cy="60" r="32" fill="#FFD700" opacity="0.9"/>
+  <!-- clouds -->
+  <ellipse cx="80" cy="55" rx="40" ry="18" fill="white" opacity="0.8"/>
+  <ellipse cx="110" cy="50" rx="30" ry="14" fill="white" opacity="0.8"/>
+  <ellipse cx="260" cy="45" rx="35" ry="15" fill="white" opacity="0.7"/>
+  <!-- sea -->
+  <rect y="200" width="400" height="100" fill="#1a6bb5"/>
+  <!-- waves -->
+  <path d="M0 210 Q50 200 100 210 T200 210 T300 210 T400 210 V230 H0Z" fill="#2196F3" opacity="0.5"/>
+  <path d="M0 225 Q60 218 120 225 T240 225 T360 225 T400 225 V245 H0Z" fill="#1976D2" opacity="0.6"/>
+  <!-- island -->
+  <ellipse cx="200" cy="200" rx="90" ry="35" fill="url(#sand)"/>
+  <!-- buildings isometric -->
+  <polygon points="170,185 190,175 210,185 190,195" fill="#FAFAFA" stroke="#ccc" stroke-width="0.5"/>
+  <polygon points="170,185 190,195 180,200 160,190" fill="#EEEEEE" stroke="#ccc" stroke-width="0.5"/>
+  <polygon points="210,185 190,195 180,200 200,190" fill="#E0E0E0" stroke="#ccc" stroke-width="0.5"/>
+  <polygon points="210,180 230,170 250,180 230,190" fill="#90CAF9" stroke="#64B5F6" stroke-width="0.5"/>
+  <polygon points="210,180 230,190 220,195 200,185" fill="#64B5F6" stroke="#42A5F5" stroke-width="0.5"/>
+  <polygon points="250,180 230,190 220,195 240,185" fill="#42A5F5" stroke="#2196F3" stroke-width="0.5"/>
+  <!-- trees -->
+  <circle cx="155" cy="178" r="8" fill="#4CAF50"/>
+  <circle cx="250" cy="175" r="7" fill="#66BB6A"/>
+  <circle cx="195" cy="170" r="6" fill="#81C784"/>
+  <!-- title -->
+  <text x="200" y="270" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="white" stroke="#000" stroke-width="3" paint-order="stroke">Mykonos Island</text>
+</svg>
