@@ -1,13 +1,20 @@
 # Messenger 3D game — 破缓存 + CORS（Safari 兼容）
 # Cloudflare _headers path = URL 路径（绝对路径）
 
+/games/messenger/
+  Cache-Control: public, max-age=0, must-revalidate
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Opener-Policy: same-origin
+
 /games/messenger/*.wasm
   Cache-Control: public, max-age=0, must-revalidate
   Access-Control-Allow-Origin: *
+  Cross-Origin-Embedder-Policy: require-corp
 
 /games/messenger/**/*.wasm
   Cache-Control: public, max-age=0, must-revalidate
   Access-Control-Allow-Origin: *
+  Cross-Origin-Embedder-Policy: require-corp
 
 /games/messenger/*.js
   Cache-Control: public, max-age=0, must-revalidate
