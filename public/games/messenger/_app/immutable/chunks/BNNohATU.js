@@ -1,4 +1,4 @@
-import{Mt as e,Nt as t,a as n,bt as r,d as i,pt as a}from"./KDm2vTix.js";import{r as o,t as s}from"./DeoYhvk1.js";function c(e,t,r=`BatchedMesh`){let i=e.length,a=new n(i,e.reduce((e,t)=>e+t.attributes.position.count,0),e.reduce((e,t)=>e+(t.index?.count??0),0),t);a.name=r,a.frustumCulled=!1;for(let t of e){let e=a.addGeometry(t);a.addInstance(e)}return a}var l=`
+import{Mt as e,Nt as t,a as n,bt as r,d as i,pt as a}from"./KDm2vTix.js";import{r as o,t as s}from"./BbnIowjr.js";function c(e,t,r=`BatchedMesh`){let i=e.length,a=new n(i,e.reduce((e,t)=>e+t.attributes.position.count,0),e.reduce((e,t)=>e+(t.index?.count??0),0),t);a.name=r,a.frustumCulled=!1;for(let t of e){let e=a.addGeometry(t);a.addInstance(e)}return a}var l=`
 varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vWorldPosition;
