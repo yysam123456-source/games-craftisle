@@ -42,7 +42,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
     setPhase('loading');
     setIsLoading(true);
     const sep = game.sourceUrl!.includes('?') ? '&' : '?';
-    setIframeSrc(game.sourceUrl! + sep + 'difficulty=' + selectedDifficulty);
+    setIframeSrc(game.sourceUrl! + sep + 'difficulty=' + selectedDifficulty + '&_cb=' + Date.now());
   }, [game.sourceUrl, selectedDifficulty]);
 
   const handleRestart = useCallback(() => {
