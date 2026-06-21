@@ -1,9 +1,26 @@
-# Messenger 3D game — 破缓存：WASM 和 JS 文件必须可刷新
-/games/messenger/*.wasm
+# Messenger 3D game — 破缓存：WASM/JS 必须可刷新
+# 路径相对于本文件所在目录 (games/messenger/)
+
+*.wasm
   Cache-Control: public, max-age=0, must-revalidate
-/games/messenger/**/*.wasm
+
+**/*.wasm
   Cache-Control: public, max-age=0, must-revalidate
-/games/messenger/*.js
+
+*.js
   Cache-Control: public, max-age=0, must-revalidate
-/games/messenger/**/*.js
+
+**/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+*.drc
+  Cache-Control: public, max-age=0, must-revalidate
+
+**/*.drc
+  Cache-Control: public, max-age=0, must-revalidate
+
+*.ktx2
+  Cache-Control: public, max-age=0, must-revalidate
+
+**/*.ktx2
   Cache-Control: public, max-age=0, must-revalidate
