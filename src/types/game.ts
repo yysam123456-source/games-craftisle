@@ -42,6 +42,8 @@ export interface Game {
   featured?: boolean;
   difficulty?: string;
   estimatedTime?: string;
+  /** Disable iframe sandbox (needed for WebAssembly / Web Worker games like 3D) */
+  disableSandbox?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

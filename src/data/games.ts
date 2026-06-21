@@ -399,6 +399,7 @@ export const games: Game[] = [
     difficulty: "Easy",
     estimatedTime: "Endless exploration",
     featured: true,
+    disableSandbox: true,
     createdAt: new Date("2026-06-21"),
     updatedAt: new Date("2026-06-21"),
   },

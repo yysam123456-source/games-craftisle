@@ -252,7 +252,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
         {phase !== "start" && (
           <iframe ref={iframeRef} src={iframeSrc || undefined} title={game.title} width="100%" height="100%"
                   style={{ border: "none", display: "block", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, background: "transparent" }}
-                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+                  {...(game.disableSandbox ? {} : { sandbox: "allow-scripts allow-same-origin allow-popups allow-forms allow-presentation" })}
                   allow="fullscreen;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
                   allowFullScreen onLoad={onIframeLoad}
                   onError={() => { setIsLoading(false); setError("Failed to load. Click Retry."); }} />
