@@ -1,26 +1,34 @@
-# Messenger 3D game — 破缓存：WASM/JS 必须可刷新
-# 路径相对于本文件所在目录 (games/messenger/)
+# Messenger 3D game — 破缓存 + CORS（Safari 兼容）
+# Cloudflare _headers path = URL 路径（绝对路径）
 
-*.wasm
+/games/messenger/*.wasm
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-**/*.wasm
+/games/messenger/**/*.wasm
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-*.js
+/games/messenger/*.js
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-**/*.js
+/games/messenger/**/*.js
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-*.drc
+/games/messenger/*.drc
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-**/*.drc
+/games/messenger/**/*.drc
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-*.ktx2
+/games/messenger/*.ktx2
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
 
-**/*.ktx2
+/games/messenger/**/*.ktx2
   Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
