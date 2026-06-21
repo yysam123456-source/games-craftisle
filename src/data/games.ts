@@ -377,6 +377,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-20"),
     updatedAt: new Date("2026-06-20"),
   },
+
+  // ===== Messenger - 3D Planet Exploration (from messenger-copy) =====
+  {
+    id: "messenger",
+    slug: "messenger",
+    title: "Messenger",
+    description: "Explore a stunning low-poly 3D alien planet! Rotate the view, zoom in/out, and discover hidden details on this mysterious world. A visual journey built with Three.js.",
+    category: "casual",
+    tags: ["3d", "exploration", "three.js", "low-poly", "planet", "relaxing", "visual"],
+    source: "embed",
+    sourceUrl: "/games/messenger/",
+    thumbnail: "/games/messenger/thumbnail.svg",
+    backgroundImage: "/games/messenger/thumbnail.svg",
+    instructions: "Drag to rotate the view. Scroll to zoom. Explore the 3D planet at your own pace!",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.9,
+    difficulty: "Easy",
+    estimatedTime: "Endless exploration",
+    featured: true,
+    createdAt: new Date("2026-06-21"),
+    updatedAt: new Date("2026-06-21"),
+  },
 ];
 
 // ===== Helper Functions =====
