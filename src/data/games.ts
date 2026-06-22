@@ -887,6 +887,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Temple Run - Endless Runner (OnlineGames.io Embed) =====
+  {
+    id: "temple-run",
+    slug: "temple-run",
+    title: "Temple Run",
+    description: "The original mobile endless runner! Dash as fast as you can, dodge obstacles, and escape the temple guards.",
+    category: "arcade",
+    tags: ["temple", "run", "endless", "runner", "mobile", "high-score", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/temple-run/index.html",
+    thumbnail: "/games/temple-run/thumbnail.svg",
+    instructions: "Swipe up to jump, down to slide, left/right to turn. Collect coins and power-ups. Dodge obstacles and the temple guards! Pro tip: Save gems for reviving — don't use them on small upgrades.",
+    controls: { keyboard: ["Up Arrow to jump", "Down Arrow to slide", "Left/Right to turn"], mouse: false, touch: true, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 500000000,
+    rating: 4.8,
+    difficulty: "Easy to Hard",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
