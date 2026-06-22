@@ -912,6 +912,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Zuma - Classic Ball Shooter (GameZipper Embed) =====
+  {
+    id: "zuma",
+    slug: "zuma",
+    title: "Zuma",
+    description: "The addictive ball-shooting puzzle! Match 3+ same-color balls to clear the chain.",
+    category: "puzzle",
+    tags: ["zuma", "ball", "shooter", "puzzle", "classic", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/zuma/",
+    thumbnail: "/games/zuma/thumbnail.svg",
+    instructions: "Mouse to aim, click to shoot. Match 3+ same-color balls to clear them. Stop the chain from reaching the end! Pro tip: Aim for the middle of groups to create combos.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 234000,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "3-15 minutes",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
