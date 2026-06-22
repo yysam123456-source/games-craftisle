@@ -14,8 +14,10 @@ import { useState, useEffect } from "react";
 import {
   Gamepad2, Download, Trophy, Smartphone, Users, Star, FolderOpen,
   Puzzle, Target, Zap, Building2, Calendar, Sparkles, Flame,
-  Volume2, VolumeX, ChevronRight
+  Volume2, VolumeX, ChevronRight, Heart, Clock
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const categoryIcons: Record<string, any> = {
   puzzle: Puzzle,
@@ -384,6 +386,134 @@ export default function HomePage() {
         </div>
       </motion.section>
 
+      {/* ===== Game of the Day (Hero) ===== */}
+      {dailyGame && (
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="py-20 md:py-28 border-b border-white/[0.04] relative overflow-hidden"
+        >
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-[10%] w-[500px] h-[500px] rounded-full bg-amber-500/4 blur-[120px]" />
+            <div className="absolute bottom-0 right-[10%] w-[400px] h-[400px] rounded-full bg-primary/4 blur-[100px]" />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center mb-10">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
+              >
+                <Calendar className="w-4 h-4 mr-1 inline -mt-0.5" /> DAILY CHALLENGE
+              </motion.div>
+              <h2 className="text-3xl md:text-5xl font-extrabold mt-3 mb-3">
+                Game of the Day
+              </h2>
+              <p className="text-muted-foreground text-base max-w-lg mx-auto">
+                A new challenge every day. Come back daily for a fresh game!
+              </p>
+            </div>
+
+            <Link href={`/play/${dailyGame.slug}`}>
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="group relative mx-auto max-w-2xl rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-white/[0.06] hover:border-primary/30 transition-all duration-500 shadow-[0_20px_60px_rgba(0,0,0,0.25)] hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] cursor-pointer"
+              >
+                {/* Thumbnail */}
+                <div className="aspect-video overflow-hidden relative">
+                  {dailyGame.thumbnail ? (
+                    <Image
+                      src={dailyGame.thumbnail}
+                      alt={`${dailyGame.title} - Game of the Day`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 672px"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-brand-cyan/20 flex items-center justify-center">
+                      <Gamepad2 className="w-16 h-16 text-primary/40" strokeWidth={1} />
+                    </div>
+                  )}
+
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                  {/* Category badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-black/60 backdrop-blur-md text-white/90 border border-white/15">
+                      {dailyGame.category}
+                    </span>
+                  </div>
+
+                  {/* Favorite button placeholder area */}
+                  <div className="absolute top-4 right-4">
+                    <Heart className="w-5 h-5 text-white/70 group-hover:text-red-400 transition-colors" />
+                  </div>
+                </div>
+
+                {/* Game info */}
+                <div className="p-6 md:p-8 space-y-4">
+                  <h3 className="text-xl md:text-2xl font-bold leading-tight group-hover:text-primary transition-colors duration-300">
+                    {dailyGame.title}
+                  </h3>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-3">
+                    {dailyGame.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {dailyGame.tags.slice(0, 4).map((tag: string) => (
+                      <span
+                        key={tag}
+                        className="px-2.5 py-1 text-xs rounded-lg bg-primary/8 text-primary/70 border border-primary/10 font-medium hover:bg-primary/14 transition-colors"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Rating + plays + CTA row */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5">
+                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" strokeWidth={0} />
+                        <span className="text-sm font-bold">{dailyGame.rating}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Gamepad2 className="w-3.5 h-3.5" strokeWidth={1.5} />
+                        <span className="text-xs">{(dailyGame.playCount / 1000).toFixed(1)}K plays</span>
+                      </div>
+                      {dailyGame.difficulty && (
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
+                          <span className="text-xs capitalize">{dailyGame.difficulty}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                      Play Now
+                      <ChevronRight className="w-4 h-4" strokeWidth={2} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom glow on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "linear-gradient(90deg, transparent, oklch(0.75_0.18_210/0.8), transparent)" }} />
+              </motion.div>
+            </Link>
+          </div>
+        </motion.section>
+      )}
+
       {/* ===== Games by Category ===== */}
       {categories.map((cat, catIdx) => {
         const catGames = games.filter((g) => g.category === cat);
@@ -432,52 +562,6 @@ export default function HomePage() {
           </motion.section>
         );
       })}
-
-      {/* ===== Daily Challenge ===== */}
-      {dailyGame && (
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="py-20 md:py-28 border-b border-white/[0.04] relative overflow-hidden"
-        >
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-[10%] w-[400px] h-[400px] rounded-full bg-amber-500/5 blur-[100px]" />
-          </div>
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center mb-14">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
-              >
-                <Calendar className="w-4 h-4 mr-1 inline -mt-0.5" /> DAILY CHALLENGE
-              </motion.div>
-              <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
-                <AnimatedWordsAdvanced text="Game of the Day" delay={0.2} />
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-                A new challenge every day. Come back daily for a fresh game!
-              </p>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] }}
-              className="max-w-2xl mx-auto"
-            >
-              <GameCard game={dailyGame} index={0} />
-              <p className="text-center text-sm text-muted-foreground mt-6">
-                Challenge resets at midnight. Share your score with friends!
-              </p>
-            </motion.div>
-          </div>
-        </motion.section>
-      )}
 
       {/* ===== Featured Games ===== */}
       <motion.section
