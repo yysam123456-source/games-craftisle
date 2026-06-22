@@ -742,6 +742,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Subway Surfers - Endless Runner (OnlineGames.io Embed) =====
+  {
+    id: "subway-surfers",
+    slug: "subway-surfers",
+    title: "Subway Surfers",
+    description: "The world's most popular mobile endless runner! Dash as fast as you can, dodge trains, and collect coins.",
+    category: "arcade",
+    tags: ["subway", "surfers", "endless", "runner", "mobile", "high-score", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/subway-surfers/index.html",
+    thumbnail: "/games/subway-surfers/thumbnail.svg",
+    instructions: "Swipe up to jump, down to roll, left/right to switch lanes. Collect coins and power-ups (jetpack, magnet, multiplier). Dodge trains and obstacles! Pro tip: Save keys for reviving — don't use them on hoverboards.",
+    controls: { keyboard: ["Up Arrow to jump", "Down Arrow to roll", "Left/Right to switch lanes"], mouse: false, touch: true, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 1000000000,
+    rating: 4.9,
+    difficulty: "Easy to Hard",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
