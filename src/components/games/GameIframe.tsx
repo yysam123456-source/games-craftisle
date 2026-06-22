@@ -196,27 +196,29 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
               </h2>
               <p className="text-sm text-white/60 mb-8 max-w-xs mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">{game.description.slice(0,80)}...</p>
 
-              {/* Difficulty selector */}
-              <div className="mb-8">
-                <p className="text-xs uppercase tracking-widest text-white/50 mb-3 flex items-center justify-center gap-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  <Settings className="w-3.5 h-3.5" /> Difficulty
-                </p>
-                <div className="flex gap-2 justify-center">
-                  {DIFFICULTY_OPTIONS.map(opt => {
-                    const active = selectedDifficulty === opt.value;
-                    return (
-                      <button key={opt.value} onClick={() => { setSelectedDifficulty(opt.value); sounds.buttonClick(); }}
-                              className={active
-                                ? "relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 bg-gradient-to-r " + opt.color + " text-white shadow-lg scale-105"
-                                : "relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 bg-white/[0.06] text-white/50 hover:bg-white/[0.10] hover:text-white/70 border border-white/[0.06]"}>
-                        {opt.label}
-                        {active && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-current opacity-60" />}
-                      </button>
-                    );
-                  })}
+              {/* Difficulty selector — only show if game actually supports it */}
+              {game.supportsDifficulty && (
+                <div className="mb-8">
+                  <p className="text-xs uppercase tracking-widest text-white/50 mb-3 flex items-center justify-center gap-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                    <Settings className="w-3.5 h-3.5" /> Difficulty
+                  </p>
+                  <div className="flex gap-2 justify-center">
+                    {DIFFICULTY_OPTIONS.map(opt => {
+                      const active = selectedDifficulty === opt.value;
+                      return (
+                        <button key={opt.value} onClick={() => { setSelectedDifficulty(opt.value); sounds.buttonClick(); }}
+                                className={active
+                                  ? "relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 bg-gradient-to-r " + opt.color + " text-white shadow-lg scale-105"
+                                  : "relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 bg-white/[0.06] text-white/50 hover:bg-white/[0.10] hover:text-white/70 border border-white/[0.06]"}>
+                          {opt.label}
+                          {active && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-current opacity-60" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-[11px] text-white/25 mt-2">{DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.desc}</p>
                 </div>
-                <p className="text-[11px] text-white/25 mt-2">{DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.desc}</p>
-              </div>
+              )}
 
               {/* START button */}
               <button onClick={handleStartGame}
@@ -282,7 +284,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
                 <span className="text-sm font-semibold text-white/90 hidden sm:inline">{game.title}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className={"px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gradient-to-r " + (DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.color || "") + " text-white/90"}>{selectedDifficulty}</span>
+                {game.supportsDifficulty && <span className={"px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gradient-to-r " + (DIFFICULTY_OPTIONS.find(d => d.value === selectedDifficulty)?.color || "") + " text-white/90"}>{selectedDifficulty}</span>}
                 <button onClick={() => { sounds.buttonClick(); setSoundEnabled(!soundEnabled); }}
                         className="p-2 rounded-lg hover:bg-white/15 text-white/60 hover:text-white pointer-events-auto">
                   {soundEnabled ? <Volume2 className="w-[18px]" /> : <VolumeX className="w-[18px]" />}

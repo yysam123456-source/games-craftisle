@@ -147,6 +147,15 @@
     let timerInterval = null;
     let firstClick = true;
     
+    // ===== Read difficulty from URL parameter =====
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlDifficulty = urlParams.get('difficulty') || '';
+    if (urlDifficulty === 'easy' || urlDifficulty === 'medium') {
+      setDifficulty(urlDifficulty);
+    } else {
+      setDifficulty('easy'); // default
+    }
+    
     function setDifficulty(level) {
       if (level === 'easy') {
         ROWS = 9; COLS = 9; MINES = 10;

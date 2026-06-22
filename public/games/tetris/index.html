@@ -351,6 +351,18 @@
       startBtn.style.display = 'block';
     }
     
+    // difficulty affects starting speed and acceleration
+    const DIFFICULTY_CONFIG = {
+      easy:   { start: 120, decay: 8  },  // slow start, slow acceleration
+      medium: { start: 100, decay: 10 },  // original behavior
+      hard:   { start: 70,  decay: 15 },  // fast start, fast acceleration
+    };
+    const config = DIFFICULTY_CONFIG[urlDifficulty] || DIFFICULTY_CONFIG.medium;
+    
+    function getSpeed() {
+      return Math.max(80, config.start - (level - 1) * config.decay);
+    }
+    
     function startGame() {
       board = Array(ROWS).fill(null).map(() => Array(COLS).fill(0));
       score = 0;
@@ -367,12 +379,16 @@
       
       startBtn.style.display = 'none';
       
-      if (gameLoop) clearInterval(gameLoop);
-      gameLoop = setInterval(() => {
+      function gameStep() {
+        if (!isPlaying) return;
         dropPiece();
         drawBoard();
         drawNextPiece();
-      }, 1000 - (level - 1) * 100);
+        if (isPlaying) {
+          gameLoop = setTimeout(gameStep, getSpeed());
+        }
+      }
+      gameLoop = setTimeout(gameStep, getSpeed());
     }
     
     document.addEventListener('keydown', (e) => {

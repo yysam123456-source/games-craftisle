@@ -157,8 +157,15 @@
       return grid;
     }
     
+    // ===== Read difficulty from URL parameter =====
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlDifficulty = urlParams.get('difficulty') || 'medium';
+    // difficulty = number of cells to remove: easy=35, medium=40, hard=50
+    const DIFFICULTY_MAP = { easy: 35, medium: 40, hard: 50 };
+    const puzzleDifficulty = DIFFICULTY_MAP[urlDifficulty] || 40;
+    
     // Create puzzle by removing numbers from solution
-    function createPuzzle(solution, difficulty = 40) {
+    function createPuzzle(solution, difficulty = puzzleDifficulty) {
       const puzzle = solution.map(row => [...row]);
       
       let removed = 0;

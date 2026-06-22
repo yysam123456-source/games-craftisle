@@ -44,6 +44,9 @@ export interface Game {
   estimatedTime?: string;
   /** Disable iframe sandbox (needed for WebAssembly / Web Worker games like 3D) */
   disableSandbox?: boolean;
+  /** Whether this game actually reads the ?difficulty= URL param. 
+   *  If false/undefined, the difficulty selector is hidden and only Start button is shown. */
+  supportsDifficulty?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
