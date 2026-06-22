@@ -5,436 +5,436 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slope - Play Free Online</title>
   <style>
-    * { margin:0; padding:0; box-sizing: border-box; }
-    body { 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: auto; 
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      font-family: 'Arial', sans-serif;
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      display:flex; justify-content:center; align-items:center;
+      min-height:auto; background:linear-gradient(135deg,#0a0a1a,#1a1a2e);
+      font-family:'Segoe UI',Arial,sans-serif; overflow:hidden;
     }
-    .game-wrapper {
-      text-align: center;
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    .game-wrapper { text-align:center; }
+    canvas {
+      border-radius:12px;
+      display:block; cursor:pointer;
+      box-shadow:0 0 60px rgba(102,126,234,0.15), inset 0 0 30px rgba(0,0,0,0.3);
     }
-    h1 { 
-      color: #333; 
-      margin-bottom: 20px;
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    .hud {
+      margin-top:14px; color:#a0aec0; font-size:14px; font-weight:600;
+      display:flex; justify-content:center; gap:32px;
     }
-    canvas { 
-      border: 4px solid #333;
-      background: #0a0a1a;
-      border-radius: 10px;
-      display: block;
-      margin: 0 auto;
-    }
-    .score-board {
-      margin-top: 20px;
-      font-size: 1.5em;
-      color: #667eea;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-around;
-    }
-    .instructions {
-      margin-top: 15px;
-      color: #666;
-      font-size: 0.9em;
-    }
+    .hud span { color:#667eea; }
   </style>
 </head>
 <body>
-  <div class="game-wrapper">
-    <h1>🏎️ Slope</h1>
-    <canvas id="gameCanvas" width="600" height="400"></canvas>
-    <div class="score-board">
-      <div>Score: <span id="score">0</span></div>
-      <div>Speed: <span id="speed">1.0</span>x</div>
-    </div>
-    <div class="instructions">
-      ← → Arrow Keys to Move | Avoid Red Obstacles! | Speed Increases Over Time!
-    </div>
-  </div>
-  
-  <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreElement = document.getElementById('score');
-    const speedElement = document.getElementById('speed');
+<div class="game-wrapper">
+  <canvas id="c" width="640" height="480"></canvas>
+  <div class="hud">Score:<span id="sc">0</span> &nbsp; Best:<span id="bs">0</span> &nbsp; Speed:<span id="sp">1.0x</span></div>
+</div>
 
-    // Read difficulty from URL params
-    const urlParams = new URLSearchParams(window.location.search);
-    const difficulty = urlParams.get('difficulty') || 'easy';
-    const DIFFICULTY_SPEED = { easy: 2.5, medium: 3.5, hard: 4.5 };
-    const BASE_SPEED = DIFFICULTY_SPEED[difficulty] || 2.5;
+<script>
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+const W=canvas.width,H=canvas.height;
 
-    let ball = {
-      x: canvas.width / 2,
-      y: canvas.height - 80,  // Start lower, within visible area
-      radius: 12,
-      dx: 0,
-      dy: 0,  // Don't fly up initially - ball stays on "ground"
-      speed: BASE_SPEED
-    };
+// Difficulty from URL
+const urlP=new URLSearchParams(location.search);
+const diff=urlP.get('difficulty')||'medium';
+const DIFF={easy:{spd:1,obs:0.012,acc:0.0004},medium:{spd:1.6,obs:0.02,acc:0.0007},hard:{spd:2.2,obs:0.032,acc:0.0012}};
+const CFG=DIFF[diff]||DIFF.medium;
 
-    let obstacles = [];
-    let particles = [];
-    let score = 0;
-    let gameSpeed = 1.0;
-    let gameLoop;
-    let isPlaying = false;
-    let trail = [];
+// --- State ---
+let state='idle'; // idle | playing | dead
+let score=0,best=+localStorage.getItem('slope-best')||0;
+let speed=CFG.spd;
+let ballX=0; // -1..1 normalized lane position
+let ballVX=0; // horizontal velocity
+let roadW=3000; // virtual road width units
+let obsList=[]; // obstacles
+let time=0;
+let deathTimer=0;
+let shakeX=0,shakeY=0;
 
-    // Track boundaries (dashed lines)
-    const TRACK_LEFT = 50;
-    const TRACK_RIGHT = canvas.width - 50;
-    const CEILING = 30;        // Top boundary - don't go above this
-    const FLOOR = canvas.height - 40;  // Bottom boundary
+// Perspective settings
+const VANISH_Y=H*0.28;
+const HORIZON_Y=H*0.22;
+const ROAD_BOTTOM_Y=H-10;
+function roadAtY(y){ // returns half-width of road screen-pixels at y
+  const t=(y-HORIZON_Y)/(ROAD_BOTTOM_Y-HORIZON_Y);
+  return Math.max(20, t*t*280);
+}
 
-    // Create neon grid effect
-    function drawGrid() {
-      ctx.strokeStyle = 'rgba(102, 126, 234, 0.1)';
-      ctx.lineWidth = 1;
+// --- Input ---
+const keys={left:false,right:false};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){keys.left=true;e.preventDefault();if(state==='idle')start();}
+  if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){keys.right=true;e.preventDefault();if(state==='idle')start();}
+});
+document.addEventListener('keyup',e=>{
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')keys.left=false;
+  if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')keys.right=false;
+});
+canvas.addEventListener('click',()=>{if(state!=='playing')start();});
 
-      // Vertical lines
-      for (let x = 0; x < canvas.width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
+// Also support touch/canvas-relative pointer
+canvas.addEventListener('touchstart',e=>{e.preventDefault();if(state!=='playing')start();},{passive:false});
 
-      // Horizontal lines (moving)
-      for (let y = 0; y < canvas.height; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y + (Date.now() / 50) % 40);
-        ctx.lineTo(canvas.width, y + (Date.now() / 50) % 40);
-        ctx.stroke();
-      }
+// --- Obstacle ---
+function spawnObs(){
+  const lane=(Math.random()-0.5)*0.75; // -0.375..0.375
+  const types=['block','block','wide','twin'];
+  const type=types[Math.floor(Math.random()*types.length)];
+  obsList.push({z:2000+Math.random()*500,lane:lane,type:type,w:type==='wide'?0.35:0.18,rotZ:(Math.random()-0.5)*0.15,color:`hsl(${Math.random()*30},90%,55%)`});
+}
+
+// --- Start / Reset ---
+function start(){
+  state='playing';
+  score=0;speed=CFG.spd;time=0;
+  ballX=0;ballVX=0;obsList=[];
+  shakeX=0;shakeY=0;
+  deathTimer=0;
+  updateHUD();
+}
+
+function die(){
+  state='dead';deathTimer=0;
+  shakeX=(Math.random()-0.5)*20;
+  shakeY=(Math.random()-0.5)*16;
+  if(score>best){best=score;localStorage.setItem('slope-best',best);}
+}
+
+function updateHUD(){
+  document.getElementById('sc').textContent=score;
+  document.getElementById('bs').textContent=best;
+  document.getElementById('sp').textContent=speed.toFixed(1)+'x';
+}
+
+// === DRAW HELPERS ===
+function drawSlope(){
+  // Sky gradient
+  const skyGrad=ctx.createLinearGradient(0,0,0,HORIZON_Y);
+  skyGrad.addColorStop(0,'#050510');
+  skyGrad.addColorStop(1,'#0f0f2a');
+  ctx.fillStyle=skyGrad;ctx.fillRect(0,0,W,HORIZON_Y);
+
+  // Ground / slope fill — dark gradient simulating depth
+  const gndGrad=ctx.createLinearGradient(0,HORIZON_Y,0,H);
+  gndGrad.addColorStop(0,'#111122');
+  gndGrad.addColorStop(0.3,'#0d0d1a');
+  gndGrad.addColorStop(1,'#070712');
+  ctx.fillStyle=gndGrad;ctx.fillRect(0,HORIZON_Y,W,H-HORIZON_Y);
+
+  // Road surface — trapezoid
+  const rbw=roadAtY(ROAD_BOTTOM_Y);
+  const rwTop=Math.max(8,roadAtY(HORIZON_Y+2));
+  ctx.beginPath();
+  ctx.moveTo(W/2-rbw,ROAD_BOTTOM_Y);
+  ctx.lineTo(W/2+rbw,ROAD_BOTTOM_Y);
+  ctx.lineTo(W/2+rwTop,HORIZON_Y+2);
+  ctx.lineTo(W/2-rwTop,HORIZON_Y+2);
+  ctx.closePath();
+
+  // Road gradient (darker center → lighter edges feel)
+  const rdGrad=ctx.createLinearGradient(W/2-rbw,ROAD_BOTTOM_Y,W/2+rbw,ROAD_BOTTOM_Y);
+  rdGrad.addColorStop(0,'#18182e');
+  rdGrad.addColorStop(0.5,'#1a1a30');
+  rdGrad.addColorStop(1,'#18182e');
+  ctx.fillStyle=rdGrad;ctx.fill();
+
+  // Road edge glow lines
+  ctx.strokeStyle='rgba(102,126,234,0.25)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(W/2-rbw,ROAD_BOTTOM_Y);ctx.lineTo(W/2-rwTop,HORIZON_Y+2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W/2+rbw,ROAD_BOTTOM_Y);ctx.lineTo(W/2+rwTop,HORIZON_Y+2);ctx.stroke();
+
+  // Grid lines on road (perspective)
+  const gridCount=18;
+  const scrollOff=((time*speed*120)%100)/100;
+  for(let i=0;i<=gridCount;i++){
+    let frac=(i/gridCount-scrollOff);
+    while(frac<0)frac+=1;while(frac>=1)frac-=1;
+    const y=HORIZON_Y+2+(ROAD_BOTTOM_Y-HORIZON_Y-2)*(frac*frac); // quadratic for perspective
+    if(y<HORIZON_Y+3||y>ROAD_BOTTOM_Y)continue;
+    const hw=roadAtY(y);
+    const alpha=0.06+frac*0.12;
+    ctx.strokeStyle=`rgba(102,126,234,${alpha})`;ctx.lineWidth=0.8;
+    ctx.beginPath();ctx.moveTo(W/2-hw,y);ctx.lineTo(W/2+hw,y);ctx.stroke();
+  }
+
+  // Side walls / guardrails (vertical lines at edges)
+  ctx.strokeStyle='rgba(102,126,234,0.08)';ctx.lineWidth=1;
+  for(let i=0;i<=10;i++){
+    const frac=i/10;
+    const y=HORIZON_Y+2+(ROAD_BOTTOM_Y-HORIZON_Y-2)*(frac*frac);
+    const hw=roadAtY(y)+6;
+    ctx.globalAlpha=frac*0.4;
+    ctx.beginPath();ctx.moveTo(W/2-hw,y);ctx.lineTo(W/2-hw,y+3);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(W/2+hw,y);ctx.lineTo(W/2+hw,y+3);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+
+  // Distant glow at horizon
+  const hGlow=ctx.createRadialGradient(W/2,HORIZON_Y,0,W/2,HORIZON_Y,180);
+  hGlow.addColorStop(0,'rgba(102,126,234,0.07)');
+  hGlow.addColorStop(1,'transparent');
+  ctx.fillStyle=hGlow;ctx.fillRect(0,HORIZON_Y-80,W,160);
+}
+
+function worldToScreen(lane,z){
+  // z: distance ahead (larger=farther). We clip far.
+  if(z<1)z=1;
+  const scale=400/z; // perspective divisor
+  const y=VANISH_Y+scale*220;
+  if(y>H)return null;
+  const hw=roadAtY(y);
+  const x=W/2+lane*hw;
+  return{x,y,scale,hw};
+}
+
+function drawObstacle(obs){
+  const p=worldToScreen(obs.lane,obs.z);
+  if(!p)return;
+  const sz=Math.max(4,p.scale*(obs.type==='twin'?28:obs.type==='wide'?40:32));
+  const w=sz*obs.w/(obs.type==='twin'?0.9:1);
+
+  ctx.save();
+  ctx.translate(p.x,p.y-sz*0.4);
+  ctx.rotate(obs.rotZ*(1-Math.min(1,p.scale/40))); // less rotation when close
+
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,0.4)';
+  ctx.fillRect(-w*0.9,sz*0.1,w*1.8,sz*0.15);
+
+  // Body
+  ctx.shadowBlur=p.scale>10?15:6;
+  ctx.shadowColor=obs.color;
+  ctx.fillStyle=obs.color;
+  // Rounded block
+  const r=sz*0.12;
+  ctx.beginPath();
+  ctx.roundRect(-w/2,-sz,w,sz,r);
+  ctx.fill();
+
+  // Top highlight
+  ctx.fillStyle='rgba(255,255,255,0.18)';
+  ctx.fillRect(-w/2+sz*0.08,-sz+sz*0.08,w-sz*0.16,sz*0.2);
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  // Red warning stripe for wide blocks
+  if(obs.type==='wide'&&p.scale>8){
+    ctx.save();
+    ctx.translate(p.x,p.y-sz*0.4);
+    ctx.rotate(obs.rotZ*(1-Math.min(1,p.scale/40)));
+    ctx.fillStyle='rgba(255,50,50,0.3)';
+    for(let s=0;s<3;s++){
+      ctx.fillRect(-w/2+s*w/3,-sz+sz*0.4,w/6,sz*0.06);
     }
+    ctx.restore();
+  }
+}
 
-    function createObstacle() {
-      const width = 40 + Math.random() * 60;
-      return {
-        x: canvas.width + 10,
-        y: FLOOR - 20,
-        width: width,
-        height: 20,
-        color: '#FF0000'
-      };
-    }
+function drawBall(){
+  // Ball screen position
+  const targetX=W/2+ballX*roadAtY(H-60);
+  const ballY=H-55;
+  const radius=state==='dead'?14:13;
 
-    function createParticle(x, y) {
-      return {
-        x: x,
-        y: y,
-        vx: (Math.random() - 0.5) * 10,
-        vy: -Math.random() * 10,
-        life: 1.0,
-        color: `hsl(${Math.random() * 60}, 100%, 50%)`
-      };
-    }
+  // Shadow under ball
+  ctx.fillStyle='rgba(0,0,0,0.45)';
+  ctx.beginPath();
+  ctx.ellipse(targetX+2,ballY+radius+4,radius*1.1,radius*0.35,0,0,Math.PI*2);
+  ctx.fill();
 
-    function drawBall() {
-      // Draw trail
-      trail.forEach((point, index) => {
-        const alpha = index / trail.length * 0.5;
-        ctx.fillStyle = `rgba(102, 126, 234, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, ball.radius * (index / trail.length), 0, Math.PI * 2);
-        ctx.fill();
-      });
+  // Ball tilt based on velocity
+  const tilt=ballVX*-0.15;
 
-      // Draw ball
-      const gradient = ctx.createRadialGradient(
-        ball.x - 3, ball.y - 3, 0,
-        ball.x, ball.y, ball.radius
-      );
-      gradient.addColorStop(0, '#FFF');
-      gradient.addColorStop(0.3, '#667eea');
-      gradient.addColorStop(1, '#764ba2');
+  ctx.save();
+  ctx.translate(targetX,ballY);
+  ctx.rotate(tilt);
 
-      ctx.fillStyle = gradient;
+  // Ball glow
+  if(state==='playing'){
+    ctx.shadowBlur=20;
+    ctx.shadowColor='#667eea';
+  }
+  // Main ball
+  const bGrad=ctx.createRadialGradient(-radius*0.25,-radius*0.25,0,0,0,radius);
+  bGrad.addColorStop(0,'#ffffff');
+  bGrad.addColorStop(0.35,'#a0b0ff');
+  bGrad.addColorStop(0.75,'#667eea');
+  bGrad.addColorStop(1,'#4338ca');
+  ctx.fillStyle=bGrad;
+  ctx.beginPath();
+  ctx.arc(0,0,radius,0,Math.PI*2);
+  ctx.fill();
+
+  // Shine
+  ctx.fillStyle='rgba(255,255,255,0.5)';
+  ctx.beginPath();
+  ctx.ellipse(-radius*0.3,-radius*0.3,radius*0.32,radius*0.22,-0.4,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  // Motion trail
+  if(state==='playing'&&Math.abs(ballVX)>0.03){
+    for(let i=1;i<=4;i++){
+      const tx=targetX-ballVX*i*8*(0.7-i*0.12);
+      const alpha=(1-i/5)*0.15;
+      ctx.fillStyle=`rgba(102,126,234,${alpha})`;
       ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.arc(tx,ballY,radius*(1-i*0.15),0,Math.PI*2);
       ctx.fill();
-
-      ctx.strokeStyle = '#FFF';
-      ctx.lineWidth = 2;
-      ctx.stroke();
     }
+  }
+}
 
-    function drawObstacles() {
-      obstacles.forEach(obs => {
-        // Glow effect
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = obs.color;
-        ctx.fillStyle = obs.color;
-        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+function drawUI(){
+  if(state==='idle'){
+    // Overlay
+    ctx.fillStyle='rgba(5,5,16,0.78)';
+    ctx.fillRect(0,0,W,H);
 
-        // Highlight
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.fillRect(obs.x + 2, obs.y + 2, obs.width - 4, 5);
-        ctx.shadowBlur = 0;
-      });
-    }
+    // Title
+    ctx.fillStyle='#667eea';
+    ctx.font='bold 52px "Segoe UI",Arial';
+    ctx.textAlign='center';
+    ctx.fillText('SLOPE',W/2,H/2-30);
 
-    function drawParticles() {
-      particles.forEach(p => {
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.life;
-        ctx.fillRect(p.x, p.y, 4, 4);
-        ctx.globalAlpha = 1.0;
-      });
-    }
+    // Subtitle
+    ctx.font='22px "Segoe UI",Arial';
+    ctx.fillStyle='#a0b0ff';
+    ctx.fillText('Roll down the infinite slope',W/2,H/2+8);
 
-    function updateGame() {
-      if (!isPlaying) return;
+    // Controls hint
+    ctx.font='17px "Segoe UI",Arial';
+    ctx.fillStyle='rgba(160,174,192,0.7)';
+    ctx.fillText('\u2190 \u2192  or  A/D  to Steer',W/2,H/2+44);
 
-      // Update ball position
-      ball.x += ball.dx;
+    // Click prompt
+    const pulse=0.6+Math.sin(Date.now()/350)*0.4;
+    ctx.fillStyle=`rgba(102,126,234,${pulse})`;
+    ctx.font='bold 19px "Segoe UI",Arial';
+    ctx.fillText('[ Click or Press Any Key ]',W/2,H/2+82);
 
-      // Gravity keeps ball near the floor (simulating a slope surface)
-      if (ball.y < FLOOR - ball.radius - 10) {
-        ball.dy += 0.15;  // Gentle gravity pulls down
-      } else {
-        ball.dy = Math.min(ball.dy, 0);  // Don't go through floor
+    // Difficulty badge
+    ctx.font='12px "Segoe UI",Arial';
+    ctx.fillStyle='rgba(102,126,234,0.5)';
+    ctx.textContent='Difficulty: '+diff.charAt(0).toUpperCase()+diff.slice(1);
+    ctx.fillText('Difficulty: '+diff.charAt(0).toUpperCase()+diff.slice(1),W/2,H/2+115);
+  }
+
+  if(state==='dead'){
+    deathTimer++;
+    const a=Math.min(1,deathTimer/30);
+    ctx.fillStyle=`rgba(180,0,0,${a*0.72})`;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle='#fff';
+    ctx.font='bold 46px "Segoe UI",Arial';
+    ctx.textAlign='center';
+    ctx.fillText('GAME OVER',W/2,H/2-20);
+
+    ctx.font='24px "Segoe UI",Arial';
+    ctx.fillStyle='#ffcdd2';
+    ctx.fillText('Score: '+score,W/2,H/2+20);
+
+    ctx.font='18px "Segoe UI",Arial';
+    ctx.fillStyle='rgba(255,255,255,0.55)';
+    ctx.fillText('Click or press any key to retry',W/2,H/2+58);
+  }
+}
+
+// === MAIN LOOP ===
+function update(){
+  if(state==='playing'){
+    time+=1/60;
+
+    // Steering input
+    const accel=0.022;
+    if(keys.left)ballVX-=accel;
+    if(keys.right)ballVX+=accel;
+
+    // Apply velocity with damping & speed-dependent friction
+    ballVX*=0.925;
+    // Clamp
+    const maxVX=0.055;
+    if(ballVX>maxVX)ballVX=maxVX;
+    if(ballVX<-maxVX)ballVX=-maxVX;
+    ballX+=ballVX;
+
+    // Lane boundaries (-1..1)
+    const limit=0.88;
+    if(ballX<-limit){ballX=-limit;ballVX*=0.2;}
+    if(ballX>limit){ballX=limit;ballVX*=0.2;}
+
+    // Move obstacles closer
+    speed+=CFG.acc;
+    for(let i=obsList.length-1;i>=0;i--){
+      obsList[i].z-=speed*50;
+      if(obsList[i].z<5){
+        obsList.splice(i,1);
+        score+=1;
+        continue;
       }
-      ball.y += ball.dy;
-
-      // === BOUNDARY CHECKS ===
-      // Left wall
-      if (ball.x - ball.radius < TRACK_LEFT) {
-        ball.x = TRACK_LEFT + ball.radius;
-        ball.dx = Math.abs(ball.dx) * 0.5;
-      }
-      // Right wall
-      if (ball.x + ball.radius > TRACK_RIGHT) {
-        ball.x = TRACK_RIGHT - ball.radius;
-        ball.dx = -Math.abs(ball.dx) * 0.5;
-      }
-      // Ceiling (prevent flying off top!)
-      if (ball.y - ball.radius < CEILING) {
-        ball.y = CEILING + ball.radius;
-        ball.dy = Math.abs(ball.dy) * 0.3;  // Bounce back down
-      }
-      // Floor
-      if (ball.y + ball.radius > FLOOR) {
-        ball.y = FLOOR - ball.radius;
-        ball.dy = 0;
-      }
-
-      // Friction on dx when no input
-      ball.dx *= 0.98;
-
-      // Add to trail
-      trail.unshift({x: ball.x, y: ball.y});
-      if (trail.length > 20) trail.pop();
-
-      // Create particles
-      if (Math.random() < 0.5) {
-        particles.push(createParticle(ball.x, ball.y + ball.radius));
-      }
-
-      // Update obstacles
-      obstacles.forEach((obs, index) => {
-        obs.x -= ball.speed * gameSpeed;
-
-        // Check collision
-        if (
-          ball.x + ball.radius > obs.x &&
-          ball.x - ball.radius < obs.x + obs.width &&
-          ball.y + ball.radius > obs.y &&
-          ball.y - ball.radius < obs.y + obs.height
-        ) {
-          gameOver();
+      // Collision check
+      const obs=obsList[i];
+      if(obs.z<80&&obs.z>10){
+        // Approximate collision: compare lane positions
+        const dx=Math.abs(ballX-obs.lane);
+        const collisionW=obs.type==='wide'?0.42:obs.type==='twin'?0.26:0.24;
+        if(dx<collisionW){
+          die();
           return;
         }
-
-        // Remove off-screen obstacles
-        if (obs.x + obs.width < 0) {
-          obstacles.splice(index, 1);
-          score += 10;
-          scoreElement.textContent = score;
-        }
-      });
-
-      // Update particles
-      particles.forEach((p, index) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.5;
-        p.life -= 0.02;
-
-        if (p.life <= 0) {
-          particles.splice(index, 1);
-        }
-      });
-
-      // Spawn new obstacles
-      if (Math.random() < 0.02 * gameSpeed) {
-        obstacles.push(createObstacle());
-      }
-
-      // Increase speed over time
-      gameSpeed += 0.0008;
-      speedElement.textContent = (gameSpeed * BASE_SPEED).toFixed(1) + 'x';
-    }
-
-    function drawGame() {
-      // Clear canvas
-      ctx.fillStyle = '#0a0a1a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      drawGrid();
-      drawObstacles();
-      drawParticles();
-      drawBall();
-
-      // Draw track borders
-      ctx.strokeStyle = '#667eea';
-      ctx.lineWidth = 4;
-      ctx.setLineDash([20, 10]);
-      ctx.beginPath();
-      ctx.moveTo(TRACK_LEFT, 0);
-      ctx.lineTo(TRACK_LEFT, canvas.height);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(TRACK_RIGHT, 0);
-      ctx.lineTo(TRACK_RIGHT, canvas.height);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Draw start message
-      if (!isPlaying) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#667eea';
-        ctx.font = 'bold 48px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Click to Start!', canvas.width / 2, canvas.height / 2);
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'white';
-        ctx.fillText('\u2190 \u2192 Arrow Keys to Move', canvas.width / 2, canvas.height / 2 + 50);
       }
     }
 
-    function gameOver() {
-      isPlaying = false;
-      clearInterval(gameLoop);
-
-      ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 48px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2 - 30);
-      ctx.font = '24px Arial';
-      ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-      ctx.fillText('Click to Restart', canvas.width / 2, canvas.height / 2 + 60);
+    // Spawn obstacles
+    if(Math.random()<CFG.obs*speed){
+      spawnObs();
     }
 
-    function startGame() {
-      ball = {
-        x: canvas.width / 2,
-        y: canvas.height - 80,
-        radius: 12,
-        dx: 0,
-        dy: 0,
-        speed: BASE_SPEED
-      };
-      obstacles = [];
-      particles = [];
-      trail = [];
-      score = 0;
-      gameSpeed = 1.0;
-      isPlaying = true;
+    // Shake decay
+    shakeX*=0.85;shakeY*=0.85;
+  }else if(state==='dead'){
+    shakeX*=0.88;shakeY*=0.88;
+  }
 
-      scoreElement.textContent = score;
-      speedElement.textContent = BASE_SPEED.toFixed(1) + 'x';
+  updateHUD();
+}
 
-      if (gameLoop) clearInterval(gameLoop);
-      gameLoop = setInterval(() => {
-        updateGame();
-        drawGame();
-      }, 1000 / 60);
-    }
+function render(){
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+  // Screen shake on death
+  if(Math.abs(shakeX)>0.1||Math.abs(shakeY)>0.1){
+    ctx.translate(shakeX,shakeY);
+  }
 
-    document.addEventListener('keydown', (e) => {
-      if (!isPlaying) return;
+  drawSlope();
 
-      switch(e.key) {
-        case 'ArrowLeft':
-          ball.dx = -BASE_SPEED * 1.5;
-          e.preventDefault();
-          break;
-        case 'ArrowRight':
-          ball.dx = BASE_SPEED * 1.5;
-          e.preventDefault();
-          break;
-      }
-    });
+  // Draw obstacles (far to near)
+  obsList.sort((a,b)=>b.z-a.z);
+  obsList.forEach(drawObstacle);
 
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        ball.dx *= 0.3;
-      }
-    });
+  drawBall();
+  drawUI();
 
-    canvas.addEventListener('click', () => {
-      if (!isPlaying) startGame();
-    });
+  ctx.restore();
+}
 
-    drawGame();
+function loop(){
+  update();
+  requestAnimationFrame(loop);
+  render();
+}
 
+document.getElementById('bs').textContent=best;
+loop();
+</script>
 
-
-</script></script>
 <script>
-// Auto-resize iframe to fit game content perfectly
-(function() {
-  function sendHeight() {
-    var h = Math.max(
-      document.body?.scrollHeight || 0,
-      document.documentElement?.scrollHeight || 0,
-      document.body?.offsetHeight || 0,
-      document.documentElement?.offsetHeight || 0,
-      document.body?.clientHeight || 0
-    );
-    if (h > 100) {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ type: 'game-resize', height: h + 20 }, '*');
-      }
-    }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(sendHeight, 100);
-      setTimeout(sendHeight, 500);
-      setTimeout(sendHeight, 1000);
-    });
-  } else {
-    setTimeout(sendHeight, 100);
-    setTimeout(sendHeight, 500);
-    setTimeout(sendHeight, 1000);
-  }
-  window.addEventListener('resize', sendHeight);
-  if (typeof MutationObserver !== 'undefined') {
-    var observer = new MutationObserver(function() {
-      clearTimeout(observer._timer);
-      observer._timer = setTimeout(sendHeight, 200);
-    });
-    observer.observe(document.body || document.documentElement, {
-      childList: true, subtree: true, attributes: true
-    });
-  }
-})();
+(function(){function h(){var d=Math.max(document.body?.scrollHeight||0,document.documentElement?.scrollHeight||0,document.body?.offsetHeight||0,document.documentElement?.offsetHeight||0,document.body?.clientHeight||0);if(d>100&&window.parent&&window.parent!==window)window.parent.postMessage({type:'game-resize',height:d+20},'*');}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(h,100);setTimeout(h,500);setTimeout(h,1000)});else{setTimeout(h,100);setTimeout(h,500);setTimeout(h,1000);}window.addEventListener('resize',h);if(typeof MutationObserver!=='undefined'){var o=new MutationObserver(function(){clearTimeout(o._timer);o._timer=setTimeout(h,200)});o.observe(document.body||document.documentElement,{childList:true,subtree:true,attributes:true})}})();
 </script>
 </body>
 </html>
