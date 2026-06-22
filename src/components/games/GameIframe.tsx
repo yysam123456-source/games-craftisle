@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Maximize2, Minimize2, Volume2, VolumeX, X, Play, Settings, RotateCcw, ArrowLeft } from "lucide-react";
+import { Maximize2, Minimize2, Volume2, VolumeX, X, Play, Settings, RotateCcw, ArrowLeft, Gamepad2 } from "lucide-react";
 import { motion } from "motion/react";
 import type { Game } from "@/types/game";
 import { sounds } from "@/lib/sound-effects";
@@ -238,7 +238,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           <div className="absolute inset-0 flex items-center justify-center bg-black/65 z-20 backdrop-blur-sm transition-opacity duration-500">
             <div className="text-center">
               <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-brand-pink p-[2px] animate-pulse">
-                <div className="w-full h-full rounded-2xl bg-black/90 flex items-center justify-center text-3xl">🎮</div>
+                <div className="w-full h-full rounded-2xl bg-black/90 flex items-center justify-center"><Gamepad2 className="w-10 h-10 text-primary/60 animate-pulse" strokeWidth={1.5} /></div>
               </div>
               <p className="text-white font-semibold text-lg mb-3">Preparing {game.title}...</p>
               <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden mx-auto">

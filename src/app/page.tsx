@@ -11,15 +11,34 @@ import { GlassCard, AnimatedCounter } from "@/components/animations/premium-comp
 import { soundManager } from "@/lib/sound-effects";
 import { motion, type Variants } from "motion/react";
 import { useState, useEffect } from "react";
+import {
+  Gamepad2, Download, Trophy, Smartphone, Users, Star, FolderOpen,
+  Puzzle, Target, Zap, Building2, Calendar, Sparkles, Flame,
+  Volume2, VolumeX, ChevronRight
+} from "lucide-react";
 
-const categoryNames: Record<string, string> = {
-  puzzle: "🧩 Puzzle",
-  arcade: "🕹️ Arcade",
-  strategy: "♟️ Strategy",
-  casual: "🎮 Casual",
-  action: "⚡ Action",
-  building: "🏗️ Building",
+const categoryIcons: Record<string, any> = {
+  puzzle: Puzzle,
+  arcade: Gamepad2,
+  strategy: Target,
+  casual: Gamepad2,
+  action: Zap,
+  building: Building2,
 };
+
+const categoryLabels: Record<string, string> = {
+  puzzle: "Puzzle",
+  arcade: "Arcade",
+  strategy: "Strategy",
+  casual: "Casual",
+  action: "Action",
+  building: "Building",
+};
+
+function CategoryIcon({ cat, className = "" }: { cat: string; className?: string }) {
+  const Icon = categoryIcons[cat] || Gamepad2;
+  return <Icon className={className} strokeWidth={1.5} />;
+}
 
 const categoryDescriptions: Record<string, string> = {
   puzzle: "Challenge your logic and mind with Sudoku, Minesweeper, word puzzles and more!",
@@ -40,10 +59,10 @@ const sectionVariants: Variants = {
 };
 
 const stats = [
-  { value: "15+", label: "Free Games", icon: "🎮" },
-  { value: "0", label: "No Download", icon: "⬇️" },
-  { value: "100%", label: "Free to Play", icon: "💯" },
-  { value: "📱", label: "Multi-Device", icon: "" },
+  { value: "15+", label: "Free Games", Icon: Gamepad2 },
+  { value: "0", label: "No Download", Icon: Download },
+  { value: "100%", label: "Free to Play", Icon: Trophy },
+  { value: "", label: "Multi-Device", Icon: Smartphone },
 ];
 
 export default function HomePage() {
@@ -146,10 +165,10 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: [0.2, 0.65, 0.3, 0.9] }}
             className="text-7xl md:text-8xl mb-6 inline-block"
           >
-            🎮
+            <Gamepad2 className="w-20 h-20 md:w-24 md:h-24 text-primary" strokeWidth={1.5} />
           </motion.div>
 
-          {/* Animated title - 使用高级字符弹跳动画 */}
+          {/* Animated title */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 leading-[1.1]">
             <span className="block text-foreground">
               <CharacterPop text="Free Online" delay={0.2} />
@@ -196,14 +215,14 @@ export default function HomePage() {
             className="flex flex-wrap justify-center gap-4 mb-16"
           >
             <PulseButton href="#all-games" className="text-lg px-10 py-4">
-              🎮 Start Playing
+              <Gamepad2 className="w-5 h-5 mr-2 inline -mt-0.5" /> Start Playing
             </PulseButton>
             <GlowButton
               href="#categories"
               variant="secondary"
               className="text-lg px-10 py-4"
             >
-              📂 Browse Categories
+              <FolderOpen className="w-5 h-5 mr-2 inline -mt-0.5" /> Browse Categories
             </GlowButton>
           </motion.div>
 
@@ -223,8 +242,8 @@ export default function HomePage() {
                 className="text-center group cursor-default"
                 whileHover={{ y: -4 }}
               >
-                <div className="text-3xl md:text-4xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
-                  {stat.icon} {stat.value}
+                <div className="text-3xl md:text-4xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
+                  <stat.Icon className="w-6 h-6" strokeWidth={1.5} />{stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
               </motion.div>
@@ -275,10 +294,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
-              { value: 15, suffix: "+", label: "Free Games", icon: "🎮" },
-              { value: 50, suffix: "K+", label: "Active Players", icon: "👥" },
-              { value: 48, suffix: "/5", label: "Average Rating", icon: "⭐" },
-              { value: 6, suffix: "", label: "Game Categories", icon: "📂" },
+              { value: 15, suffix: "+", label: "Free Games", Icon: Gamepad2 },
+              { value: 50, suffix: "K+", label: "Active Players", Icon: Users },
+              { value: 48, suffix: "/5", label: "Average Rating", Icon: Star },
+              { value: 6, suffix: "", label: "Game Categories", Icon: FolderOpen },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -289,7 +308,7 @@ export default function HomePage() {
                 whileHover={{ y: -8, scale: 1.05 }}
               >
                 <GlassCard className="text-center p-6">
-                  <div className="text-4xl mb-3">{stat.icon}</div>
+                  <div className="text-4xl mb-3"><stat.Icon className="w-10 h-10 mx-auto text-primary" strokeWidth={1.5} /></div>
                   <div className="text-4xl md:text-5xl font-extrabold text-primary mb-2">
                     <AnimatedCounter 
                       to={stat.value} 
@@ -351,10 +370,10 @@ export default function HomePage() {
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 to-transparent" />
                   <div className="relative z-10 text-center">
                     <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                      {categoryNames[cat]?.charAt(0) || "🎮"}
+                      <CategoryIcon cat={cat} className="w-10 h-10 mx-auto text-primary" />
                     </div>
                     <div className="font-bold text-sm mb-1 group-hover:text-primary transition-colors">
-                      {categoryNames[cat]?.slice(2).trim() || cat}
+                      {categoryLabels[cat] || cat}
                     </div>
                     <div className="text-xs text-muted-foreground">{count} games</div>
                   </div>
@@ -386,9 +405,9 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 className="flex items-center gap-3 mb-3"
               >
-                <span className="text-3xl">{categoryNames[cat]?.charAt(0) || "🎮"}</span>
+                {(() => { const CatIcon = categoryIcons[cat] || Gamepad2; return <CatIcon className="w-8 h-8 text-primary" strokeWidth={1.5} />; })()}
                 <h2 className="text-2xl md:text-4xl font-extrabold">
-                  {categoryNames[cat]?.slice(2).trim() || cat}
+                  {categoryLabels[cat] || cat}
                 </h2>
               </motion.div>
               <motion.p
@@ -434,7 +453,7 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
               >
-                📅 DAILY CHALLENGE
+                <Calendar className="w-4 h-4 mr-1 inline -mt-0.5" /> DAILY CHALLENGE
               </motion.div>
               <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
                 <AnimatedWordsAdvanced text="Game of the Day" delay={0.2} />
@@ -476,7 +495,7 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4"
             >
-              ⭐ FEATURED
+              <Star className="w-4 h-4 mr-1 inline -mt-0.5 text-amber-400" /> FEATURED
             </motion.div>
             <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
               Editor's Choice
@@ -513,7 +532,7 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-4"
             >
-              🆕 NEW GAMES
+              <Sparkles className="w-4 h-4 mr-1 inline -mt-0.5 text-emerald-400" /> NEW GAMES
             </motion.div>
             <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
               Fresh Arrivals
@@ -550,7 +569,7 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20 mb-4"
             >
-              🔥 POPULAR
+              <Flame className="w-4 h-4 mr-1 inline -mt-0.5 text-red-400" /> POPULAR
             </motion.div>
             <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
               Most Played
@@ -687,19 +706,19 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
-                icon: "🎮",
+                Icon: Gamepad2,
                 title: "100% Free",
                 desc: "All games are completely free, no registration required, no download needed. Open your browser and start playing.",
                 gradient: "from-emerald-500/10 to-emerald-500/0",
               },
               {
-                icon: "📱",
+                Icon: Smartphone,
                 title: "Multi-Device",
                 desc: "Perfectly adapted for mobile, tablet, and desktop. Play anywhere, anytime.",
                 gradient: "from-blue-500/10 to-blue-500/0",
               },
               {
-                icon: "⚡",
+                Icon: Zap,
                 title: "Instant Play",
                 desc: "No loading waits, click and play. Perfect for killing time whenever you have a few minutes.",
                 gradient: "from-amber-500/10 to-amber-500/0",
@@ -714,7 +733,7 @@ export default function HomePage() {
               >
                 <GlassCard className="p-8 text-center group">
                   <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {feature.icon}
+                    <feature.Icon className="w-10 h-10 mx-auto text-primary" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
                     {feature.title}
@@ -764,7 +783,7 @@ export default function HomePage() {
             transition={{ delay: 0.4 }}
           >
             <GlowButton href="#all-games" className="text-lg px-12 py-5">
-              🎮 Browse All Games
+              <Gamepad2 className="w-5 h-5 mr-2 inline -mt-0.5" /> Browse All Games
             </GlowButton>
           </motion.div>
         </div>
@@ -798,21 +817,21 @@ export default function HomePage() {
             {[
               {
                 name: "GamerPro",
-                avatar: "🧑‍💻",
+                initials: "GP",
                 rating: 5,
                 review: "Best free gaming site ever! No ads, no downloads, just pure gaming fun. The games are addictive!",
                 game: "2048",
               },
               {
                 name: "GameLover",
-                avatar: "🎮",
+                initials: "GL",
                 rating: 5,
                 review: "I love the variety of games. From puzzles to action, there's something for everyone. Highly recommended!",
                 game: "Tetris",
               },
               {
                 name: "CasualPlayer",
-                avatar: "😊",
+                initials: "CP",
                 rating: 4,
                 review: "Perfect for killing time. The games load instantly and run smoothly on my phone. Great job!",
                 game: "Flappy Wings",
@@ -830,10 +849,10 @@ export default function HomePage() {
                   {/* Rating */}
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(review.rating)].map((_, i) => (
-                      <span key={i} className="text-amber-400 text-lg">⭐</span>
+                      <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" strokeWidth={0} />
                     ))}
                     {[...Array(5 - review.rating)].map((_, i) => (
-                      <span key={i} className="text-gray-600 text-lg">⭐</span>
+                      <Star key={i} className="w-5 h-5 text-gray-600/30" strokeWidth={1.5} />
                     ))}
                   </div>
                   
@@ -844,8 +863,8 @@ export default function HomePage() {
                   
                   {/* Author */}
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-xl">
-                      {review.avatar}
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                      {review.initials}
                     </div>
                     <div>
                       <div className="font-semibold text-sm">{review.name}</div>
@@ -889,7 +908,7 @@ export default function HomePage() {
                     href={`#cat-${cat}`}
                     className="block text-muted-foreground hover:text-primary transition-colors"
                   >
-                    {categoryNames[cat]}
+                    {categoryLabels[cat]}
                   </a>
                 ))}
               </div>
@@ -935,7 +954,7 @@ export default function HomePage() {
               }}
               className="ml-4 px-3 py-1 rounded-full text-xs bg-white/5 hover:bg-white/10 transition-colors"
             >
-              {soundManager.isEnabled() ? "🔊 Sound On" : "🔇 Sound Off"}
+              {soundManager.isEnabled() ? <><Volume2 className="w-4 h-4 inline mr-1 -mt-0.5" /> Sound On</> : <><VolumeX className="w-4 h-4 inline mr-1 -mt-0.5" /> Sound Off</>}
             </button>
           </motion.div>
         </div>
