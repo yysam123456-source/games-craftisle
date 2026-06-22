@@ -693,6 +693,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Bubble Shooter - Classic Puzzle (GameZipper Embed) =====
+  {
+    id: "bubble-shooter",
+    slug: "bubble-shooter",
+    title: "Bubble Shooter",
+    description: "Shoot colored bubbles to match 3 or more. Clear the board in this addictive classic!",
+    category: "puzzle",
+    tags: ["bubble", "shooter", "puzzle", "classic", "match", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/bubble-shooter/",
+    thumbnail: "/games/bubble-shooter/thumbnail.svg",
+    instructions: "Aim with mouse, click to shoot. Match 3+ same-color bubbles to pop them. Clear all bubbles to win! Pro tip: Aim for the edges to create chains.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 156000,
+    rating: 4.7,
+    difficulty: "Medium",
+    estimatedTime: "3-15 minutes",
+    featured: false,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
