@@ -839,6 +839,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Frogger - Classic Arcade (GameZipper Embed) =====
+  {
+    id: "frogger",
+    slug: "frogger",
+    title: "Frogger",
+    description: "The legendary 1981 arcade game! Guide frogs across busy roads and a hazardous river.",
+    category: "arcade",
+    tags: ["frogger", "classic", "retro", "arcade", "namco", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/frogger/",
+    thumbnail: "/games/frogger/thumbnail.svg",
+    instructions: "Use Arrow Keys to move the frog. Cross the road (avoid cars), then cross the river (jump on logs/turtles). Reach the top to advance! Pro tip: Wait for the perfect gap in traffic — don't rush.",
+    controls: { keyboard: ["Arrow Keys to move"], mouse: false, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 345000,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "1-5 minutes per level",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
