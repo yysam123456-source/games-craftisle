@@ -936,6 +936,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Candy Crush - Match-3 Puzzle (GameZipper Embed) =====
+  {
+    id: "candy-crush",
+    slug: "candy-crush",
+    title: "Candy Crush",
+    description: "The world's most popular match-3 puzzle! Swap candies to make matches of 3 or more.",
+    category: "puzzle",
+    tags: ["candy", "crush", "match", "puzzle", "classic", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/candy-crush/",
+    thumbnail: "/games/candy-crush/thumbnail.svg",
+    instructions: "Swap adjacent candies to make matches of 3+ same-color candies. Complete the objective before running out of moves! Pro tip: Focus on the bottom — cascades create free matches.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 5000000000,
+    rating: 4.9,
+    difficulty: "Easy to Hard",
+    estimatedTime: "Endless levels",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
