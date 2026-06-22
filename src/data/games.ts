@@ -717,6 +717,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Merge Tower - Tower Defense (OnlineGames.io Embed) =====
+  {
+    id: "merge-tower",
+    slug: "merge-tower",
+    title: "Merge Tower",
+    description: "Merge towers to defend your base! Strategic tower defense with merge mechanics.",
+    category: "strategy",
+    tags: ["tower", "defense", "merge", "strategy", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/merge-tower/index.html",
+    thumbnail: "/games/merge-tower/thumbnail.svg",
+    instructions: "Drag towers onto the map to defend. Merge two identical towers to upgrade! Balance economy (gold income) and defense. Pro tip: Always keep some gold in reserve for emergency merges.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 120000,
+    rating: 4.6,
+    difficulty: "Medium",
+    estimatedTime: "Endless",
+    featured: false,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
