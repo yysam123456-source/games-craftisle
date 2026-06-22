@@ -815,6 +815,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Galaga - Classic Shooter (GameZipper Embed) =====
+  {
+    id: "galaga",
+    slug: "galaga",
+    title: "Galaga",
+    description: "The legendary 1981 arcade shooter! Blast waves of alien enemies and rescue captured fighters.",
+    category: "arcade",
+    tags: ["galaga", "classic", "retro", "shooter", "alien", "namco", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/galaga/",
+    thumbnail: "/games/galaga/thumbnail.svg",
+    instructions: "Left/Right Arrow Keys to move. Space to fire. Destroy all enemies to advance to the next wave! Bonus stage: destroy all enemies for extra points. Pro tip: Rescue your captured fighter to dual-wield (double firepower).",
+    controls: { keyboard: ["Left/Right Arrow Keys to move", "Space to fire"], mouse: false, touch: false, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 456000,
+    rating: 4.9,
+    difficulty: "Medium to Hard",
+    estimatedTime: "Endless waves",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
