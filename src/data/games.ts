@@ -668,6 +668,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Super Mario - Classic Platformer (Embed) =====
+  {
+    id: "super-mario",
+    slug: "super-mario",
+    title: "Super Mario",
+    description: "The most iconic platformer ever! Jump on Goombas, collect coins, and rescue Princess Peach from Bowser.",
+    category: "arcade",
+    tags: ["mario", "platformer", "classic", "nintendo", "jump", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/super-mario/index.html",
+    thumbnail: "/games/super-mario/thumbnail.svg",
+    instructions: "Arrow Keys to move, Space to jump. Collect coins and power-ups (mushroom = grow, fire flower = shoot fireballs). Reach the flag pole at the end of each level! Pro tip: Wait for the 'Super' power-up — fire flowers let you attack enemies from a distance.",
+    controls: { keyboard: ["Arrow Keys to move", "Space to jump", "Shift to run"], mouse: false, touch: true, gamepad: true },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 1200000,
+    rating: 4.9,
+    difficulty: "Medium",
+    estimatedTime: "5-20 minutes per level",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
