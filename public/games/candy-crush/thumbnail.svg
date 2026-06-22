@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-candycrush" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6a0dad"/>
+      <stop offset="100%" stop-color="#6a0dad99"/>
+    </linearGradient>
+    <radialGradient id="glow-candycrush" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ff149333"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-candycrush)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-candycrush)" rx="12"/>
+  <rect x="168" y="78" width="24" height="24" rx="6" fill="#ff1493"/><rect x="168" y="78" width="16" height="16" rx="4" fill="#fff" opacity="0.25"/><rect x="203" y="83" width="24" height="24" rx="6" fill="#00bfff"/><rect x="203" y="83" width="16" height="16" rx="4" fill="#fff" opacity="0.25"/><rect x="180" y="103" width="24" height="24" rx="6" fill="#ff1493"/><rect x="210" y="100" width="24" height="24" rx="6" fill="#00bfff"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">CANDY CRUSH</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">MATCH 3</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#ff1493" opacity="0.4"/>
+</svg>

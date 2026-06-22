@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-pacman" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000"/>
+      <stop offset="100%" stop-color="#00099"/>
+    </linearGradient>
+    <radialGradient id="glow-pacman" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ffff0033"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-pacman)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-pacman)" rx="12"/>
+  <circle cx="200" cy="100" r="30" fill="#ffff00"/><path d="M200,100 L240,75 A30,30 0 1,1 240,125 Z" fill="#000"/><circle cx="200" cy="100" r="4" fill="#000"/><circle cx="250" cy="80" r="5" fill="#2121de"/><circle cx="255" cy="100" r="5" fill="#2121de"/><circle cx="250" cy="120" r="5" fill="#2121de"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">PAC-MAN</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">EAT DOTS!</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#ffff00" opacity="0.4"/>
+</svg>

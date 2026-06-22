@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-frogger" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b5e20"/>
+      <stop offset="100%" stop-color="#1b5e2099"/>
+    </linearGradient>
+    <radialGradient id="glow-frogger" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#76ff0333"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-frogger)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-frogger)" rx="12"/>
+  <ellipse cx="200" cy="105" rx="20" ry="16" fill="#76ff03"/><circle cx="190" cy="92" r="9" fill="#76ff03"/><circle cx="210" cy="92" r="9" fill="#76ff03"/><circle cx="190" cy="90" r="4" fill="#fff"/><circle cx="210" cy="90" r="4" fill="#fff"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">FROGGER</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">CROSS ROAD</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#76ff03" opacity="0.4"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-whackamole" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#228b22"/>
+      <stop offset="100%" stop-color="#228b2299"/>
+    </linearGradient>
+    <radialGradient id="glow-whackamole" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#cd853f33"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-whackamole)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-whackamole)" rx="12"/>
+  <ellipse cx="200" cy="120" rx="35" ry="15" fill="#8b4513" opacity="0.4"/><circle cx="200" cy="100" r="25" fill="#cd853f"/><circle cx="191" cy="95" r="7" fill="#fff"/><circle cx="209" cy="95" r="7" fill="#fff"/><ellipse cx="200" cy="108" rx="10" ry="7" fill="#ffb6c1"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">WHACK-A-MOLE</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">REFLEX GAME</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#cd853f" opacity="0.4"/>
+</svg>

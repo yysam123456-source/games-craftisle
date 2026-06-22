@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-memorymatch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#1a1a2e99"/>
+    </linearGradient>
+    <radialGradient id="glow-memorymatch" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#f093fb33"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-memorymatch)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-memorymatch)" rx="12"/>
+  <rect x="155" y="70" width="36" height="48" rx="5" fill="#f093fb" opacity="0.8"/><rect x="209" y="70" width="36" height="48" rx="5" fill="#f5576c" opacity="0.6"/><text x="173" y="105" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#fff">?</text><text x="227" y="105" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#fff">?</text>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">MEMORY MATCH</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">BRAIN TRAINING</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#f093fb" opacity="0.4"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-csonline" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#1a1a1a99"/>
+    </linearGradient>
+    <radialGradient id="glow-csonline" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ff660033"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-csonline)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-csonline)" rx="12"/>
+  <rect x="170" y="95" width="45" height="14" rx="2" fill="#ff6600"/><rect x="215" y="98" width="25" height="8" rx="1" fill="#cc3300"/><rect x="175" y="109" width="12" height="20" rx="2" fill="#ff6600" opacity="0.7"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">CS ONLINE</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">TACTICAL FPS</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#ff6600" opacity="0.4"/>
+</svg>

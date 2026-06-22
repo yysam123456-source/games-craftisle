@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-stackfireball" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#0a0a0a99"/>
+    </linearGradient>
+    <radialGradient id="glow-stackfireball" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ff440033"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-stackfireball)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-stackfireball)" rx="12"/>
+  <circle cx="200" cy="115" r="20" fill="#ff4400"/><ellipse cx="195" cy="100" rx="12" ry="22" fill="#ffaa00"/><ellipse cx="205" cy="105" rx="8" ry="16" fill="#ffee00"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">STACK FIRE BALL</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">STACK & SMASH</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#ff4400" opacity="0.4"/>
+</svg>

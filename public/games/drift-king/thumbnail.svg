@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bg-driftking" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#16213e99"/>
+    </linearGradient>
+    <radialGradient id="glow-driftking" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#e9456033"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#bg-driftking)" rx="12"/>
+  <rect width="400" height="225" fill="url(#glow-driftking)" rx="12"/>
+  <path d="M165,120 L175,100 L205,100 L215,120 Z" fill="#e94560"/><rect x="170" y="120" width="55" height="18" rx="3" fill="#e94560"/><circle cx="182" cy="138" r="7" fill="#333"/><circle cx="218" cy="138" r="7" fill="#333"/>
+  <text x="200" y="185" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="32" font-weight="900" fill="#fff" opacity="0.95">DRIFT KING</text>
+  <text x="200" y="208" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="500" fill="#fff" opacity="0.5" letter-spacing="3">3D DRIFTING</text>
+  <rect x="140" y="160" width="120" height="2" rx="1" fill="#e94560" opacity="0.4"/>
+</svg>
