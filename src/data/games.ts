@@ -791,6 +791,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Gold Miner - Classic Arcade (GameZipper Embed) =====
+  {
+    id: "gold-miner",
+    slug: "gold-miner",
+    title: "Gold Miner",
+    description: "The addictive classic! Lower your claw to grab gold and treasures before time runs out.",
+    category: "arcade",
+    tags: ["gold", "miner", "classic", "arcade", "retro", "claw", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/gold-miner/",
+    thumbnail: "/games/gold-miner/thumbnail.svg",
+    instructions: "Press SPACE or click to lower the claw. Grab gold nuggets (high value) and small items. Avoid rocks (low value, heavy). Pro tip: Wait for the perfect angle before dropping the claw!",
+    controls: { keyboard: ["SPACE to drop claw"], mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 234000,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "1-5 minutes per level",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
