@@ -767,6 +767,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Pac-Man - Classic Arcade (GameZipper Embed) =====
+  {
+    id: "pac-man",
+    slug: "pac-man",
+    title: "Pac-Man",
+    description: "The most iconic arcade game ever! Eat dots, avoid ghosts, and grab power pellets to fight back!",
+    category: "arcade",
+    tags: ["pac-man", "classic", "arcade", "retro", "maze", "namco", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/pac-man/",
+    thumbnail: "/games/pac-man/thumbnail.svg",
+    instructions: "Use Arrow Keys to move Pac-Man around the maze. Eat all dots to advance to the next level! Power Pellets (larger dots) let you eat ghosts for bonus points. Ghosts: Blinky (red, chases), Pinky (pink, ambushes), Inky (cyan, unpredictable), Clyde (orange, shy). Pro tip: Save power pellets for when ghosts are close — maxmize points!",
+    controls: { keyboard: ["Arrow Keys to move"], mouse: false, touch: false, gamepad: true },
+    isOriginal: false,
+    isActive: true,
+    playCount: 5000000,
+    rating: 5.0,
+    difficulty: "Medium to Hard",
+    estimatedTime: "Endless levels",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
