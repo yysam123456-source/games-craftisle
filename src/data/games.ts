@@ -863,6 +863,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Donkey Kong - Classic Arcade (GameZipper Embed) =====
+  {
+    id: "donkey-kong",
+    slug: "donkey-kong",
+    title: "Donkey Kong",
+    description: "Nintendo's 1981 breakthrough! Climb ladders, dodge barrels, and rescue Pauline from Donkey Kong.",
+    category: "arcade",
+    tags: ["donkey", "kong", "classic", "arcade", "retro", "nintendo", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/donkey-kong/",
+    thumbnail: "/games/donkey-kong/thumbnail.svg",
+    instructions: "Arrow Keys to move, Space to jump. Climb ladders to reach the top. Dodge barrels thrown by Donkey Kong! Pro tip: Wait for the barrel to pass, then quickly climb.",
+    controls: { keyboard: ["Arrow Keys to move", "Space to jump"], mouse: false, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 567000,
+    rating: 4.9,
+    difficulty: "Medium",
+    estimatedTime: "2-10 minutes per level",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
