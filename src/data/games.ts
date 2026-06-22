@@ -618,6 +618,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== GTA Simulator - Open World Action (OnlineGames.io Embed) =====
+  {
+    id: "gta-simulator",
+    slug: "gta-simulator",
+    title: "GTA Simulator",
+    description: "Experience the thrill of open-world driving and action! Drive cars, complete missions, and explore a vast city.",
+    category: "action",
+    tags: ["gta", "simulator", "driving", "open-world", "action", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/gta-simulator/index.html",
+    thumbnail: "/games/gta-simulator/thumbnail.svg",
+    instructions: "WASD or Arrow Keys to drive. Space to handbrake. Mouse to aim/shoot. Explore the city, steal cars, complete missions! Pro tip: Use the map to find mission markers (blips).",
+    controls: { keyboard: ["WASD/Arrows to drive", "Space = handbrake", "Mouse = aim/shoot"], mouse: true, touch: false, gamepad: true },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 500000,
+    rating: 4.7,
+    difficulty: "Medium",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
