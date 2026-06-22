@@ -81,8 +81,23 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
   }, []);
 
   const onIframeLoad = useCallback(() => {
-    setTimeout(() => { setIsLoading(false); setPhase('playing'); sounds.gameStart(); }, 500);
+    setTimeout(() => {
+      setIsLoading(false);
+      setPhase('playing');
+      sounds.gameStart();
+      // CRITICAL: Focus the iframe so keyboard/touch events reach the embedded game
+      try { iframeRef.current?.contentWindow?.focus(); } catch(e) {}
+      try { iframeRef.current?.focus(); } catch(e) {}
+    }, 500);
   }, []);
+
+  // Click-to-focus: ensure iframe receives input when user taps/clicks game area
+  const handleViewportClick = useCallback(() => {
+    if (phase === 'playing') {
+      try { iframeRef.current?.contentWindow?.focus(); } catch(e) {}
+      try { iframeRef.current?.focus(); } catch(e) {}
+    }
+  }, [phase]);
 
   // ===== EFFECTS =====
 
@@ -164,7 +179,8 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
 
       {/* Game viewport — background is on the container div */}
       <div className={viewportClassName}
-           onDoubleClick={() => { if (isImmersive && !isFullscreen) toggleFullscreen(); }}>
+           onDoubleClick={() => { if (isImmersive && !isFullscreen) toggleFullscreen(); }}
+           onClick={handleViewportClick}>
 
         {/* ===== START SCREEN ===== */}
         {phase === "start" && (
@@ -255,8 +271,10 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           <iframe ref={iframeRef} src={iframeSrc || undefined} title={game.title} width="100%" height="100%"
                   style={{ border: "none", display: "block", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, background: "transparent" }}
                   {...(game.disableSandbox ? {} : { sandbox: "allow-scripts allow-same-origin allow-popups allow-forms allow-presentation" })}
-                  allow="fullscreen;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
-                  allowFullScreen onLoad={onIframeLoad}
+                  allow="fullscreen;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-pointer-lock;pointer-lock"
+                  allowFullScreen
+                  tabIndex={0}
+                  onLoad={onIframeLoad}
                   onError={() => { setIsLoading(false); setError("Failed to load. Click Retry."); }} />
         )}
 
