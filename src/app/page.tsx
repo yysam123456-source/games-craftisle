@@ -74,12 +74,10 @@ export default function HomePage() {
   const [isClient, setIsClient] = useState(false);
   const [dailyGame, setDailyGame] = useState<any>(null);
 
-  // 计算每日游戏（基于日期 deterministic）
+  // 计算每日游戏 — 固定展示 Messenger
   useEffect(() => {
-    const today = new Date();
-    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
-    const index = dayOfYear % games.length;
-    setDailyGame(games[index]);
+    const messenger = games.find((g) => g.slug === "messenger");
+    setDailyGame(messenger || games[0]);
   }, [games]);
 
   // 从 localStorage 加载最近游玩记录
