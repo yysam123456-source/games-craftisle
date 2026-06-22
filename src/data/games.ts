@@ -960,6 +960,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Angry Birds - Physics Puzzle (OnlineGames.io Embed) =====
+  {
+    id: "angry-birds",
+    slug: "angry-birds",
+    title: "Angry Birds",
+    description: "The global phenomenon! Launch birds at piggies' fortresses and destroy them all.",
+    category: "arcade",
+    tags: ["angry", "birds", "physics", "puzzle", "ravio", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/angry-birds/index.html",
+    thumbnail: "/games/angry-birds/thumbnail.svg",
+    instructions: "Drag backwards on the slingshot, then release to launch the bird. Tap mid-air to activate the bird's special power! Destroy all piggies to advance. Pro tip: Aim for weak points in the structure — cascade collapses do more damage.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 1000000000,
+    rating: 4.9,
+    difficulty: "Medium",
+    estimatedTime: "Endless levels",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
