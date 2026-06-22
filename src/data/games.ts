@@ -643,6 +643,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== CS Online - FPS Action (OnlineGames.io Embed) =====
+  {
+    id: "cs-online",
+    slug: "cs-online",
+    title: "CS Online",
+    description: "Classic Counter-Strike browser version! Fight terrorists or become one in this addictive FPS game.",
+    category: "action",
+    tags: ["cs", "fps", "shooter", "action", "multiplayer", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2023/unity/cs-online/index.html",
+    thumbnail: "/games/cs-online/thumbnail.svg",
+    instructions: "WASD to move, Mouse to aim and shoot. Press R to reload. Choose Terrorist or Counter-Terrorist team. Plant/defuse the bomb! Pro tip: Crouch (C) for better accuracy.",
+    controls: { keyboard: ["WASD to move", "Mouse to aim/shoot", "R to reload", "C to crouch"], mouse: true, touch: false, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 800000,
+    rating: 4.8,
+    difficulty: "Hard",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
