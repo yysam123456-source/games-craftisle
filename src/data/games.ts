@@ -544,6 +544,30 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Word Puzzle - Classic Word Game (GameZipper Embed) =====
+  {
+    id: "word-puzzle",
+    slug: "word-puzzle",
+    title: "Word Puzzle",
+    description: "Arrange letters to form words. Great for vocabulary building and brain training!",
+    category: "puzzle",
+    tags: ["word", "puzzle", "vocabulary", "brain", "training", "letters", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://gamezipper.com/word-puzzle/",
+    thumbnail: "/games/word-puzzle/thumbnail.svg",
+    instructions: "Swipe or click letters to form words. Find all hidden words to complete the level! Each puzzle has a theme (animals, food, etc.). Pro tip: Look for common prefixes (UN-, RE-, -ING) to find hidden words.",
+    controls: { keyboard: true, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 54000,
+    rating: 4.6,
+    difficulty: "Medium",
+    estimatedTime: "3-15 minutes",
+    featured: false,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
