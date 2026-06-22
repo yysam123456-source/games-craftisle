@@ -593,6 +593,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Drift King - 3D Drifting (OnlineGames.io Embed) =====
+  {
+    id: "drift-king",
+    slug: "drift-king",
+    title: "Drift King",
+    description: "The ultimate drifting experience with realistic 3D visuals, 10 sports cars, and 6 maps. Experience premium drifting!",
+    category: "arcade",
+    tags: ["drift", "racing", "3d", "car", "driving", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2022/unity/drift-king/index.html",
+    thumbnail: "/games/drift-king/thumbnail.svg",
+    instructions: "Use Arrow Keys or WASD to drive. SPACE = handbrake (drift!). Master the perfect drift to earn points. 10 cars and 6 maps to unlock! Pro tip: Approach corners at high speed, then SPACE + turn to initiate drift.",
+    controls: { keyboard: ["Arrow Keys or WASD to drive", "SPACE for handbrake/drift"], mouse: false, touch: false, gamepad: true },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 180000,
+    rating: 4.7,
+    difficulty: "Medium",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
