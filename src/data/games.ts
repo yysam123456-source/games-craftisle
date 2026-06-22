@@ -568,6 +568,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-22"),
     updatedAt: new Date("2026-06-22"),
   },
+
+  // ===== Stack Fire Ball - 3D Stacking (OnlineGames.io Embed) =====
+  {
+    id: "stack-fire-ball",
+    slug: "stack-fire-ball",
+    title: "Stack Fire Ball",
+    description: "Drop a blazing fireball through rotating platforms! Smash colored layers and avoid the black tiles.",
+    category: "arcade",
+    tags: ["stack", "fire", "ball", "arcade", "3d", "avoid", "free", "browser"],
+    source: "embed",
+    sourceUrl: "https://www.onlinegames.io/games/2021/unity/stack-fire-ball/index.html",
+    thumbnail: "/games/stack-fire-ball/thumbnail.svg",
+    instructions: "Tap or click to release the fireball. Smash through colored layers. Avoid black tiles — one hit destroys the ball! Each 10 levels = new pattern. Pro tip: Aim for the center to avoid edge tiles.",
+    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
+    disableSandbox: true,
+    isOriginal: false,
+    isActive: true,
+    playCount: 250000,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "Endless",
+    featured: true,
+    createdAt: new Date("2026-06-22"),
+    updatedAt: new Date("2026-06-22"),
+  },
 ];
 
 // ===== Helper Functions =====
