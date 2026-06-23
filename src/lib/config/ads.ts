@@ -1,16 +1,22 @@
 /**
- * Ad configuration module
+ * Ad configuration module for games-craftisle
  *
+ * Uses Monetag for Next.js pages, AdSense for static HTML pages.
  * Centralized control via craftisle-configs repo.
- * All Craftisle projects read from the same URL.
  */
+
+// ========== Ad platform for this project ==========
+export const AD_PLATFORM = 'monetag' as const;
 
 // Hardcoded fallback (used when remote config is unavailable)
 export const ADS_ENABLED = true;
 
-// AdSense configuration (for games-craftisle and other AdSense projects)
-// TODO: fill in your real AdSense client ID
-export const ADSENSE_CLIENT_ID = 'ca-pub-XXXXXXXXXX'; // Replace with real ID
+// Monetag config
+export const MONETAG_ZONE_ID = '11117037';
+export const MONETAG_SCRIPT_URL = '/monetag-vignette.js';
+
+// AdSense config (for static HTML pages)
+export const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-XXXXXXXXXX';
 
 // Set to true to fetch ad config from central URL
 export const USE_REMOTE_CONFIG = true;
@@ -25,6 +31,8 @@ let remoteCache: { value: boolean; fetchedAt: number } | null = null;
 
 export interface AdsRemoteConfig {
   enabled: boolean;
+  monetag?: boolean;
+  adsense?: boolean;
   updatedAt: string;
   note?: string;
 }
@@ -50,8 +58,15 @@ export async function isAdsEnabled(): Promise<boolean> {
       });
       if (res.ok) {
         const config: AdsRemoteConfig = await res.json();
-        remoteCache = { value: config.enabled, fetchedAt: now };
-        return config.enabled;
+        // Check platform-specific field
+        let enabled: boolean;
+        if (AD_PLATFORM === 'monetag') {
+          enabled = config.enabled && config.monetag !== false;
+        } else {
+          enabled = config.enabled && config.adsense !== false;
+        }
+        remoteCache = { value: enabled, fetchedAt: now };
+        return enabled;
       }
     } catch {
       // fetch failed - fall through to hardcoded fallback
