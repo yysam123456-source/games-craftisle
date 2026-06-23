@@ -10,8 +10,9 @@ import { isAdsEnabled, isAdsEnabledSync } from '@/lib/config/ads';
  * Uses runtime config (remote or hardcoded) to decide whether to load ads.
  * This runs on the client after hydration, so remote config fetch works.
  *
- * Note: Static HTML pages (/games/island-builder/) load AdSense via inline script.
- * This component is for Next.js dynamic pages (Monetag).
+ * Both Next.js pages and static HTML pages now use Monetag consistently.
+ * Static HTML pages load Monetag via inline script before </body>.
+ * This component is for Next.js dynamic pages (Monetag Vignette Banner).
  */
 export function AdLoader() {
   const [adsEnabled, setAdsEnabled] = useState(isAdsEnabledSync());
