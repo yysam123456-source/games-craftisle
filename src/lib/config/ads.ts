@@ -8,6 +8,10 @@
 // Hardcoded fallback (used when remote config is unavailable)
 export const ADS_ENABLED = true;
 
+// AdSense configuration (for games-craftisle and other AdSense projects)
+// TODO: fill in your real AdSense client ID
+export const ADSENSE_CLIENT_ID = 'ca-pub-XXXXXXXXXX'; // Replace with real ID
+
 // Set to true to fetch ad config from central URL
 export const USE_REMOTE_CONFIG = true;
 
