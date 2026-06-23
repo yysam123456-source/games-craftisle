@@ -15,8 +15,8 @@ export const ADS_ENABLED = true;
 export const MONETAG_ZONE_ID = '11117037';
 export const MONETAG_SCRIPT_URL = '/monetag-vignette.js';
 
-// AdSense config (for static HTML pages)
-export const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-XXXXXXXXXX';
+// AdSense config (not used - this project uses Monetag only)
+// Kept as placeholder in case needed for static HTML pages in future
 
 // Set to true to fetch ad config from central URL
 export const USE_REMOTE_CONFIG = true;
