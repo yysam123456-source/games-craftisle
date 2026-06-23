@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wordle</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --text: #f0ede6;
+    --muted: #666;
+    --correct: #4ade80;
+    --present: #facc15;
+    --absent: #2e2e2e;
+    --absent-text: #555;
+    --key-bg: #272727;
+    --key-text: #ccc;
+    --accent: #f0ede6;
+    --tile-size: 58px;
+    --tile-font: 24px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px 40px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% -10%, #1f3a2a 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text);
+  }
+
+  .logo span { color: var(--correct); }
+
+  .config-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .config-bar label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23666' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 26px;
+    transition: border-color 0.2s;
+  }
+
+  select:hover, select:focus { border-color: var(--correct); }
+
+  #new-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  #new-btn:hover {
+    border-color: var(--correct);
+    color: var(--correct);
+  }
+
+  #msg-area {
+    position: relative;
+    z-index: 1;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0 4px;
+  }
+
+  #msg {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 5px 16px;
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s, transform 0.25s;
+    white-space: nowrap;
+  }
+
+  #msg.show { opacity: 1; transform: translateY(0); }
+
+  #board-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    padding: 8px 0;
+  }
+
+  #board { display: flex; flex-direction: column; gap: 6px; }
+  .row { display: flex; gap: 6px; }
+
+  .tile {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: var(--tile-font);
+    font-weight: 700;
+    color: var(--text);
+    text-transform: uppercase;
+    background: var(--surface);
+    position: relative;
+    transition: border-color 0.1s;
+    user-select: none;
+  }
+
+  .tile.active { border-color: #444; }
+
+  .tile.pop {
+    animation: pop 0.1s ease;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .tile.shake { animation: shake 0.4s ease; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  .tile.flip {
+    animation: flip 0.5s ease forwards;
+  }
+
+  @keyframes flip {
+    0% { transform: rotateX(0); }
+    49% { transform: rotateX(90deg); background: var(--surface); border-color: var(--border); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0); }
+  }
+
+  .tile.correct { background: var(--correct); border-color: var(--correct); color: #0f0f0f; }
+  .tile.present { background: var(--present); border-color: var(--present); color: #0f0f0f; }
+  .tile.absent  { background: var(--absent); border-color: var(--absent); color: var(--absent-text); }
+
+  .tile.bounce { animation: bounce 0.5s ease; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-16px); }
+    60% { transform: translateY(-8px); }
+  }
+
+  #keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 16px;
+  }
+
+  .kb-row { display: flex; gap: 5px; }
+
+  .key {
+    height: 54px;
+    min-width: 38px;
+    padding: 0 8px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background: var(--key-bg);
+    color: var(--key-text);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .key.wide { min-width: 58px; font-size: 10px; }
+
+  .key:active { transform: scale(0.94); }
+
+  .key.correct { background: var(--correct); border-color: var(--correct); color: #0f0f0f; }
+  .key.present { background: var(--present); border-color: var(--present); color: #0f0f0f; }
+  .key.absent  { background: #1e1e1e; border-color: #1e1e1e; color: #444; }
+
+  #hint-strip {
+    position: relative;
+    z-index: 1;
+    margin-top: 20px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    gap: 20px;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 2px;
+  }
+  .legend-dot.correct { background: var(--correct); }
+  .legend-dot.present { background: var(--present); }
+  .legend-dot.absent  { background: #444; }
+
+  @media (max-width: 420px) {
+    .logo { font-size: 22px; }
+    :root { --tile-size: 48px; --tile-font: 20px; }
+    .key { height: 46px; min-width: 32px; font-size: 10px; }
+    .key.wide { min-width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Word<span>le</span></div>
+  <div class="config-bar">
+    <label for="len-sel">Letters</label>
+    <select id="len-sel">
+      <option value="4">4</option>
+      <option value="5" selected>5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+    <button id="new-btn">New</button>
+  </div>
+</header>
+
+<div id="msg-area"><div id="msg"></div></div>
+<div id="board-wrap"><div id="board"></div></div>
+<div id="keyboard"></div>
+
+<div id="hint-strip">
+  <div class="legend-item"><div class="legend-dot correct"></div> Correct</div>
+  <div class="legend-item"><div class="legend-dot present"></div> Wrong spot</div>
+  <div class="legend-item"><div class="legend-dot absent"></div> Not in word</div>
+</div>
+
+<script>
+const WORDS = {
+  4: ["able","acid","also","arch","area","army","aunt","away","back","ball","band","bank","barn","base","bath","beam","bean","bear","beat","bell","best","bird","bite","blow","blue","blur","boat","bold","bolt","bomb","bond","bone","book","boot","bore","born","boss","both","bowl","burn","cage","cake","call","calm","came","cane","card","care","cart","case","cash","cast","cave","cell","chat","chef","chip","city","clam","clap","clay","clip","club","clue","coal","coat","code","coil","cold","comb","come","cone","cook","cool","cord","core","corn","cost","cove","crab","crew","crop","cure","curl","cute","damp","dare","dark","dart","dash","data","date","dawn","dead","deal","dean","dear","debt","deck","deed","deep","deny","desk","diet","dire","dirt","disc","dish","disk","dock","done","door","dose","dove","down","draw","drew","drip","drop","drug","drum","dual","dull","dump","dusk","dust","duty","earn","ease","east","edge","emit","epic","even","ever","evil","exam","face","fact","fail","fair","fake","fall","fame","farm","fast","fate","fear","feat","feed","feel","feet","fell","felt","fend","file","fill","film","find","fire","firm","fish","fist","five","flag","flat","flaw","flea","flew","flex","flip","flow","foam","fold","folk","fond","font","food","fool","foot","ford","fork","form","fort","foul","four","free","fuel","full","fund","fuse","fuzz","gain","gale","game","gang","gasp","gate","gave","gaze","gear","give","glad","glob","glue","goal","goat","gold","golf","gone","good","gore","gown","grab","gray","grew","grid","grim","grip","grow","gulf","gust","hack","hail","half","hall","halt","hand","hang","hard","harm","hash","hate","have","hawk","haze","head","heal","heap","hear","heat","heel","help","herb","here","hero","hide","high","hill","hint","hire","hold","hole","holy","home","hood","hook","hope","horn","hose","host","hour","huge","hull","hung","hunt","hurt","icon","idea","idle","inch","into","iron","isle","item","join","joke","jolt","jump","junk","just","keen","keep","kick","kind","king","knee","knew","knot","lace","lack","laid","lake","lame","lamp","land","lane","lark","lash","last","late","lawn","lead","leaf","lean","leap","left","less","liar","lick","life","lift","like","limb","lime","line","link","lion","list","live","load","loan","lock","loft","lone","long","look","loom","loop","lore","lose","loss","lost","love","luck","lung","lurk","lush","made","mail","main","make","male","mall","malt","many","mare","mark","mars","mask","mass","mate","meal","mean","meat","meet","melt","mere","mesh","mess","mild","mile","milk","mill","mime","mind","mine","miss","mist","moat","mock","mode","mood","moon","more","moss","most","move","much","must","name","near","neat","neck","need","nest","news","next","nice","nine","node","none","norm","nose","note","noun","nude","numb","oath","obey","odds","once","only","open","oral","oven","over","pace","pack","page","paid","pain","pair","pale","palm","park","part","pass","past","path","pave","peak","peel","peer","pest","pick","pier","pile","pill","pine","pink","pipe","plan","play","plod","plot","plug","plus","poem","poet","pole","poll","pond","pool","poor","pore","port","pose","post","pour","prey","prod","prop","pull","pump","pure","push","rack","rage","rail","rain","rake","ramp","rang","rank","rant","rare","rash","rate","read","real","reap","rear","reel","rely","rest","rice","rich","ride","riff","ring","riot","rise","risk","road","roam","roar","rock","role","roll","roof","room","root","rope","rose","ruby","ruin","rule","ruse","rush","rust","safe","sage","said","sake","salt","same","sand","sane","sang","sank","save","scan","scar","seal","seam","seat","seed","seek","seem","seen","sell","sent","shed","ship","shoe","shop","shot","show","shut","sick","side","sigh","sign","silk","sing","sink","site","size","skip","slam","slap","slim","slip","slop","slow","slug","snap","snow","soap","soar","sock","soft","soil","sold","sole","some","song","soon","soot","sort","soul","sour","span","spar","spin","spot","spun","stab","star","stay","stem","step","stir","stop","such","suit","sung","sunk","sure","swap","swat","swim","tail","tale","talk","tall","tame","tank","tape","task","team","tear","tell","tend","tent","term","text","than","that","them","then","thin","this","tide","tile","time","tiny","toad","toil","toll","tomb","tone","took","tool","tore","torn","tort","tour","town","trap","tree","trek","trim","trio","true","tube","tuck","tune","turf","turn","twin","twig","type","ugly","undo","unit","upon","used","user","vain","vale","vast","very","view","vine","void","vole","vote","wage","wake","walk","wall","wand","ward","warm","warp","wary","wash","wave","weak","weld","went","were","west","what","when","whom","wide","wife","wild","will","wind","wine","wing","wire","wise","wish","with","woke","wolf","womb","word","wore","worm","worn","wove","wrap","yawn","yell","your","zero","zone","zoom"],
+  5: ["aback","abbey","abbot","abyss","acute","admit","adobe","adopt","adult","after","again","agile","agony","agree","ahead","aisle","alert","alibi","alien","align","aloft","alone","along","amaze","amble","amend","angel","anger","angle","angry","angst","anvil","aorta","apart","apple","apply","apron","arbor","ardor","arena","aroma","arose","array","atone","attic","audio","audit","avian","avoid","awake","awful","badge","bagel","baker","banjo","basis","baste","batch","bathe","bayou","beach","begin","being","bench","berry","birch","bison","black","blade","blaze","bleak","blend","blink","block","blunt","blurb","boast","bogus","bonus","booth","boxer","brace","braid","brake","brand","brave","bravo","brawl","bread","break","breed","briar","bribe","bride","brief","brine","bring","brook","brown","brute","buddy","budge","build","built","bulge","bully","bunch","bunny","bugle","burly","burnt","burst","buyer","cabal","cabin","cadet","camel","canal","candy","canny","canoe","canon","cargo","carol","carry","carve","cedar","chain","chair","chalk","chaos","chard","charm","chase","cheap","check","cheek","cheer","chess","chief","child","china","choke","chord","chose","chunk","civic","civil","clack","claim","clank","clash","class","clean","clear","clerk","click","cliff","climb","cling","clink","clone","close","cloth","cloud","clove","clown","comet","comic","comma","conch","condo","coral","couch","cough","could","count","court","cover","covet","crack","crane","creak","creek","crimp","crisp","cross","crowd","crown","cruel","crush","crux","cubic","cupid","curly","curve","daisy","dance","delta","dense","depot","depth","derby","disco","dizzy","dodge","dogma","dolly","dopey","doubt","dough","dowel","dozen","draft","drain","drama","drank","dread","dream","dress","dried","drift","drink","drive","drone","drove","drunk","dryer","eagle","early","easel","eject","elect","elite","ember","empty","endow","enemy","enjoy","ensue","enter","envoy","epoch","erase","erode","essay","evade","event","every","evoke","exact","exile","extra","fable","facet","fairy","faith","false","fancy","fatal","fatty","fault","feast","fence","ferry","fetch","fever","fewer","fiber","field","fiend","fiery","fifth","fifty","final","firth","fixed","flank","flare","flask","flesh","flick","fling","flint","flock","flood","floor","floss","fluid","fluke","fluky","flunk","flung","focus","foggy","folly","forge","forth","forum","found","frame","frank","fraud","fresh","frisk","front","frost","froze","fruit","fully","fungi","funky","funny","fussy","fuzzy","gaudy","gauge","gauze","gavel","genie","giant","given","gland","glare","glass","gleam","glean","glide","glint","gloat","globe","gloom","glory","gloss","glove","glyph","gnash","gnome","golem","gouge","gourd","grace","grade","grain","grand","grant","grape","grasp","grass","grate","grave","graze","greed","green","greet","grief","gripe","groan","groin","grope","gross","grout","grove","guard","guess","guilt","guise","gusto","habit","happy","hardy","harsh","haste","haunt","haven","heavy","hedge","hefty","hence","hitch","hoard","hobby","holly","honor","horde","hotel","hound","human","humid","humor","humus","ideal","image","imply","incur","index","infer","inset","intro","ionic","irony","ivory","jaded","jaunt","jazzy","jewel","jiffy","joust","judge","juice","juicy","jumbo","juror","kayak","knack","knave","kneel","knife","knock","known","label","lance","large","laser","later","latch","lathe","latte","laugh","layer","leaky","learn","leech","legal","lemon","level","liege","lifer","light","lilac","limit","linen","liner","liver","lodge","login","loose","lousy","lover","lower","loyal","lucid","lucky","lyric","mambo","mange","manor","manly","maple","march","marry","match","maxim","mayor","melon","mercy","metal","minor","minus","mirth","moist","money","month","moose","mourn","mouse","mouth","moved","mower","muddy","muggy","musky","naive","nasty","naval","navel","needy","nerve","never","night","ninja","noble","nobly","noise","notch","novel","nurse","nutty","occur","ocean","offer","often","olive","onion","onset","orbit","order","other","ought","ounce","outer","ovary","oxide","ozone","pansy","paper","patch","patio","pause","peace","pedal","penal","penny","peony","perch","peril","pesky","petty","phase","phone","photo","piano","pinch","pique","pitch","pixel","pizza","place","plain","plant","plaza","plead","pleat","pluck","plumb","plume","plunk","poach","point","poise","poker","polar","polio","polka","poppy","pouch","pouty","power","prank","press","price","prick","pride","prime","print","prism","privy","probe","prose","proud","prune","pulse","puree","purge","queen","query","queue","quick","quiet","quota","rabbi","raven","react","rebut","reign","relax","renew","repay","repel","rerun","reuse","rival","rivet","roast","robin","rocky","rouge","rough","round","rouse","route","rowdy","ruler","rumba","rumor","rupee","rusty","sadly","saint","salsa","salve","sandy","sassy","sauce","saucy","savor","savvy","scald","scale","scalp","scaly","scene","scoff","scold","scope","score","scorn","scour","scout","scowl","scrub","seize","sense","serve","setup","sever","shack","shade","shake","shaky","shall","shame","shark","sharp","shawl","shelf","shift","shoal","short","shout","shove","shred","shrub","siege","since","sinew","sixth","sixty","skill","skimp","skirt","skunk","skull","slack","slain","slant","slave","sleep","sleet","slick","slide","slime","slope","sloth","slump","slunk","smack","small","smart","smell","smirk","smite","smock","smoke","snack","snail","snake","snare","sneak","sneer","snide","sniff","snore","snort","snout","soggy","solar","solid","space","spade","spawn","spear","speck","speed","spell","spend","spike","spill","spine","spoke","spoof","spook","spool","spoon","spore","sport","spray","squad","stain","stale","stall","stare","stark","start","state","stave","steal","steam","steel","steer","stern","stiff","still","sting","stock","stoic","stone","stool","storm","story","stout","stove","strap","straw","stray","strip","strut","stuck","study","stunt","style","sugar","suave","suite","sulky","super","surge","swamp","swear","sweat","sweep","sweet","swept","swift","swill","swipe","swirl","sword","talon","tango","taunt","thank","theme","thick","think","thorn","those","three","threw","throw","thump","thumb","tiara","tiger","tight","tithe","token","tooth","topaz","topic","torch","total","touch","toxic","trace","track","trail","train","tramp","trash","tread","trend","trial","tribe","trick","trout","truck","truly","trunk","truss","trust","truth","tulip","tumor","tuner","twang","tweed","tweet","twice","twill","twist","ulcer","ultra","uncle","under","unity","until","upend","upset","urban","usher","usual","utter","vague","valid","valor","value","valve","vaunt","vegan","verge","verse","vicar","vigor","viper","viral","virus","visor","vista","vogue","vouch","waltz","waste","watch","water","weary","weave","wedge","weedy","weigh","weird","which","whiff","while","whine","whirl","whisk","white","whole","whose","widen","wield","witch","women","world","worse","worst","worth","wrath","wrist","wrote","yeast","yield","young","youth","zesty","zilch","zippy"],
+  6: ["absorb","accent","accept","access","accord","accrue","accuse","active","actual","adhere","adjust","admire","adrift","affect","afford","afraid","agenda","aghast","almost","alpine","always","amidst","anchor","annual","answer","anthem","anyone","appear","around","arouse","artful","ascend","assert","astray","author","autumn","avenue","beacon","behalf","belief","benign","beyond","blight","borrow","bought","bounce","breeze","bridge","bright","broken","bronze","bruise","buffer","bumble","bundle","burrow","bypass","canopy","castle","caught","center","change","charge","choice","chrome","circle","cobalt","combat","comply","convey","corner","cosmos","create","crisis","crunch","custom","dancer","danger","dangle","darken","deadly","debris","deceit","defend","define","donate","double","damage","devote","direct","divide","domain","donkey","emerge","enable","energy","engage","ensure","entire","escape","expire","extend","fallen","famine","feeble","filter","finger","follow","forest","foster","freely","frozen","galley","garden","gather","gentle","geyser","gloomy","goblin","govern","gravel","growth","guitar","gutter","handle","happen","harbor","harvest","herbal","hidden","hollow","humble","hunger","impact","insect","intent","invent","island","jester","jingle","jungle","knight","lament","lavish","leaden","legacy","legend","length","liquid","little","lively","lowest","marble","market","mature","meadow","member","melody","memory","mirror","misery","modest","moment","mortal","motion","narrow","needle","number","object","obtain","offend","offset","ordeal","origin","oyster","palace","parent","parson","patrol","people","permit","pillar","plague","polite","potter","powder","prefer","pretty","prompt","proper","purple","pursue","rabbit","radish","rarely","rather","rattle","reason","reduce","refine","refuse","remote","repair","repeat","rescue","resist","resort","return","reveal","reward","ribbon","riddle","ripple","robber","robust","rotate","rubber","rudder","saddle","sample","signal","silent","silver","simple","sister","slight","slowly","smooth","sorrow","source","sphere","spiral","stable","steady","stream","stress","strict","strike","string","strive","strong","submit","subtle","sunset","surely","switch","symbol","talent","thread","timber","toggle","tongue","toward","travel","tribal","triple","trophy","tunnel","turkey","unable","unique","unjust","unlock","useful","valley","vanish","verbal","vessel","victim","violet","virtue","visual","voyage","wander","warden","warmth","wealth","weekly","wonder","window","winter","wisdom","within","yellow"],
+  7: ["absence","account","achieve","acquire","address","advance","adverse","against","awesome","balance","because","believe","beneath","benefit","between","blossom","cabinet","captain","capture","century","chapter","collect","comfort","company","compete","compile","concern","confirm","connect","consent","contain","content","contest","control","counsel","country","courage","culture","current","curtain","cushion","customs","deliver","despite","develop","digital","discuss","display","dispose","distant","diverse","dungeon","eastern","economy","embrace","enhance","evident","exactly","explain","factory","failure","fantasy","fashion","feather","fiction","flutter","foreign","formula","forward","freedom","fulfill","genuine","goddess","grammar","granite","greatly","harvest","history","hundred","however","imagine","include","initial","inquiry","instant","instead","involve","journey","kingdom","knowing","lantern","largest","limited","machine","measure","mission","morning","mystery","network","nothing","notable","observe","obvious","opinion","patient","pattern","perfect","perhaps","present","prevent","primary","problem","product","program","project","protect","provide","purpose","quality","quickly","respond","restore","results","revenue","shelter","silence","similar","somehow","someone","specify","support","surface","survive","sustain","tonight","towards","typical","uniform","unknown","unusual","version","weather","western","whisper","without","writing"]
+};
+
+let wordLen = 5, maxRows = 6, secret = "", grid = [], currentRow = 0, currentCol = 0, gameOver = false;
+const keyStates = {};
+let msgTimer = null;
+
+function pickWord(len) {
+  const list = WORDS[len];
+  return list[Math.floor(Math.random() * list.length)].toUpperCase();
+}
+
+function setTileSize(len) {
+  const sizes = { 4: [62, 26], 5: [58, 24], 6: [50, 21], 7: [44, 18] };
+  const [ts, tf] = sizes[len] || [58, 24];
+  document.documentElement.style.setProperty("--tile-size", ts + "px");
+  document.documentElement.style.setProperty("--tile-font", tf + "px");
+}
+
+function buildGrid() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  grid = [];
+  setTileSize(wordLen);
+  for (let r = 0; r < maxRows; r++) {
+    const row = document.createElement("div");
+    row.className = "row";
+    grid.push([]);
+    for (let c = 0; c < wordLen; c++) {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      row.appendChild(tile);
+      grid[r].push(tile);
+    }
+    board.appendChild(row);
+  }
+}
+
+function buildKeyboard() {
+  const kb = document.getElementById("keyboard");
+  kb.innerHTML = "";
+  const rows = [
+    ["Q","W","E","R","T","Y","U","I","O","P"],
+    ["A","S","D","F","G","H","J","K","L"],
+    ["Enter","Z","X","C","V","B","N","M","⌫"]
+  ];
+  rows.forEach(keys => {
+    const row = document.createElement("div");
+    row.className = "kb-row";
+    keys.forEach(k => {
+      const btn = document.createElement("button");
+      btn.className = "key" + (k.length > 1 ? " wide" : "");
+      btn.textContent = k;
+      btn.dataset.key = k;
+      btn.addEventListener("click", () => handleKey(k));
+      row.appendChild(btn);
+    });
+    kb.appendChild(row);
+  });
+}
+
+function updateKeyState(letter, state) {
+  const priority = { correct: 3, present: 2, absent: 1 };
+  if (!keyStates[letter] || priority[state] > priority[keyStates[letter]]) {
+    keyStates[letter] = state;
+  }
+  document.querySelectorAll(".key").forEach(btn => {
+    if (btn.dataset.key === letter) {
+      btn.className = "key" + (btn.textContent.length > 1 ? " wide" : "") + " " + keyStates[letter];
+    }
+  });
+}
+
+function showMsg(text, duration = 1800) {
+  const el = document.getElementById("msg");
+  el.textContent = text;
+  el.classList.add("show");
+  if (msgTimer) clearTimeout(msgTimer);
+  if (duration > 0) {
+    msgTimer = setTimeout(() => el.classList.remove("show"), duration);
+  }
+}
+
+function handleKey(key) {
+  if (gameOver) return;
+  const el = document.getElementById("msg");
+  el.classList.remove("show");
+
+  if (key === "⌫" || key === "Backspace") {
+    if (currentCol > 0) {
+      currentCol--;
+      const tile = grid[currentRow][currentCol];
+      tile.textContent = "";
+      tile.className = "tile";
+    }
+  } else if (key === "Enter") {
+    if (currentCol < wordLen) {
+      shakeRow(currentRow);
+      showMsg("Not enough letters", 1200);
+      return;
+    }
+    submitGuess();
+  } else if (/^[A-Za-z]$/.test(key) && currentCol < wordLen) {
+    const tile = grid[currentRow][currentCol];
+    tile.textContent = key.toUpperCase();
+    tile.className = "tile active pop";
+    setTimeout(() => tile.classList.remove("pop"), 120);
+    currentCol++;
+  }
+}
+
+function shakeRow(row) {
+  grid[row].forEach(tile => {
+    tile.classList.add("shake");
+    tile.addEventListener("animationend", () => tile.classList.remove("shake"), { once: true });
+  });
+}
+
+function scoreGuess(guess, secret) {
+  const result = Array(guess.length).fill("absent");
+  const used = Array(secret.length).fill(false);
+  for (let i = 0; i < guess.length; i++) {
+    if (guess[i] === secret[i]) { result[i] = "correct"; used[i] = true; }
+  }
+  for (let i = 0; i < guess.length; i++) {
+    if (result[i] === "correct") continue;
+    for (let j = 0; j < secret.length; j++) {
+      if (!used[j] && guess[i] === secret[j]) { result[i] = "present"; used[j] = true; break; }
+    }
+  }
+  return result;
+}
+
+function submitGuess() {
+  const guess = grid[currentRow].map(t => t.textContent).join("");
+  const result = scoreGuess(guess, secret);
+
+  grid[currentRow].forEach((tile, i) => {
+    setTimeout(() => {
+      tile.style.transition = "none";
+      tile.style.transform = "rotateX(90deg)";
+      setTimeout(() => {
+        tile.className = "tile " + result[i];
+        tile.style.transform = "";
+        tile.style.transition = "transform 0.25s ease";
+        updateKeyState(guess[i], result[i]);
+      }, 50);
+    }, i * 100);
+  });
+
+  const delay = wordLen * 100 + 200;
+  const won = result.every(s => s === "correct");
+
+  setTimeout(() => {
+    if (won) {
+      const msgs = ["Genius!", "Magnificent!", "Impressive!", "Splendid!", "Great!", "Phew!"];
+      showMsg(msgs[Math.min(currentRow, msgs.length - 1)], 0);
+      grid[currentRow].forEach((tile, i) => {
+        setTimeout(() => {
+          tile.classList.add("bounce");
+          tile.addEventListener("animationend", () => tile.classList.remove("bounce"), { once: true });
+        }, i * 80);
+      });
+      gameOver = true;
+    } else {
+      currentRow++;
+      currentCol = 0;
+      if (currentRow >= maxRows) {
+        showMsg(secret, 0);
+        gameOver = true;
+      }
+    }
+  }, delay);
+}
+
+function newGame() {
+  wordLen = parseInt(document.getElementById("len-sel").value);
+  secret = pickWord(wordLen);
+  currentRow = 0;
+  currentCol = 0;
+  gameOver = false;
+  Object.keys(keyStates).forEach(k => delete keyStates[k]);
+  const el = document.getElementById("msg");
+  el.classList.remove("show");
+  buildGrid();
+  buildKeyboard();
+}
+
+document.getElementById("len-sel").addEventListener("change", newGame);
+document.getElementById("new-btn").addEventListener("click", newGame);
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === "Backspace") handleKey("Backspace");
+  else if (e.key === "Enter") handleKey("Enter");
+  else if (/^[a-zA-Z]$/.test(e.key)) handleKey(e.key);
+});
+
+newGame();
+</script>
+</body>
+</html>

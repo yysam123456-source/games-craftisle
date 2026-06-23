@@ -10,7 +10,8 @@ export type GameSource =
   | "embed"
   | "phaser"
   | "canvas"
-  | "external";
+  | "external"
+  | "self-hosted";
 
 export interface GameControls {
   keyboard?: boolean | string[];
