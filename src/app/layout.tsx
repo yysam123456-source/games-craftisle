@@ -3,6 +3,7 @@ import "./globals.css";
 import { PWARegistration } from "@/components/pwa/PWARegistration";
 import { Navigation } from "@/components/layout/Navigation";
 import { PageTransition } from "@/components/animations/page-transition";
+import { AdLoader } from "@/components/common/AdLoader";
 
 // 使用系统字体，避免 Google Fonts 网络依赖
 const fontSans = { variable: "--font-sans" };
@@ -90,6 +91,7 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </main>
         <PWARegistration />
+        <AdLoader />
       </body>
     </html>
   );
