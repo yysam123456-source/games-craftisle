@@ -7,13 +7,6 @@
   <link rel="stylesheet"  type="text/css" href="./css/game.css">
   <link rel="stylesheet"  type="text/css" href="./css/hire.css">
   <link rel="stylesheet"  type="text/css" href="./css/inn.css">
-  <script src="js/lib/sentry.min.js" crossorigin="anonymous"></script>
-  <script>
-    'use strict';
-    if (window.location.href.indexOf("file")===-1){
-      Sentry.init({ dsn: 'https://84a2a9b7436b40a6868d8493ee91c6dd@o1014630.ingest.sentry.io/5979860' });
-    }
-  </script>
   <!--BIND LIBRARY-->
   <script src="js/lib/bind.min.js"></script>
   <script src="js/lib/rivets.bundled.min.js"></script>
@@ -23,13 +16,9 @@
 <body>
 <div id="htmlGame">
   <div class="menu-panel">
-    <button class="tab-link" onclick="openTab(event, 'Main')" id="tabCity" type="button">Main</button>
+    <button class="tab-link" onclick="openTab(event, 'Main')" id="tabCity" type="button">City</button>
     <button class="tab-link" onclick="openTab(event, 'tabBuilding')" id="btnOpenTabBuilding" type="button">Building</button>
-    <button class="tab-link" onclick="openTab(event, 'Settings')" id="tabSettings" type="button">Settings</button>
-    <button class="tab-link" onclick="openTab(event, 'About')" id="tabAbout" type="button">How To Play</button>
-    <button class="tab-link" onclick="openTab(event, 'Discord')" id="tabDiscord" type="button">Discord</button>
     <div id="lblEventCountdownValue" style="margin-left:20px;" onclick="game.getEventHelp()"></div>
-    <a href="https://www.patreon.com/bePatron?u=7838459" target="_blank"><img src="resources/patreon.png" style="padding: 6px 0px"></a>
   </div>
   <div class="resource-panel">
     <div class="gold-val" onclick="checkGold()">
@@ -51,9 +40,6 @@
       <img class="resource-icon" src="resources/sand_clock.png">
       <span id="dcounter" >30</span>
       <span id="panelTurnCountdown" style="display:none">{ dcounter }</span>
-    </div>
-    <div class="server-val">
-      <span id="spnServerStatusLabel">Server: </span><span id="spnServerStatusValue">n/d</span>
     </div>
     <div class="event-val" style="margin-left: 20px;">
       <span id="event-label" onclick="getEventHelp()"></span>
@@ -704,23 +690,6 @@
       Your browser does not support the HTML5 canvas tag.
     </canvas>
   </div>
-  <div class="info-panel">
-      <div class="info-panel__actions">
-        <button id="log_btn"  class="btn" onclick="openLog()" type="button">log</button>
-        <button id="chat_btn" class="btn" onclick="openChat()" type="button">chat</button>
-        <button id="mod_btn"  class="btn" onclick="openTab(null, 'tabModTools')" style="visibility: hidden" type="button">mod</button>
-        <div id="lbl_online"><span id="spnOnline">Online: </span><span id="spnOnlineValue">n/d</span></div>
-      </div>
-      <div id="log"  name="log"		class="info-panel__history"></div>
-      <div id="chat" name="chat" 	class="info-panel__history"></div>
-      <div id="chatForm" class="info-panel__form">
-        <label id="inp_nickname"></label>
-        <div class="info-panel__form-msg">
-          <input type="text" id="msg_out">
-        </div>
-        <button id="btnSend" onclick="sendOnClick2()" class="btn" type="button">Send</button>
-      </div>
-    </div>
 </div>
 
 <!--GAME CONFIG-->
@@ -781,44 +750,6 @@
   accordion('.accordion', '.accordion-header');
   accordion('.accordion-battle', '.accordion-battle-header');
 </script>
-<!--Google Analytics. Sorry guys and girls, but I need some analytic from the game. Feel free to block it -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111661515-1"></script>
-<script async>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-111661515-1');
-</script>
-<!-- Yandex.Metrika counter. The same -->
-<script>
-  (function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-      try {
-        w.yaCounter47225574 = new Ya.Metrika({
-          id:47225574,
-          clickmap:true,
-          trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
-        });
-      } catch(e) { }
-    });
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = "https://mc.yandex.ru/metrika/watch.js";
-    if (w.opera == "[object Opera]") {
-      d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
-  })(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript>
-  <div>
-  <img src="https://mc.yandex.ru/watch/47225574" style="position:absolute; left:-9999px;" alt="">
-  </div>
-</noscript>
-<!-- /Yandex.Metrika counter -->
+<!--Google Analytics. Sorry guys</script>
 </body>
 </html>

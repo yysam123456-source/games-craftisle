@@ -63,8 +63,8 @@ var config = {
   //Also, we can make Church to Cathedral upgrade (TODO)
   tutChurchY: 1300,
   tutCathedralY: 1330,
-  isOnline: true,
-  pullMessages: true,
+  isOnline: false,
+  pullMessages: false,
   pullMessagesMS: 1500,
   minCityLevelForChat: 3,
   debug: false,

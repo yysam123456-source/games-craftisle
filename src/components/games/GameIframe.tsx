@@ -290,7 +290,7 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
         )}
 
         {/* ===== TOP BAR (immersive mode only): Exit + Title ===== */}
-        {isImmersive && (
+        {isImmersive && !game.hasNativeUI && (
           <div className={"absolute top-0 left-0 right-0 z-30 transition-all duration-300 " + (showControls ? "opacity-100" : "opacity-0")}>
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
               <div className="flex items-center gap-3">
@@ -318,8 +318,36 @@ export function GameIframe({ game, width = "100%", onFullscreenChange }: GameIfr
           </div>
         )}
 
+        {/* ===== MINIMAL FLOATING BUTTON for games with native UI ===== */}
+        {isImmersive && game.hasNativeUI && (
+          <>
+            {/* Top-left floating exit button */}
+            <div className={"absolute top-3 left-3 z-30 transition-all duration-300 " + (showControls ? "opacity-100" : "opacity-0")}>
+              <button onClick={handleExitImmersive}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white/80 hover:text-white text-xs font-medium transition-all backdrop-blur-md border border-white/10 shadow-lg"
+                      title="Back to menu (ESC)">
+                <ArrowLeft className="w-3.5 h-3.5" /> Back
+              </button>
+            </div>
+            {/* Top-right floating controls */}
+            <div className={"absolute top-3 right-3 z-30 transition-all duration-300 flex items-center gap-1 " + (showControls ? "opacity-100" : "opacity-0")}>
+              <button onClick={() => { sounds.buttonClick(); setSoundEnabled(!soundEnabled); }}
+                      className="p-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white/60 hover:text-white backdrop-blur-md border border-white/10"
+                      title="Toggle sound">
+                {soundEnabled ? <Volume2 className="w-[14px]" /> : <VolumeX className="w-[14px]" />}
+              </button>
+              <button onClick={handleRestart} className="p-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white/60 hover:text-white backdrop-blur-md border border-white/10" title="Restart (R)">
+                <RotateCcw className="w-[14px]" />
+              </button>
+              <button onClick={toggleFullscreen} className="p-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white/60 hover:text-white backdrop-blur-md border border-white/10" title="Fullscreen (F)">
+                {isFullscreen ? <Minimize2 className="w-[14px]" /> : <Maximize2 className="w-[14px]" />}
+              </button>
+            </div>
+          </>
+        )}
+
         {/* ===== BOTTOM CONTROLS (immersive mode only) ===== */}
-        {isImmersive && (
+        {isImmersive && !game.hasNativeUI && (
           <div className={"absolute bottom-0 left-0 right-0 z-30 transition-all duration-300 ease-out " + (showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2")}
                onMouseEnter={() => setControlsHovered(true)} onMouseLeave={() => setControlsHovered(false)}>
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />

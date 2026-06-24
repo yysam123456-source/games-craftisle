@@ -48,6 +48,8 @@ export interface Game {
   /** Whether this game actually reads the ?difficulty= URL param. 
    *  If false/undefined, the difficulty selector is hidden and only Start button is shown. */
   supportsDifficulty?: boolean;
+  /** If true, game has its own native UI — hide our immersive top/bottom bars and show minimal exit button instead */
+  hasNativeUI?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
