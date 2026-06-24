@@ -72,9 +72,8 @@ let segments = [];        // track segments
 let obstacles = [];       // {z, lane, width, scored}
 
 // ---- Perspective parameters ----
-const CAM_HEIGHT = 1.2;   // camera height above track
-const CAM_DEPTH = 300;     // perspective depth factor
-const VANISH_Y = 180;     // vanishing point Y on screen
+const FOCAL = 600;        // focal length for perspective
+const VANISH_Y = 200;     // vanishing point Y on screen
 
 // ---- Input ----
 const keys = { left: false, right: false };
@@ -125,18 +124,11 @@ function getTrackX(z) {
   return x0 + (x1 - x0) * frac;
 }
 
-// ============================================================
-//  3D Projection
-// ============================================================
-// Project a world point to screen coordinates.
-// World: X = left-right (track-relative), Y = up-down, Z = forward (away from camera)
-// Camera is at (0, CAM_HEIGHT, trackZ)
-function project(wx, wy, wz) {
-  // wz = distance ahead of camera
+function project(wx, wz) {
   if (wz < 0.5) return null;
-  const scale = CAM_DEPTH / (CAM_DEPTH + wz);
+  const scale = FOCAL / (FOCAL + wz * 1.5);
   const sx = W / 2 + wx * scale;
-  const sy = VANISH_Y + (H - VANISH_Y) * (1 - scale * 0.72);
+  const sy = VANISH_Y + (H - VANISH_Y) * (1 - scale);
   return { sx, sy, scale };
 }
 
@@ -305,10 +297,10 @@ function draw() {
 
     // Project track edges (half-width = 2.5 world units)
     const HW = 2.8;
-    const pL0 = project(cx0 - HW - ballTrackX, 0, dz0);
-    const pR0 = project(cx0 + HW - ballTrackX, 0, dz0);
-    const pL1 = project(cx1 - HW - ballTrackX, 0, dz1);
-    const pR1 = project(cx1 + HW - ballTrackX, 0, dz1);
+    const pL0 = project(cx0 - HW - ballTrackX, dz0);
+    const pR0 = project(cx0 + HW - ballTrackX, dz0);
+    const pL1 = project(cx1 - HW - ballTrackX, dz1);
+    const pR1 = project(cx1 + HW - ballTrackX, dz1);
 
     if (!pL0 || !pR0 || !pL1 || !pR1) continue;
     if (pL0.scale < 0.02 || pR0.scale < 0.02) continue;
@@ -359,7 +351,7 @@ function draw() {
     if (dz > DRAW_DIST || dz < 0) continue;
     const trackCX = getTrackX(obs.z);
     const obsWX = trackCX + obs.lane - ballTrackX;
-    const p = project(obsWX, 0, dz);
+    const p = project(obsWX, dz);
     if (!p || p.scale < 0.03) continue;
 
     const obsW = Math.max(6, p.scale * 50 * (obs.width / 0.3));
