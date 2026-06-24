@@ -6,313 +6,531 @@
 <title>Slope</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#030308;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif}
-#ui{position:relative}
-canvas{display:block;border-radius:10px;box-shadow:0 0 90px rgba(102,126,234,.13)}
-#hud{position:absolute;top:11px;width:100%;display:flex;justify-content:center;gap:34px;color:#5a6a88;font-size:12px;font-weight:700;pointer-events:none;letter-spacing:.3px}
-#hud b{color:#667eea}
-#mask{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(3,3,8,.92);border-radius:10px;transition:opacity .3s}
-#mask.hide{opacity:0;pointer-events:none}
-#mask h1{color:#667eea;font-size:44px;font-weight:900;letter-spacing:4px;margin-bottom:3px;text-shadow:0 0 40px rgba(102,126,234,.5)}
-#mask .sub{color:#6a7aae;font-size:14px;margin-bottom:20px}
-#mask .ctrl{color:#3a4a66;font-size:12px;margin-bottom:18px;line-height:2;text-align:center}
-#mask button{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:12px 42px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .12s}
-#mask button:hover{transform:scale(1.06);box-shadow:0 0 25px rgba(102,126,234,.5)}
-#mask .go{color:#ff4444;font-size:34px;font-weight:900;margin-bottom:1px}
-#mask .go-score{color:#ffcdd2;font-size:16px;margin-bottom:16px}
+body{background:#0a0a1a;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif}
+#game{position:relative;width:800px;height:600px}
+canvas{display:block;border-radius:12px;box-shadow:0 0 60px rgba(100,120,230,.2)}
+#hud{position:absolute;top:15px;left:0;width:100%;display:flex;justify-content:center;gap:40px;color:#4a5a7a;font-size:13px;font-weight:700;pointer-events:none;letter-spacing:.5px;z-index:2}
+#hud b{color:#7088ff}
+#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,5,20,.9);border-radius:12px;z-index:3;transition:opacity .4s}
+#overlay.hidden{opacity:0;pointer-events:none}
+#overlay h1{color:#7088ff;font-size:52px;font-weight:900;letter-spacing:6px;margin-bottom:5px;text-shadow:0 0 50px rgba(100,120,230,.6)}
+#overlay .sub{color:#5a6a8a;font-size:14px;margin-bottom:25px}
+#overlay .controls{color:#3a4a6a;font-size:12px;margin-bottom:20px;line-height:2;text-align:center}
+#overlay button{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:14px 48px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:1px}
+#overlay button:hover{transform:scale(1.05);box-shadow:0 0 30px rgba(100,120,230,.5)}
+#overlay .gameover{color:#ff4444;font-size:38px;font-weight:900;margin-bottom:5px}
+#overlay .final-score{color:#aabbdd;font-size:16px;margin-bottom:18px}
 </style>
 </head>
 <body>
-<div id="ui">
-  <canvas id="c" width="640" height="480"></canvas>
-  <div id="hud"><span>Score: <b id="sc">0</b></span><span>Best: <b id="bs">0</b></span><span>Speed: <b id="sp">1.0x</b></span></div>
-  <div id="mask">
+<div id="game">
+  <canvas id="c" width="800" height="600"></canvas>
+  <div id="hud">
+    <span>Score: <b id="score-el">0</b></span>
+    <span>Best: <b id="best-el">0</b></span>
+    <span>Speed: <b id="speed-el">1.0x</b></span>
+  </div>
+  <div id="overlay">
     <h1>SLOPE</h1>
-    <div class="sub">Race down the infinite slope</div>
-    <div class="ctrl">← → &nbsp;or&nbsp; A / D &nbsp;to steer &nbsp;|&nbsp; Avoid red blocks</div>
-    <button id="btn">START</button>
+    <div class="sub">Race down the endless slope</div>
+    <div class="controls">← → or A / D to steer &nbsp;|&nbsp; Avoid red obstacles</div>
+    <button id="start-btn">START</button>
   </div>
 </div>
 
 <script>
 "use strict";
-const C=document.getElementById('c'),X=C.getContext('2d');
-const W=640,H=480;
-const VY=H*0.285;       // vanishing point Y
-const SEG_LEN=7;        // world units per segment
-const ROAD_HW=220;       // road half-width in world units
+// ============================================================
+//  Slope — fully refactored
+//  Proper pseudo-3D perspective, clean game logic
+// ============================================================
 
-const diff=new URLSearchParams(location.search).get('difficulty')||'medium';
-const SPDMUL={easy:.6,medium:1,hard:1.45}[diff]||1;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 800, H = 600;
 
-let state='idle',score=0,best=+localStorage.getItem('slope-best')||0;
-let spd,ballZ,ballLane,ballVX,trackPts,obs,frame,shake;
+// ---- State ----
+let state = 'idle';      // idle | playing | dead
+let score = 0;
+let best = +(localStorage.getItem('slope-best') || 0);
+let speed = 0;
+let maxSpeed = 0;
+let ballX = 0;          // -1..1  lateral position on track
+let ballVX = 0;         // velocity X
+let trackZ = 0;         // how far the player has travelled
+let shakeTimer = 0;
 
-const mask=document.getElementById('mask'),btn=document.getElementById('btn');
-const scE=document.getElementById('sc'),bsE=document.getElementById('bs'),spE=document.getElementById('sp');
-bsE.textContent=best;
+// ---- Track definition ----
+// Track is an array of segments.
+// Each segment: { curve }  curve = how much the track turns (-1..1)
+// The track is generated procedurally.
+const SEG_LEN = 1;       // world units per segment
+const DRAW_DIST = 250;    // how many segments to draw ahead
+const SPAWN_DIST = 180;   // how far ahead to spawn obstacles
 
-// === Track: array of {cx} = center X offset (world units), generated procedurally ===
-// ballZ: float, position along track in world units
-// trackPts[i] = cx at world position i*SEG_LEN
-// Extend trackPts dynamically as ballZ increases
-function ensureTrack(upto){
-  while(trackPts.length*SEG_LEN<upto+200){
-    const prev=trackPts[trackPts.length-1];
-    // Curve: gradual random walk, occasional bigger turn
-    let nx=prev+(Math.random()-.5)*10;
-    nx=Math.max(-400,Math.min(400,nx));
-    if(Math.random()<0.06)nx+=(Math.random()-.5)*60;
-    trackPts.push(nx);
+let segments = [];        // track segments
+let obstacles = [];       // {z, lane, width, scored}
+
+// ---- Perspective parameters ----
+const CAM_HEIGHT = 1.2;   // camera height above track
+const CAM_DEPTH = 300;     // perspective depth factor
+const VANISH_Y = 180;     // vanishing point Y on screen
+
+// ---- Input ----
+const keys = { left: false, right: false };
+let touchStartX = null;
+let touchLastX = null;
+
+// ---- UI ----
+const scoreEl = document.getElementById('score-el');
+const bestEl = document.getElementById('best-el');
+const speedEl = document.getElementById('speed-el');
+const overlay = document.getElementById('overlay');
+const startBtn = document.getElementById('start-btn');
+
+bestEl.textContent = best;
+
+// ============================================================
+//  Track generation
+// ============================================================
+function generateTrack(upto) {
+  while (segments.length < upto) {
+    const prev = segments[segments.length - 1] || { curve: 0, x: 0 };
+    let curve = prev.curve;
+    // Smooth random walk for curve
+    curve += (Math.random() - 0.5) * 0.04;
+    // Clamp curve
+    curve = Math.max(-0.35, Math.min(0.35, curve));
+    // Occasional sharper turn
+    if (Math.random() < 0.04) {
+      curve += (Math.random() - 0.5) * 0.25;
+      curve = Math.max(-0.35, Math.min(0.35, curve));
+    }
+    // Compute x position (lateral offset of track center)
+    const x = (prev.x || 0) + curve * SEG_LEN;
+    segments.push({ curve, x });
   }
 }
-function resetTrack(){
-  trackPts=[0];
-  ensureTrack(1200);
-}
-function cxAt(z){
-  // Get track center X at world position z (interpolated)
-  const idx=Math.floor(z/SEG_LEN);
-  const frac=(z/SEG_LEN)-idx;
-  const i0=Math.min(Math.max(idx,0),trackPts.length-1);
-  const i1=Math.min(i0+1,trackPts.length-1);
-  return trackPts[i0]+(trackPts[i1]-trackPts[i0])*frac;
-}
 
-function reset(){
-  resetTrack();obs=[];
-  ballZ=50;ballLane=0;ballVX=0;
-  spd=3.2*SPDMUL;
-  score=0;shake=0;frame=0;
-  scE.textContent='0';spE.textContent=spd.toFixed(1)+'x';
+function getTrackX(z) {
+  // Get track center X at position z (interpolated)
+  const idx = Math.floor(z / SEG_LEN);
+  const frac = (z / SEG_LEN) - idx;
+  const i0 = Math.max(0, Math.min(idx, segments.length - 1));
+  const i1 = Math.min(i0 + 1, segments.length - 1);
+  const s0 = segments[i0];
+  const s1 = segments[i1];
+  const x0 = s0 ? s0.x : 0;
+  const x1 = s1 ? s1.x : x0;
+  return x0 + (x1 - x0) * frac;
 }
 
-// === Perspective: dx from ball, wz distance ahead -> screen ===
-function proj(dx,wz){
-  if(wz<0.5)return null;
-  const f=280/(280+wz*0.3);
-  return{sx:W/2+dx*f, sy:VY+(H-VY)*(1-f*0.76), sc:f};
+// ============================================================
+//  3D Projection
+// ============================================================
+// Project a world point to screen coordinates.
+// World: X = left-right (track-relative), Y = up-down, Z = forward (away from camera)
+// Camera is at (0, CAM_HEIGHT, trackZ)
+function project(wx, wy, wz) {
+  // wz = distance ahead of camera
+  if (wz < 0.5) return null;
+  const scale = CAM_DEPTH / (CAM_DEPTH + wz);
+  const sx = W / 2 + wx * scale;
+  const sy = VANISH_Y + (H - VANISH_Y) * (1 - scale * 0.72);
+  return { sx, sy, scale };
 }
 
-// === Obstacles: {z, lane(-1..1), w(0.15..0.45)} ===
-function trySpawn(){
-  if(obs.length>10)return;
-  const lastZ=obs.length?Math.max(...obs.map(o=>o.z)):ballZ+2000;
-  if(lastZ<ballZ+800)return;
-  const z=ballZ+800+Math.random()*400;
-  const lane=(Math.random()-.5)*1.5;
-  const w=0.18+Math.random()*0.28;
-  obs.push({z:z,lane:lane,w:w});
+// ============================================================
+//  Obstacle management
+// ============================================================
+function spawnObstacle() {
+  if (obstacles.length > 15) return;
+  const lastZ = obstacles.length > 0 ? Math.max(...obstacles.map(o => o.z)) : trackZ + 500;
+  if (lastZ < trackZ + SPAWN_DIST - 40) return;
+
+  const z = trackZ + SPAWN_DIST + Math.random() * 80;
+  const lane = (Math.random() - 0.5) * 1.6;  // -0.8 .. 0.8
+  const width = 0.2 + Math.random() * 0.3;
+  obstacles.push({ z, lane, width, scored: false });
 }
 
-// === Update ===
-function update(){
-  if(state!=='playing')return;
-  frame++;
-
-  // Speed up
-  spd+=0.004*SPDMUL;
-  if(spd>14*SPDMUL)spd=14*SPDMUL;
-
-  // Ball forward
-  ballZ+=spd*0.5;
-
-  // Ensure track ahead
-  ensureTrack(ballZ+1200);
-
-  // Move/remove obstacles
-  for(let i=obs.length-1;i>=0;i--){
-    if(obs[i].z<ballZ-5){
-      obs.splice(i,1);score+=10;scE.textContent=score;
+function updateObstacles() {
+  // Remove passed obstacles, add score
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    if (obstacles[i].z < trackZ - 5) {
+      if (!obstacles[i].scored) {
+        score += 10;
+        scoreEl.textContent = score;
+        obstacles[i].scored = true;
+      }
+      obstacles.splice(i, 1);
     }
   }
+  // Spawn new ones
+  if (Math.random() < 0.018 + speed * 0.0008) {
+    spawnObstacle();
+  }
+}
 
-  // Spawn
-  if(Math.random()<0.02+spd*0.0006)trySpawn();
+// ============================================================
+//  Collision detection
+// ============================================================
+function checkCollisions() {
+  for (const obs of obstacles) {
+    const dz = obs.z - trackZ;
+    if (dz > 30 || dz < 0) continue;
+    const trackCX = getTrackX(obs.z);
+    const obsWorldX = trackCX + obs.lane;
+    const ballWorldX = getTrackX(trackZ) + ballX * 2;  // ballX is -1..1, scale to world
+    if (Math.abs(ballWorldX - obsWorldX) < obs.width + 0.15) {
+      return true;  // collision
+    }
+  }
+  return false;
+}
 
-  // Steering — responsive!
-  const ACC=0.038;
-  if(K.left)ballVX-=ACC;
-  if(K.right)ballVX+=ACC;
-  ballVX*=0.91; // damping (was 0.87 — too high)
-  ballLane+=ballVX;
-  // Lane limit
-  const LIM=1.12;
-  if(ballLane<-LIM){ballLane=-LIM;ballVX=Math.abs(ballVX)*0.05;}
-  if(ballLane>LIM){ballLane=LIM;ballVX=-Math.abs(ballVX)*0.05;}
+// ============================================================
+//  Game logic
+// ============================================================
+function resetGame() {
+  segments = [];
+  obstacles = [];
+  trackZ = 0;
+  ballX = 0;
+  ballVX = 0;
+  speed = 2.8;
+  maxSpeed = 2.8;
+  score = 0;
+  scoreEl.textContent = '0';
+  generateTrack(400);
+}
 
-  // Track curvature pushes ball gently
-  const curve=(cxAt(ballZ+20)-cxAt(ballZ))/20;
-  ballVX+=curve*0.012;
+function update() {
+  if (state !== 'playing') return;
+
+  // Speed increase
+  speed += 0.003;
+  if (speed > 12) speed = 12;
+  maxSpeed = Math.max(maxSpeed, speed);
+
+  // Move forward
+  trackZ += speed * 0.6;
+
+  // Generate more track
+  generateTrack(Math.floor(trackZ / SEG_LEN) + DRAW_DIST + 50);
+
+  // Steering
+  const STEER = 0.035;
+  if (keys.left) ballVX -= STEER;
+  if (keys.right) ballVX += STEER;
+  ballVX *= 0.89;  // damping
+  ballX += ballVX;
+  // Clamp ball position
+  const lim = 1.1;
+  if (ballX < -lim) { ballX = -lim; ballVX = Math.abs(ballVX) * 0.03; }
+  if (ballX > lim) { ballX = lim; ballVX = -Math.abs(ballVX) * 0.03; }
+
+  // Track curvature influence
+  const curv = segments[Math.floor(trackZ / SEG_LEN)];
+  if (curv) ballVX += curv.curve * 0.01;
+
+  // Update obstacles
+  updateObstacles();
 
   // Collision
-  for(let i=0;i<obs.length;i++){
-    const o=obs[i];
-    const dz=o.z-ballZ;
-    if(dz>35||dz<0)continue;
-    if(Math.abs(ballLane-o.lane)<o.w+0.12){
-      die();return;
-    }
+  if (checkCollisions()) {
+    die();
+    return;
   }
 
-  spE.textContent=spd.toFixed(1)+'x';
+  // Update HUD
+  speedEl.textContent = speed.toFixed(1) + 'x';
 }
 
-// === Draw ===
-function draw(){
-  // Sky gradient
-  const sg=X.createLinearGradient(0,0,0,VY+20);
-  sg.addColorStop(0,'#020206');sg.addColorStop(1,'#08081e');
-  X.fillStyle=sg;X.fillRect(0,0,W,VY+20);
-  X.fillStyle='#050510';X.fillRect(0,VY+20,W,H-VY-20);
+function die() {
+  state = 'dead';
+  shakeTimer = 20;
+  if (score > best) {
+    best = score;
+    localStorage.setItem('slope-best', best);
+    bestEl.textContent = best;
+  }
+  overlay.classList.remove('hidden');
+  overlay.innerHTML = `
+    <div class="gameover">GAME OVER</div>
+    <div class="final-score">Score: ${score}</div>
+    <button id="retry-btn">RETRY</button>
+  `;
+  document.getElementById('retry-btn').onclick = () => {
+    resetGame();
+    state = 'playing';
+    overlay.classList.add('hidden');
+  };
+}
 
-  // Ball world X (for camera)
-  const ballWX=cxAt(ballZ)+ballLane*ROAD_HW;
+// ============================================================
+//  Rendering
+// ============================================================
+function draw() {
+  // Sky
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, VANISH_Y + 40);
+  skyGrad.addColorStop(0, '#050510');
+  skyGrad.addColorStop(1, '#0a0a2a');
+  ctx.fillStyle = skyGrad;
+  ctx.fillRect(0, 0, W, VANISH_Y + 40);
 
-  // Draw track segments: far to near
-  const STEP=14;
-  let prev=null;
-  for(let z=ballZ+1100;z>ballZ;z-=STEP){
-    const cx=cxAt(z);
-    const wz=z-ballZ;
-    const dx=cx-ballWX; // offset from ball world X
-    const p=proj(dx,wz);
-    if(!p||p.sc<0.03)continue;
+  // Ground below vanishing point
+  ctx.fillStyle = '#08081e';
+  ctx.fillRect(0, VANISH_Y + 40, W, H - VANISH_Y - 40);
 
-    const hw=ROAD_HW*p.sc; // road half-width in screen px
+  // Draw track segments (far to near)
+  const ballTrackX = getTrackX(trackZ);
 
-    if(prev&&p.sc>0.03){
-      // Road surface
-      X.fillStyle=`rgba(8,8,20,${0.1+p.sc*0.55})`;
-      X.beginPath();
-      X.moveTo(prev.sx-prev.hw,prev.sy);
-      X.lineTo(prev.sx+prev.hw,prev.sy);
-      X.lineTo(p.sx+hw,p.sy);
-      X.lineTo(p.sx-hw,p.sy);
-      X.closePath();X.fill();
+  // We draw from far to near so nearer segments overdraw farther ones
+  const startIdx = Math.floor((trackZ + DRAW_DIST) / SEG_LEN);
+  const endIdx = Math.floor(trackZ / SEG_LEN);
 
-      // Grid lines (perspective)
-      if(Math.floor(z/35)!==Math.floor((z-STEP)/35)&&p.sc>0.08){
-        X.strokeStyle=`rgba(102,126,234,${p.sc*0.15})`;
-        X.lineWidth=0.6;X.setLineDash([3,9]);
-        X.beginPath();X.moveTo(prev.sx,prev.sy);X.lineTo(p.sx,p.sy);X.stroke();
-        X.setLineDash([]);
-      }
+  let prevL = null, prevR = null;
 
-      // Edge lines (neon glow)
-      X.strokeStyle=`rgba(102,126,234,${p.sc*0.4})`;
-      X.lineWidth=Math.max(1,p.sc*2);
-      X.beginPath();X.moveTo(prev.sx-prev.hw,prev.sy);X.lineTo(p.sx-hw,p.sy);X.stroke();
-      X.beginPath();X.moveTo(prev.sx+prev.hw,prev.sy);X.lineTo(p.sx+hw,p.sy);X.stroke();
+  for (let i = startIdx; i >= endIdx; i--) {
+    const z0 = i * SEG_LEN;
+    const z1 = (i + 1) * SEG_LEN;
+    const dz0 = z0 - trackZ;
+    const dz1 = z1 - trackZ;
+    if (dz0 < 0.5 && dz1 < 0.5) continue;
+    if (dz0 > DRAW_DIST || dz1 > DRAW_DIST) continue;
+
+    const cx0 = getTrackX(z0);
+    const cx1 = getTrackX(z1);
+
+    // Project track edges (half-width = 2.5 world units)
+    const HW = 2.8;
+    const pL0 = project(cx0 - HW - ballTrackX, 0, dz0);
+    const pR0 = project(cx0 + HW - ballTrackX, 0, dz0);
+    const pL1 = project(cx1 - HW - ballTrackX, 0, dz1);
+    const pR1 = project(cx1 + HW - ballTrackX, 0, dz1);
+
+    if (!pL0 || !pR0 || !pL1 || !pR1) continue;
+    if (pL0.scale < 0.02 || pR0.scale < 0.02) continue;
+
+    // Draw road segment as trapezoid
+    const alpha = 0.08 + pL0.scale * 0.5;
+    ctx.fillStyle = `rgba(10, 10, 30, ${alpha})`;
+    ctx.beginPath();
+    ctx.moveTo(pL1.sx, pL1.sy);
+    ctx.lineTo(pR1.sx, pR1.sy);
+    ctx.lineTo(pR0.sx, pR0.sy);
+    ctx.lineTo(pL0.sx, pL0.sy);
+    ctx.closePath();
+    ctx.fill();
+
+    // Road edge glow
+    const glowAlpha = pL0.scale * 0.35;
+    ctx.strokeStyle = `rgba(100, 120, 255, ${glowAlpha})`;
+    ctx.lineWidth = Math.max(1, pL0.scale * 2.5);
+    ctx.beginPath();
+    ctx.moveTo(pL1.sx, pL1.sy);
+    ctx.lineTo(pL0.sx, pL0.sy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pR1.sx, pR1.sy);
+    ctx.lineTo(pR0.sx, pR0.sy);
+    ctx.stroke();
+
+    // Center line (dashed)
+    if (pL0.scale > 0.06) {
+      ctx.strokeStyle = `rgba(100, 120, 255, ${pL0.scale * 0.12})`;
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([2, 8]);
+      ctx.beginPath();
+      ctx.moveTo((pL1.sx + pR1.sx) / 2, (pL1.sy + pR1.sy) / 2);
+      ctx.lineTo((pL0.sx + pR0.sx) / 2, (pL0.sy + pR0.sy) / 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
     }
-    prev={sx:p.sx,sy:p.sy,hw:hw,sc:p.sc};
+
+    prevL = pL0;
+    prevR = pR0;
   }
 
-  // Draw obstacles
-  obs.forEach(o=>{
-    const dz=o.z-ballZ;
-    if(dz>1100||dz<0)return;
-    const cx=cxAt(o.z);
-    const owx=cx+o.lane*ROAD_HW; // obstacle world X
-    const dx=owx-ballWX;
-    const p=proj(dx,dz);
-    if(!p||p.sc<0.03)return;
+  // ---- Draw obstacles ----
+  for (const obs of obstacles) {
+    const dz = obs.z - trackZ;
+    if (dz > DRAW_DIST || dz < 0) continue;
+    const trackCX = getTrackX(obs.z);
+    const obsWX = trackCX + obs.lane - ballTrackX;
+    const p = project(obsWX, 0, dz);
+    if (!p || p.scale < 0.03) continue;
 
-    const sz=Math.max(5,p.sc*44*(o.w/0.22+0.4));
-    const ox=p.sx; // already projected to screen
+    const obsW = Math.max(6, p.scale * 50 * (obs.width / 0.3));
+    const obsH = Math.max(4, p.scale * 18);
+    const ox = p.sx;
+    const oy = p.sy;
 
-    X.save();
-    X.translate(ox,p.sy-sz*0.25);
-    X.shadowBlur=p.sc>0.1?14:4;
-    X.shadowColor='#ff3333';
-    X.fillStyle='#ee2222';
-    const bw=sz*o.w*3.0,bh=sz*0.5;
-    X.beginPath();
-    X.roundRect(-bw/2,-bh/2,bw,bh,Math.max(2,sz*0.08));
-    X.fill();
+    ctx.save();
+    ctx.translate(ox, oy);
+    ctx.shadowBlur = p.scale > 0.08 ? 16 : 4;
+    ctx.shadowColor = '#ff3333';
+    ctx.fillStyle = '#ee2222';
+    ctx.beginPath();
+    ctx.roundRect(-obsW / 2, -obsH / 2, obsW, obsH, Math.max(2, p.scale * 6));
+    ctx.fill();
     // Highlight
-    X.fillStyle='rgba(255,255,255,0.1)';
-    X.fillRect(-bw/2+bw*0.04,-bh/2+bh*0.06,bw*0.92,bh*0.16);
-    X.shadowBlur=0;
-    X.restore();
-  });
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(-obsW / 2 + obsW * 0.05, -obsH / 2 + obsH * 0.07, obsW * 0.9, obsH * 0.18);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
 
-  // Draw ball
-  const p=proj(0,6); // dx=0 -> ball at screen center
-  if(!p)p={sx:W/2,sy:H-40,sc:1};
-  const by=H-40,br=11;
+  // ---- Draw ball ----
+  // Ball is fixed at bottom center of screen
+  const ballScreenX = W / 2 + ballX * 60;
+  const ballScreenY = H - 55;
+  const ballR = 12;
 
   // Shadow
-  X.fillStyle='rgba(0,0,0,0.5)';
-  X.beginPath();X.ellipse(p.sx+2,by+br+5,br*1.2,br*0.25,0,0,Math.PI*2);X.fill();
+  ctx.fillStyle = 'rgba(0,0,0,0.45)';
+  ctx.beginPath();
+  ctx.ellipse(ballScreenX + 2, ballScreenY + ballR + 6, ballR * 1.3, ballR * 0.22, 0, 0, Math.PI * 2);
+  ctx.fill();
 
-  // Ball glow
-  if(state==='playing'){
-    X.shadowBlur=10;X.shadowColor='#667eea';
+  // Glow
+  if (state === 'playing') {
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = '#7088ff';
   }
   // Ball body
-  X.save();X.translate(p.sx,by);X.rotate(ballVX*-0.15);
-  const g=X.createRadialGradient(-2.5,-2.5,0,0,0,br);
-  g.addColorStop(0,'#ffffff');g.addColorStop(0.3,'#8899ee');g.addColorStop(0.75,'#5566dd');g.addColorStop(1,'#3344aa');
-  X.fillStyle=g;
-  X.beginPath();X.arc(0,0,br,0,Math.PI*2);X.fill();
-  X.shadowBlur=0;
+  ctx.save();
+  ctx.translate(ballScreenX, ballScreenY);
+  ctx.rotate(ballVX * -0.2);
+  const ballGrad = ctx.createRadialGradient(-3, -3, 0, 0, 0, ballR);
+  ballGrad.addColorStop(0, '#ffffff');
+  ballGrad.addColorStop(0.3, '#8899ff');
+  ballGrad.addColorStop(0.75, '#5566dd');
+  ballGrad.addColorStop(1, '#3344aa');
+  ctx.fillStyle = ballGrad;
+  ctx.beginPath();
+  ctx.arc(0, 0, ballR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
   // Shine
-  X.fillStyle='rgba(255,255,255,0.38)';
-  X.beginPath();X.ellipse(-br*0.2,-br*0.2,br*0.22,br*0.14,-0.3,0,Math.PI*2);X.fill();
-  X.restore();
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.beginPath();
+  ctx.ellipse(-ballR * 0.2, -ballR * 0.2, ballR * 0.2, ballR * 0.12, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
 
   // Motion trail
-  if(state==='playing'&&Math.abs(ballVX)>0.01){
-    for(let i=1;i<=3;i++){
-      X.fillStyle=`rgba(102,126,234,${0.07/i})`;
-      X.beginPath();X.arc(p.sx-ballVX*i*20*(0.65-i*0.08),by,br*(1-i*0.08),0,Math.PI*2);X.fill();
+  if (state === 'playing' && Math.abs(ballVX) > 0.01) {
+    for (let i = 1; i <= 3; i++) {
+      ctx.fillStyle = `rgba(100,120,255,${0.06 / i})`;
+      ctx.beginPath();
+      ctx.arc(ballScreenX - ballVX * i * 22 * (0.6 - i * 0.1), ballScreenY, ballR * (1 - i * 0.1), 0, Math.PI * 2);
+      ctx.fill();
     }
   }
 
   // Horizon glow
-  const hg=X.createRadialGradient(W/2,VY,0,W/2,VY,100);
-  hg.addColorStop(0,'rgba(102,126,234,0.05)');hg.addColorStop(1,'transparent');
-  X.fillStyle=hg;X.fillRect(0,VY-30,W,60);
+  const hg = ctx.createRadialGradient(W / 2, VANISH_Y, 0, W / 2, VANISH_Y, 120);
+  hg.addColorStop(0, 'rgba(100,120,255,0.06)');
+  hg.addColorStop(1, 'transparent');
+  ctx.fillStyle = hg;
+  ctx.fillRect(0, VANISH_Y - 40, W, 80);
 }
 
-function die(){
-  state='dead';shake=16;
-  if(score>best){best=score;localStorage.setItem('slope-best',best);bsE.textContent=best;}
-  mask.classList.remove('hide');
-  mask.innerHTML=`<div class="go">GAME OVER</div><div class="go-score">Score: ${score}</div><button id="btn2">RETRY</button>`;
-  document.getElementById('btn2').onclick=()=>{reset();state='playing';mask.classList.add('hide');};
+// ============================================================
+//  Input handling
+// ============================================================
+function onKeyDown(e) {
+  if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
+    keys.left = true;
+    e.preventDefault();
+    if (state === 'idle') startGame();
+  }
+  if (['ArrowRight', 'd', 'D'].includes(e.key)) {
+    keys.right = true;
+    e.preventDefault();
+    if (state === 'idle') startGame();
+  }
+  if ([' ', 'Enter'].includes(e.key)) {
+    e.preventDefault();
+    if (state !== 'playing' && state !== 'dead') startGame();
+  }
+}
+function onKeyUp(e) {
+  if (['ArrowLeft', 'a', 'A'].includes(e.key)) keys.left = false;
+  if (['ArrowRight', 'd', 'D'].includes(e.key)) keys.right = false;
 }
 
-// === Input ===
-const K={left:false,right:false};
-document.addEventListener('keydown',e=>{
-  if(['ArrowLeft','a','A'].includes(e.key)){K.left=true;e.preventDefault();if(state==='idle'){reset();state='playing';mask.classList.add('hide');}}
-  if(['ArrowRight','d','D'].includes(e.key)){K.right=true;e.preventDefault();if(state==='idle'){reset();state='playing';mask.classList.add('hide');}}
-  if([' ','Enter'].includes(e.key)){e.preventDefault();if(state!=='playing'){reset();state='playing';mask.classList.add('hide');}}
-});
-document.addEventListener('keyup',e=>{
-  if(['ArrowLeft','a','A'].includes(e.key))K.left=false;
-  if(['ArrowRight','d','D'].includes(e.key))K.right=false;
-});
-btn.onclick=()=>{reset();state='playing';mask.classList.add('hide');};
+function onTouchStart(e) {
+  e.preventDefault();
+  touchStartX = e.touches[0].clientX;
+  touchLastX = touchStartX;
+  if (state === 'idle') startGame();
+}
+function onTouchMove(e) {
+  e.preventDefault();
+  if (!touchLastX) return;
+  const dx = e.touches[0].clientX - touchLastX;
+  ballVX += dx * 0.003;
+  touchLastX = e.touches[0].clientX;
+}
+function onTouchEnd(e) {
+  touchStartX = null;
+  touchLastX = null;
+}
 
-// Touch
-let tLast=0;
-C.addEventListener('touchstart',e=>{e.preventDefault();if(state!=='playing'){reset();state='playing';mask.classList.add('hide');}tLast=e.touches[0].clientX;},{passive:false});
-C.addEventListener('touchmove',e=>{e.preventDefault();const dx=e.touches[0].clientX-tLast;ballVX+=dx*0.002;tLast=e.touches[0].clientX;},{passive:false});
+function startGame() {
+  resetGame();
+  state = 'playing';
+  overlay.classList.add('hidden');
+}
 
-// === Loop ===
-function loop(){
-  requestAnimationFrame(loop);
+// ---- Event listeners ----
+document.addEventListener('keydown', onKeyDown);
+document.addEventListener('keyup', onKeyUp);
+canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+canvas.addEventListener('touchend', onTouchEnd);
+startBtn.onclick = startGame;
+
+// ============================================================
+//  Game loop
+// ============================================================
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
   update();
-  X.clearRect(0,0,W,H);
-  if(shake>0){shake--;X.save();X.translate((Math.random()-.5)*shake*1.5,(Math.random()-.5)*shake);}
+
+  ctx.clearRect(0, 0, W, H);
+  if (shakeTimer > 0) {
+    shakeTimer--;
+    ctx.save();
+    ctx.translate((Math.random() - 0.5) * shakeTimer * 2, (Math.random() - 0.5) * shakeTimer * 1.5);
+  }
   draw();
-  if(shake>0)X.restore();
+  if (shakeTimer > 0) ctx.restore();
 }
-reset();
-loop();
+
+// ---- Resize handler (for iframe embedding) ----
+function reportHeight() {
+  const h = document.body.scrollHeight;
+  if (h > 100 && window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'game-resize', height: h + 20 }, '*');
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { setTimeout(reportHeight, 100); setTimeout(reportHeight, 500); });
+} else {
+  setTimeout(reportHeight, 100); setTimeout(reportHeight, 500);
+}
+window.addEventListener('resize', reportHeight);
+if (typeof MutationObserver !== 'undefined') {
+  new MutationObserver(() => { clearTimeout(reportHeight._t); reportHeight._t = setTimeout(reportHeight, 200); })
+    .observe(document.body, { childList: true, subtree: true, attributes: true });
+}
+
+// ---- Start ----
+gameLoop();
 </script>
 
 <script>
