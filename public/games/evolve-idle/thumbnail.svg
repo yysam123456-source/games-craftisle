@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect fill="#0f4c3a" width="400" height="300"/>
+  <circle cx="200" cy="130" r="40" fill="#2ecc71" opacity="0.6"/>
+  <text x="200" y="140" font-family="sans-serif" font-size="48" fill="white" text-anchor="middle">🧬</text>
+  <text x="200" y="220" font-family="sans-serif" font-size="28" fill="#2ecc71" text-anchor="middle" font-weight="bold">EVOLVE</text>
+</svg>
