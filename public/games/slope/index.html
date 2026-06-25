@@ -2,341 +2,483 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="viewport"content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Slope</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a1a;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif}
-#game{position:relative;width:800px;height:600px}
-canvas{display:block;border-radius:12px}
-#hud{position:absolute;top:12px;left:0;width:100%;display:flex;justify-content:center;gap:36px;color:#5a6a8a;font-size:13px;font-weight:700;pointer-events:none;z-index:2}
-#hud b{color:#7894ff}
-#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(3,3,15,.93);border-radius:12px;z-index:3;transition:opacity .35s}
-#overlay.hidden{opacity:0;pointer-events:none}
-#overlay h1{color:#7894ff;font-size:50px;font-weight:900;letter-spacing:7px;margin-bottom:4px;text-shadow:0 0 50px rgba(100,120,255,.55)}
-#overlay .sub{color:#5a6a8a;font-size:14px;margin-bottom:22px}
-#overlay .ctrl{color:#3a4a66;font-size:11.5px;margin-bottom:18px;line-height:2;text-align:center}
-#overlay button{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:13px 46px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .14s,box-shadow .14s}
-#overlay button:hover{transform:scale(1.05);box-shadow:0 0 28px rgba(102,126,234,.48)}
-#overlay .go{color:#ff4444;font-size:36px;font-weight:900;margin-bottom:2px}
-#overlay .fscore{color:#bbccff;font-size:16px;margin-bottom:16px}
+body{background:#000;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;font-family:system-ui,-apple-system,sans-serif}
+#c{display:block;border-radius:8px;background:#111}
 </style>
 </head>
 <body>
-<div id="game">
-<canvas id="c" width="800" height="600"></canvas>
-<div id="hud"><span>Score:<b id="sc">0</b></span><span>Best:<b id="bs">0</b></span><span>Speed:<b id="sp">1.0x</b></span></div>
-<div id="overlay">
-<h1>SLOPE</h1><div class="sub">Race down the endless slope</div>
-<div class="ctrl">&larr; &rarr; or A/D to steer &nbsp;|&nbsp; Avoid red blocks</div>
-<button id="btn">START</button>
-</div>
-</div>
-
+<canvas id="c"width="800"height="600"></canvas>
 <script>
 "use strict";
-// ================================================================
-//  Slope — Pseudo-3D endless runner
-//  Classic OutRun-style projection
-// ================================================================
-
-const C=document.getElementById('c'),X=C.getContext('2d');
+const C=document.getElementById('c'),ctx=C.getContext('2d');
 const W=800,H=600;
 
-// ---- Camera & perspective (tuned for good visual proportions) ----
-const CAM_H=1200;          // camera height above ground (world units)
-const HORIZON_Y=160;       // horizon line Y position on screen
-const ROAD_W=1800;         // road half-width at base (world units)
+/* ============================================================
+   Slope — Pseudo-3D endless runner
+   ============================================================ */
 
-function proj(wx,wz){
-  // wx: lateral offset from center (world units), wz: distance ahead (>0)
-  if(wz<=0)return null;
-  const s=CAM_H/(CAM_H+wz);
+// ---- Projection constants ----
+const FOCAL_LEN=280;       // focal length (controls FOV)
+const CAMERA_H=800;        // camera height above ground
+const ROAD_WIDTH=2000;     // road half-width at camera Z=0
+
+/**
+ * project(wx, wz) -> {x, y, scale} | null
+ * wx: world X (lateral, relative to track center)
+ * wz: distance ahead of camera (always >= 0)
+ */
+function project(wx,wz){
+  if(wz<=1)return null;
+  const scale=FOCAL_LEN/(FOCAL_LEN+wz);
   return{
-    sx:W/2+wx*s*ROAD_W/CAM_H,
-    sy:HORIZON_Y+(H-HORIZON_Y)*s,
-    s:s
+    x:W/2+wx*scale*(W/ROAD_WIDTH),
+    y:H*.42+(H*.58)*(1-scale),
+    scale:scale
   };
 }
 
 // ---- Game state ----
-let st='idle';             // idle|playing|dead
-let score=0,best=+localStorage.getItem('slope-best')||0;
-let spd=0;
-let bx=0,bvx=0;            // ball lane (-1..1), velocity
-let posZ=0;                // player Z position (world units)
+let state='idle';          // idle|play|gameover
+let score=0,best=+localStorage.getItem('slopeBest')||0;
+let speed=300;             // forward speed (world units/frame)
+let playerX=0,playerVX=0;  // lateral position & velocity (-1..1)
+let worldZ=0;              // how far we've traveled
 let shake=0;
 
-// ---- Track data ----
-// Each segment stores curve value (-1..1)
-const SEGLEN=200;           // world units per segment segment
-const segs=[];              // {curve, x} array
-const obs=[];               // obstacles: {z, lane(-1..1), w}
-
-// ---- UI refs ----
-const scEl=document.getElementById('sc');
-const bsEl=document.getElementById('bs');
-const spEl=document.getElementById('sp');
-const ov=document.getElementById('overlay');
-bsEl.textContent=best;
+// ---- Track segments ----
+const SEG_L=200;           // segment length in world units
+const track=[];            // [{curve, x}] curve=-1..1, x=cumulative offset
+// ---- Obstacles ----
+const obstacles=[];        // [{z, lane, width}]
 
 // ---- Input ----
-const K={L:false,R:false};
+const keys={left:false,right:false};
 
-// ================================================================
-//  Track generation
-// ================================================================
-function genSegs(need){
-  while(segs.length<need){
-    const prev=segs[segs.length-1]||{curve:0,x:0};
-    let c=prev.curve+(Math.random()-.5)*.06;
-    c=Math.max(-.6,Math.min(.6,c));
-    if(Math.random()<.03)c+=(Math.random()-.5)*.45;
-    c=Math.max(-.6,Math.min(.6,c));
-    segs.push({curve:c,x:prev.x+c*SEGLEN});
+/* ============================================================
+   Track generation
+   ============================================================ */
+function ensureSegments(count){
+  while(track.length<count){
+    const prev=track[track.length-1]||{curve:0,x:0};
+    // Smooth random walk for curve
+    let c=prev.curve+(Math.random()-.5)*.055;
+    c=Math.max(-.7,Math.min(.7,c));
+    // Occasional sharp turn
+    if(Math.random()<.025)c+=(Math.random()-.5)*.5;
+    c=Math.max(-.7,Math.min(.7,c));
+    track.push({curve:c,x:prev.x+c*SEG_L});
   }
 }
-function trkX(z){
-  const i=Math.floor(z/SEGLEN),f=(z/SEGLEN)-i;
-  const s0=segs[Math.max(0,Math.min(i,segs.length-1))]||{};
-  const s1=segs[Math.max(0,Math.min(i+1,segs.length-1))]||s0;
-  return(s0.x||0)+((s1.x||0)-(s0.x||0))*f;
+
+/** Get track centerline X at given world-Z */
+function trackCenterX(z){
+  const idx=Math.floor(z/SEG_L);
+  const frac=z/SEG_L-idx;
+  const s0=track[idx>=0&&idx<track.length?idx:0]||{x:0};
+  const s1=track[idx+1>=0&&idx+1<track.length?idx+1:0]||s0;
+  return s0.x+(s1.x-s0.x)*frac;
 }
 
-// ================================================================
-//  Obstacles
-// ================================================================
-function spawnObs(){
-  if(obs.length>12)return;
-  const lz=obs.length?Math.max(...obs.map(o=>o.z)):posZ+5000;
-  if(lz<posZ+3500)return;
-  obs.push({
-    z:posZ+3500+Math.random()*1500,
-    lane:(Math.random()-.5)*1.65,
-    w:.22+Math.random()*.32
+/* ============================================================
+   Obstacles
+   ============================================================ */
+function maybeSpawnObstacle(){
+  if(obstacles.length>15)return;
+  const lastZ=obstacles.length?Math.max(...obstacles.map(o=>o.z)):worldZ+5000;
+  if(lastZ<worldZ+3200)return;
+  obstacles.push({
+    z:lastZ+Math.random()*2000,
+    lane:(Math.random()-.5)*1.6,
+    w:.18+Math.random()*.35
   });
 }
-function updObs(){
-  for(let i=obs.length-1;i>=0;i--){
-    if(obs[i].z<posZ-200){score+=10;scEl.textContent=score;obs.splice(i,1);}
+
+function updateObstacles(){
+  for(let i=obstacles.length-1;i>=0;i--){
+    if(obstacles[i].z<worldZ-150){score+=10;obstacles.splice(i,1);}
   }
-  if(Math.random()<.015+.001*spd)spawnObs();
+  if(Math.random()<.02)speed>350?maybeSpawnObstacle():void 0;
+  else if(Math.random()<.008)maybeSpawnObstacle();
 }
 
-// ================================================================
-//  Collision
-// ================================================================
-function hit(){
-  for(const o of obs){
-    const dz=o.z-posZ;
-    if(dz>900||dz<0)continue;
-    const ox=trkX(o.z)+o.lane*ROAD_W*.42;
-    const px=trkX(posZ)+bx*ROAD_W*.42;
-    if(Math.abs(px-ox)<(o.w+.18)*ROAD_W*.38&&dz<700)return true;
+/* ============================================================
+   Collision detection
+   ============================================================ */
+function checkCollision(){
+  const pw=160;  // ball collision radius (world units)
+  for(const o of obstacles){
+    const dz=o.z-worldZ;
+    if(dz>850||dz<=0)continue;
+    const ox=trackCenterX(o.z)+o.lane*ROAD_WIDTH*.38;
+    const px=trackCenterX(worldZ)+playerX*ROAD_WIDTH*.35;
+    const dist=Math.abs(px-ox);
+    if(dist<(o.w+.16)*ROAD_WIDTH*.36&&dz<650)return true;
   }
   return false;
 }
 
-// ================================================================
-//  Reset / Update
-// ================================================================
-function reset(){
-  segs.length=0;obs.length=0;
-  posZ=0;bx=0;bvx=0;spd=280;score=0;
-  scEl.textContent='0';
-  genSegs(30);
+/* ============================================================
+   Reset / Game logic
+   ============================================================ */
+function resetGame(){
+  track.length=0;obstacles.length=0;
+  worldZ=0;playerX=0;playerVX=0;
+  speed=300;score=0;shake=0;
+  ensureSegments(30);
 }
 
 function update(){
-  if(st!=='playing')return;
-  spd+=.35;if(spd>1100)spd=1100;
-  posZ+=spd*.042;
-  genSegs(Math.floor(posZ/SEGLEN)+25);
+  if(state!=='play')return;
+
+  // Accelerate
+  speed+=.4;if(speed>1050)speed=1050;
+  worldZ+=speed*.04;
+  ensureSegments(Math.floor(worldZ/SEG_L)+28);
 
   // Steering
-  const ACC=2.2;
-  if(K.L)bvx-=ACC;if(R)bvx+=ACC;
-  bvx*=.88;bx+=bvx;
-  if(bx<-1.08){bx=-1.08;bvx*=.04;}
-  if(bx>1.08){bx=1.08;bvx=-Math.abs(bvx)*.04;}
+  const STEER=2.4;
+  if(keys.left)playerVX-=STEER;
+  if(keys.right)playerVX+=STEER;
+  playerVX*=.87;
+  playerX+=playerVX;
+  // Clamp
+  if(playerX<-1.12){playerX=-1.12;playerVX*=.03;}
+  if(playerX>1.12){playerX=1.12;playerVX*=-Math.abs(playerVX)*.03;}
 
   // Curve push
-  const ci=Math.floor(posZ/SEGLEN);
-  if(segs[ci])bvx+=segs[ci].curve*.004;
+  const ci=Math.floor(worldZ/SEG_L);
+  if(track[ci])playerVX+=track[ci].curve*.0045;
 
-  updObs();
-  if(hit()){die();return;}
-  spEl.textContent=(spd/280).toFixed(1)+'x';
+  updateObstacles();
+  if(checkCollision()){gameOver();return;}
 }
 
-function die(){
-  st='dead';shake=22;
-  if(score>best){best=score;localStorage.setItem('slope-best',best);bsEl.textContent=best;}
-  ov.classList.remove('hidden');
-  ov.innerHTML=`<div class="go">GAME OVER</div><div class="fscore">Score: ${score}</div><button id="btn2">RETRY</button>`;
-  document.getElementById('btn2').onclick=()=>{reset();st='playing';ov.classList.add('hidden');};
+function gameOver(){
+  state='gameover';shake=25;
+  if(score>best){best=score;localStorage.setItem('slopeBest',best);}
 }
 
-// ================================================================
-//  Render
-// ================================================================
+/* ============================================================
+   RENDERING
+   ============================================================ */
 function draw(){
-  // Sky
-  const sg=X.createLinearGradient(0,0,0,HORIZON_Y+30);
-  sg.addColorStop(0,'#04040e');sg.addColorStop(1,'#0c0c28');
-  X.fillStyle=sg;X.fillRect(0,0,W,HORIZON_Y+30);
+  // === 1. SKY gradient ===
+  const skyGrad=ctx.createLinearGradient(0,0,0,H*.44);
+  skyGrad.addColorStop(0,'#08081a');
+  skyGrad.addColorStop(.6,'#101030');
+  skyGrad.addColorStop(1,'#181848');
+  ctx.fillStyle=skyGrad;
+  ctx.fillRect(0,0,W,H*.46);
 
-  // Ground fill
-  X.fillStyle='#07071a';
-  X.fillRect(0,HORIZON_Y+30,W,H-HORIZON-Y-30);
+  // === 2. GROUND fill ===
+  ctx.fillStyle='#1a1a2e';
+  ctx.fillRect(0,H*.44,W,H*.56);
 
-  // Horizon glow
-  const hg=X.createRadialGradient(W/2,HORIZON_Y,0,W/2,HORIZON_Y,160);
-  hg.addColorStop(0,'rgba(90,110,210,.07)');hg.addColorStop(1,'transparent');
-  X.fillStyle=hg;X.fillRect(0,HORIZON_Y-40,W,80);
-
-  // ---- Draw road segments far->near ----
-  const baseX=trkX(posZ);
-  const DRAW=12000;        // draw distance ahead
-  const STEP=300;          // step size between drawn strips
-  let pL=null,pR=null;
-
-  for(let z=posZ+DRAW;z>=posZ;z-=STEP){
-    const cx=trkX(z);
-    const dx=cx-baseX;
-    const pl=proj(dx-ROAD_W,z-posZ);
-    const pr=proj(dx+ROAD_W,z-posZ);
-    if(!pl||!pr)continue;
-    if(pl.s<.008)continue;
-
-    // Road surface
-    const a=.06+pl.s*.52;
-    X.fillStyle=`rgba(8,10,26,${a})`;
-    X.beginPath();
-    if(pL){
-      X.moveTo(pL.sx,pL.sy);X.lineTo(pR.sx,pR.sy);
-      X.lineTo(pr.sx,pr.sy);X.lineTo(pl.sx,pl.sy);
-      X.closePath();X.fill();
-    }
-
-    // Edge lines (neon blue)
-    const ea=pl.s*.38;
-    X.strokeStyle=`rgba(100,130,255,${ea})`;
-    X.lineWidth=Math.max(1,pl.s*2.8);
-    X.beginPath();if(pL){X.moveTo(pL.sx,pL.sy);}X.lineTo(pl.sx,pl.sy);X.stroke();
-    X.beginPath();if(pR){X.moveTo(pR.sx,pR.sy);}X.lineTo(pr.sx,pr.sy);X.stroke();
-
-    // Center dashed line
-    if(pl.s>.065){
-      X.strokeStyle=`rgba(100,130,255,${pl.s*.115})`;
-      X.lineWidth=.6;X.setLineDash([3,10]);
-      X.beginPath();
-      const mx=(pl.sx+pr.sx)/2,my=(pl.sy+pr.sy)/2;
-      if(pL){const pmx=(pL.sx+pR.sx)/2,pmy=(pL.sy+pR.sy)/2;X.moveTo(pmx,pmy);}
-      X.lineTo(mx,my);X.stroke();
-      X.setLineDash([]);
-    }
-
-    pL=pl;pR=pr;
+  // Stars (static dots in sky)
+  ctx.fillStyle='rgba(255,255,255,.25)';
+  for(let i=0;i<40;i++){
+    // Deterministic "random" positions based on index
+    const sx=((i*137+43)%W);
+    const sy=((i*293+17)%(H*.4));
+    const sr=.5+(i%3)*.4;
+    ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();
   }
 
-  // ---- Draw obstacles ----
-  for(const o of obs){
-    const dz=o.z-posZ;
-    if(dz>DRAW||dz<0)continue;
-    const cx=trkX(o.z);
-    const odx=cx-baseX+o.lane*ROAD_W*.42;
-    const p=proj(odx,dz);
-    if(!p||p.s<.012)continue;
+  // === 3. DRAW ROAD (far -> near) ===
+  const baseTrackX=trackCenterX(worldZ);
+  const MAX_DRAW_Z=11000;
+  const STRIP_GAP=260;  // world units between strip pairs
 
-    const ow=Math.max(8,p.s*62*(o.w/.27));
-    const oh=Math.max(5,p.s*22);
-    const oy=p.sy-oh*.35;  // sit slightly above road surface
+  let prevL=null,prevR=null;
 
-    X.save();X.translate(p.sx,oy);
-    X.shadowBlur=p.s>.1?18:5;
-    X.shadowColor='#ff2222';
-    X.fillStyle='#dd1111';
-    X.beginPath();X.roundRect(-ow/2,-oh/2,ow,oh,Math.max(2,p.s*7));X.fill();
-    X.fillStyle='rgba(255,255,255,.11)';
-    X.fillRect(-ow/2+ow*.05,-oh/2+oh*.07,ow*.9,oh*.17);
-    X.shadowBlur=0;X.restore();
+  for(let dz=MAX_DRAW_DZ=MAX_DRAW_Z;dz>=0;dz-=STRIP_GAP){
+    const cz=worldZ+dz;
+    const cx=trackCenterX(cz);
+    const relX=cx-baseTrackX;
+
+    const leftP=project(relX-ROAD_WIDTH,dz);
+    const rightP=project(relX+ROAD_WIDTH,dz);
+    if(!leftP||!rightP)continue;
+    if(leftP.scale<.004)continue;  // skip tiny far strips
+
+    // --- Road polygon ---
+    const roadAlpha=.08+leftP.scale*.65;
+    ctx.fillStyle=`rgba(20,24,50,${Math.min(1,roadAlpha)})`;
+    ctx.beginPath();
+    if(prevL){
+      ctx.moveTo(prevL.x,prevL.y);
+      ctx.lineTo(prevR.x,prevR.y);
+      ctx.lineTo(rightP.x,rightP.y);
+      ctx.lineTo(leftP.x,leftP.y);
+    }
+    ctx.closePath();ctx.fill();
+
+    // --- Left edge line (bright cyan) ---
+    const edgeAlpha=Math.min(.9,leftP.scale*.55);
+    ctx.strokeStyle=`rgba(0,220,255,${edgeAlpha})`;
+    ctx.lineWidth=Math.max(1,leftP.scale*3.5);
+    ctx.beginPath();
+    if(prevL)ctx.moveTo(prevL.x,prevL.y);
+    ctx.lineTo(leftP.x,leftP.y);
+    ctx.stroke();
+
+    // --- Right edge line ---
+    ctx.strokeStyle=`rgba(0,220,255,${edgeAlpha})`;
+    ctx.lineWidth=Math.max(1,leftP.scale*3.5);
+    ctx.beginPath();
+    if(prevR)ctx.moveTo(prevR.x,prevR.y);
+    ctx.lineTo(rightP.x,rightP.y);
+    ctx.stroke();
+
+    // --- Center dashed line ---
+    if(leftP.scale>.07){
+      const dashAlpha=leftP.scale*.18;
+      ctx.strokeStyle=`rgba(0,200,255,${dashAlpha})`;
+      ctx.lineWidth=1.2;
+      ctx.setLineDash([4,14]);
+      ctx.beginPath();
+      const midX=(leftP.x+rightP.x)/2,midY=(leftP.y+rightP.y)/2;
+      if(prevL){
+        const pmidX=(prevL.x+prevR.x)/2,pmidY=(prevL.y+prevR.y)/2;
+        ctx.moveTo(pmidX,pmidY);
+      }
+      ctx.lineTo(midX,midY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // --- Road stripes (perpendicular lines across road) ---
+    if(leftP.scale>.03&&dz%STRIP_GAP===0){
+      const stripeAlpha=leftP.scale*.22;
+      ctx.strokeStyle=`rgba(60,80,150,${stripeAlpha})`;
+      ctx.lineWidth=Math.max(.5,leftP.scale*1.5);
+      ctx.beginPath();
+      ctx.moveTo(leftP.x,leftP.y);
+      ctx.lineTo(rightP.x,rightP.y);
+      ctx.stroke();
+    }
+
+    prevL=leftP;prevR=rightP;
   }
 
-  // ---- Ball (fixed at bottom-center area) ----
-  const ballSX=W/2+bx*72;
-  const ballSY=H-58;
-  const br=13;
+  // === 4. OBSTACLES (red blocks) ===
+  for(const o of obstacles){
+    const dz=o.z-worldZ;
+    if(dz>MAX_DRAW_Z||dz<=0)continue;
+    const cx=trackCenterX(o.z);
+    const ox=baseTrackX?cx-baseTrackX+o.lane*ROAD_WIDTH*.42:o.lane*ROAD_WIDTH*.42;
+    const op=project(ox,dz);
+    if(!op||op.scale<.01)continue;
 
-  // Shadow on "ground"
-  X.fillStyle='rgba(0,0,0,.42)';
-  X.beginPath();X.ellipse(ballSX+2,ballSY+br+7,br*1.35,br*.21,0,0,Math.PI*2);X.fill();
+    const ow=Math.max(10,op.scale*70*(o.w/.27));
+    const oh=Math.max(6,op.scale*28);
+    const oy=op.y-oh*.5;
 
-  // Ball glow
-  if(st==='playing'){X.shadowBlur=15;X.shadowColor='#6890ff';}
-  X.save();X.translate(ballSX,ballSY);X.rotate(bvx*-.18);
-  const bg=X.createRadialGradient(-3,-3,0,0,0,br);
-  bg.addColorStop(0,'#fff');bg.addColorStop(0.3,'#89a0ff');
-  bg.addColorStop(0.73,'#5670dd');bg.addColorStop(1,'#3450aa');
-  X.fillStyle=bg;
-  X.beginPath();X.arc(0,0,br,0,Math.PI*2);X.fill();
-  X.shadowBlur=0;
-  // Shine
-  X.fillStyle='rgba(255,255,255,.34)';
-  X.beginPath();X.ellipse(-br*.2,-br*.2,br*.2,br*.12,-.3,0,Math.PI*2);X.fill();
-  X.restore();
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,.35)';
+    ctx.fillRect(op.x-ow*.45,oy+oh*.9,ow*.9,oh*.18);
 
-  // Trail
-  if(st==='playing'&&Math.abs(bvx)>.01){
-    for(let i=1;i<=3;i++){
-      X.fillStyle=`rgba(100,130,255,${.055/i})`;
-      X.beginPath();X.arc(ballSX-bvx*i*24*(.58-i*.09),ballSY,br*(1-i*.09),0,Math.PI*2);X.fill();
+    // Block body
+    ctx.save();ctx.translate(op.x,oy);
+
+    // Glow
+    if(op.scale>.08){
+      ctx.shadowColor='#ff2222';
+      ctx.shadowBlur=op.scale>0.15?22:8;
     }
+    ctx.fillStyle='#dd2222';
+    ctx.beginPath();
+    ctx.roundRect(-ow/2,-oh/2,ow,oh,Math.max(2,op.scale*5));
+    ctx.fill();
+
+    // Highlight stripe
+    ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(255,255,255,.13)';
+    ctx.fillRect(-ow*.4,-oh*.35,ow*.8,oh*.2);
+    ctx.restore();
+  }
+
+  // === 5. BALL (fixed near bottom-center) ===
+  const bx=W/2+playerX*76;
+  const by=H-62;
+  const br=14;
+
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,.4)';
+  ctx.beginPath();
+  ctx.ellipse(bx+3,by+br+8,br*1.4,br*.2,0,0,Math.PI*2);
+  ctx.fill();
+
+  // Ball body with gradient
+  ctx.save();ctx.translate(bx,by);ctx.rotate(playerVX*-.15);
+  const ballGrad=ctx.createRadialGradient(-3,-3,0,0,0,br);
+  ballGrad.addColorStop(0,'#ffffff');
+  ballGrad.addColorStop(.25,'#99bbff');
+  ballGrad.addColorStop('.6','#5577dd');
+  ballGrad.addColorStop(1,'#3344aa');
+
+  if(state==='play'){
+    ctx.shadowColor='#6699ff';
+    ctx.shadowBlur=16;
+  }
+  ctx.fillStyle=ballGrad;
+  ctx.beginPath();ctx.arc(0,0,br,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+
+  // Shine spot
+  ctx.fillStyle='rgba(255,255,255,.35)';
+  ctx.beginPath();
+  ctx.ellipse(-br*.22,-br*.22,br*.22,br*.11,-.3,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+
+  // Motion trail
+  if(state==='play'&&Math.abs(playerVX)>.015){
+    for(let t=1;t<=4;t++){
+      const ta=.06/t;
+      ctx.fillStyle=`rgba(100,150,255,${ta})`;
+      ctx.beginPath();
+      ctx.arc(bx-playerVX*t*22*(.6-t*.08),by,br*(1-t*.07),0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // === 6. UI OVERLAY (when idle/gameover) ===
+  if(state==='idle'||state==='gameover'){
+    ctx.fillStyle='rgba(5,5,15,.88)';
+    ctx.fillRect(0,0,W,H);
+
+    if(state==='idle'){
+      // Title
+      ctx.textAlign='center';
+      ctx.font='900 64px system-ui';
+      ctx.fillStyle='#6688ff';
+      ctx.shadowColor='#4466dd';
+      ctx.shadowBlur=40;
+      ctx.fillText('SLOPE',W/2,H*.38);
+      ctx.shadowBlur=0;
+
+      ctx.font='400 16px system-ui';
+      ctx.fillStyle='#6677aa';
+      ctx.fillText('Roll down the endless slope',W/2,H*.38+32);
+
+      ctx.font='400 13px system-ui';
+      ctx.fillStyle='#445577';
+      ctx.fillText('\u2190 \u2192 or A/D to steer  \u2022  Avoid red blocks',W/2,H*.38+60);
+
+      ctx.font='700 15px system-ui';
+      ctx.fillStyle='#fff';
+      ctx.fillText('[ PRESS SPACE OR TAP TO START ]',W/2,H*.52);
+    }else{
+      // Game over
+      ctx.textAlign='center';
+      ctx.font='900 48px system-ui';
+      ctx.fillStyle='#ff4444';
+      ctx.fillText('GAME OVER',W/2,H*.38);
+
+      ctx.font='700 22px system-ui';
+      ctx.fillStyle='#aaccee';
+      ctx.fillText(`Score: ${score}`,W/2,H*.38+40);
+
+      if(score>=best){
+        ctx.font='700 16px system-ui';
+        ctx.fillStyle='#ffcc33';
+        ctx.fillText('\u2605 NEW BEST!',W/2,H*.38+68);
+      }else{
+        ctx.font='400 14px system-ui';
+        ctx.fillStyle='#7788aa';
+        ctx.fillText(`Best: ${best}`,W/2,H*.38+68);
+      }
+
+      ctx.font='700 15px system-ui';
+      ctx.fillStyle='#fff';
+      ctx.fillText('[ SPACE OR TAP TO RETRY ]',W/2,H*.54);
+    }
+  }else{
+    // === In-game HUD ===
+    ctx.textAlign='left';
+    ctx.font='700 14px monospace';
+    ctx.fillStyle='#5577cc';
+    ctx.fillText(`SCORE ${score}`,16,28);
+    ctx.textAlign='right';
+    ctx.fillText(`BEST ${best}`,W-16,28);
+    ctx.textAlign='center';
+    ctx.fillText(`${(speed/300).toFixed(1)}x`,W/2,28);
   }
 }
 
-// ================================================================
-//  Input
-// ================================================================
+/* ============================================================
+   INPUT HANDLING
+   ============================================================ */
 document.addEventListener('keydown',e=>{
-  if(['ArrowLeft','a','A'].includes(e.key)){K.L=true;e.preventDefault();if(st==='idle'){reset();st='playing';ov.classList.add('hidden');}}
-  if(['ArrowRight','d','D'].includes(e.key)){K.R=true;e.preventDefault();if(st==='idle'){reset();st='playing';ov.classList.add('hidden');}}
-  if([' ','Enter'].includes(e.key)){e.preventDefault();if(st!=='playing'&&st!=='dead'){reset();st='playing';ov.classList.add('hidden');}}
+  if(['ArrowLeft','a','A'].includes(e.key)){keys.left=true;e.preventDefault();if(state!=='play'){resetGame();state='play';}}
+  if(['ArrowRight','d','D'].includes(e.key)){keys.right=true;e.preventDefault();if(state!=='play'){resetGame();state='play';}}
+  if([' ','Enter'].includes(e.key)&&state!=='play'){e.preventDefault();resetGame();state='play';}
 });
 document.addEventListener('keyup',e=>{
-  if(['ArrowLeft','a','A'].includes(e.key))K.L=false;
-  if(['ArrowRight','d','D'].includes(e.key))K.R=false;
+  if(['ArrowLeft','a','A'].includes(e.key))keys.left=false;
+  if(['ArrowRight','d','D'].includes(e.key))keys.right=false;
 });
-document.getElementById('btn').onclick=()=>{reset();st='playing';ov.classList.add('hidden');};
-// Touch: single tap to start, drag to steer
-let _tx=null;
+
+// Touch support
+let touchStartX=null;
 C.addEventListener('touchstart',e=>{
   e.preventDefault();
-  _tx=e.touches[0].clientX;
-  if(st==='idle'||st==='dead'){reset();st='playing';ov.classList.add('hidden');}
+  touchStartX=e.touches[0].clientX;
+  if(state!=='play'){resetGame();state='play';}
 },{passive:false});
 C.addEventListener('touchmove',e=>{
   e.preventDefault();
-  if(_tx===null)return;
-  const d=e.touches[0].clientX-_tx;
-  bvx+=d*.0028;
-  _tx=e.touches[0].clientX;
+  if(touchStartX===null)return;
+  const dx=e.touches[0].clientX-touchStartX;
+  playerVX+=dx*.0032;
+  touchStartX=e.touches[0].clientX;
 },{passive:false});
 
-// ================================================================
-//  Loop
-// ================================================================
-(function loop(){
+/* ============================================================
+   GAME LOOP
+   ============================================================ */
+function loop(){
   requestAnimationFrame(loop);
   update();
-  X.clearRect(0,0,W,H);
-  if(shake>0){shake--;X.save();X.translate((Math.random()-.5)*shake*2,(Math.random()-.5)*shake*1.4);}
-  draw();
-  if(shake>0)X.restore();
-})();
 
-// ---- Iframe resize bridge ----
-(function(){function h(){var d=Math.max(document.body?.scrollHeight||0,document.documentElement?.scrollHeight||0,document.body?.offsetHeight||0,document.documentElement?.offsetHeight||0,document.body?.clientHeight||0);if(d>100&&window.parent&&window.parent!==window)window.parent.postMessage({type:'game-resize',height:d+20},'*');}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(h,100);setTimeout(h,500)});else{setTimeout(h,100);setTimeout(h,500);}window.addEventListener('resize',h);if(typeof MutationObserver!=='undefined'){var o=new MutationObserver(function(){clearTimeout(o._timer);o._timer=setTimeout(h,200)});o.observe(document.body||document.documentElement,{childList:true,subtree:true,attributes:true})}})();
+  ctx.setTransform(1,0,0,1,0,0); // Reset transform
+  ctx.clearRect(0,0,W,H);
+
+  // Screen shake
+  if(shake>0){
+    shake--;
+    ctx.save();
+    ctx.translate((Math.random()-.5)*shake*2.2,(Math.random()-.5)*shake*1.5);
+  }
+
+  draw();
+  if(shake>0)ctx.restore();
+}
+
+loop();
+
+/* Iframe resize bridge */
+(function(){
+  function postHeight(){
+    var h=Math.max(
+      document.body?.scrollHeight||0,
+      document.documentElement?.scrollHeight||0,
+      document.body?.offsetHeight||0,
+      H
+    );
+    if(h>50&&window.parent&&window.parent!==window)
+      window.parent.postMessage({type:'game-resize',height:h+20},'*');
+  }
+  if(document.readyState==='loading')
+    document.addEventListener('DOMContentLoaded',()=>{setTimeout(postHeight,100);setTimeout(postHeight,500);});
+  else{setTimeout(postHeight,100);setTimeout(postHeight,500);}
+  window.addEventListener('resize',postHeight);
+})();
 </script>
 </body>
 </html>
