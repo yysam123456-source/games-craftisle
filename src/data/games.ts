@@ -488,31 +488,6 @@ export const games: Game[] = [
     updatedAt: new Date("2026-06-24"),
   },
 
-  // ===== Life Restart - Life Simulation =====
-  {
-    id: "lifeRestart",
-    slug: "lifeRestart",
-    title: "Life Restart",
-    description: "人生重开模拟器！Relive your life from birth, make choices, and see where life takes you.",
-    category: "casual",
-    tags: ["life", "simulation", "life-restart", "choices", "story", "中文"],
-    source: "self-hosted",
-    sourceUrl: "/games/lifeRestart/index.html",
-    thumbnail: "/games/lifeRestart/thumbnail.svg",
-    instructions: "Click to start. Make choices at each life stage. See how your life turns out!",
-    controls: { keyboard: false, mouse: true, touch: true, gamepad: false },
-    isOriginal: false,
-    isActive: true,
-    playCount: 9600,
-    rating: 4.9,
-    difficulty: "Easy",
-    estimatedTime: "5-30 minutes per life",
-    featured: true,
-    hasNativeUI: true,
-    createdAt: new Date("2026-06-24"),
-    updatedAt: new Date("2026-06-24"),
-  },
-
   // ===== Evolve - Idle/Civilization Evolution =====
   {
     id: "evolve-idle",

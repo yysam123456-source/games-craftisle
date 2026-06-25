@@ -86,15 +86,15 @@
       this._debug = this.options.debug;
       this._log = this.options.log;
 
-      // Check for HTML5 support
-      if(!Engine.browserValid()) {
-        window.location = 'browserWarning.html';
-      }
+      // Check for HTML5 support - DISABLED for iframe embedding
+      // if(!Engine.browserValid()) {
+      //   window.location = 'browserWarning.html';
+      // }
 
-      // Check for mobile
-      if(Engine.isMobile()) {
-        window.location = 'mobileWarning.html';
-      }
+      // Check for mobile - DISABLED for iframe embedding
+      // if(Engine.isMobile()) {
+      //   window.location = 'mobileWarning.html';
+      // }
 
       Engine.disableSelection();
 

@@ -85,68 +85,21 @@
 	
 	<script src="script/localization.js"></script>
 
-	<!-- ===== Games-Craftisle iframe fixes ===== -->
+	<!-- ===== Minimal iframe fixes (DO NOT override game layout) ===== -->
 	<style>
-		/* Make game fill the iframe/container */
-		html, body {
-			height: 100%;
-			width: 100%;
-			overflow: hidden;
-			margin: 0;
-			padding: 0;
-			background: #000;
-		}
-		body {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		/* Scale wrapper to fit viewport while preserving aspect ratio */
-		#wrapper {
-			transform-origin: top left;
-			padding: 0 !important;
-			margin: 0 !important;
-			width: 920px !important;
-		}
-		#content {
-			height: auto !important;
-			min-height: 700px;
-			overflow: visible !important;
-		}
-		/* Ensure menu stays visible */
-		.menu {
-			position: fixed;
-			bottom: 8px;
-			right: 8px;
-			z-index: 999;
-		}
-		.logo {
-			display: none;
-		}
+	/* Hide only the doublespeak logo (external link, not a game function) */
+	.logo { display: none !important; }
+	/* DO NOT hide .menu - it contains restart/save/lights off/sound/language controls */
 	</style>
 	<script>
-		// Auto-scale #wrapper to fit the container
-		function scaleGame() {
-			var w = window.innerWidth;
-			var h = window.innerHeight;
-			var wrapper = document.getElementById('wrapper');
-			if (!wrapper) return;
-			// Game native size: ~920x720 (700+220 padding x 700+20 padding)
-			var GW = 920, GH = 740;
-			var sx = w / GW;
-			var sy = h / GH;
-			var s = Math.min(sx, sy);
-			// Don't scale up beyond native size
-			if (s > 1.5) s = 1.5;
-			wrapper.style.transform = 'scale(' + s + ')';
-			// Center after scale
-			var scaledW = GW * s;
-			var scaledH = GH * s;
-			wrapper.style.marginLeft = ((w - scaledW) / 2) + 'px';
-			wrapper.style.marginTop = ((h - scaledH) / 2) + 'px';
-		}
-		window.addEventListener('resize', scaleGame);
-		window.addEventListener('load', scaleGame);
+		// Only fix: clear stale lightsOff from previous sessions
+		try {
+			var s = JSON.parse(localStorage.getItem('gameState') || '{}');
+			if(s && s.config && s.config.lightsOff) {
+				s.config.lightsOff = false;
+				localStorage.setItem('gameState', JSON.stringify(s));
+			}
+		} catch(e){}
 	</script>
 
 </head>
@@ -161,10 +114,5 @@
 			</div>
 		</div>
   </div>
-  <a class="logo" href="https://www.doublespeakgames.com" alt="doublespeak games" target="_blank">
-    <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 41.75 32.84375" class="logo-icon">
-      <path d="m 18.024533,28.5722 c 2.532365,-2.243 5.064679,-4.4861 7.596993,-6.7292 4.907813,0 9.815625,0 14.723438,0 0,-6.8136 0,-13.6272 0,-20.4408 -12.976656,0 -25.953312,0 -38.9299676,0 0,6.8136 0,13.6272 0,20.4408 3.2917905,0 6.5835811,0 9.8753716,0 -0.643311,2.2431 -1.286622,4.4861 -1.9299604,6.7292 2.5323644,-2.243 5.0646784,-4.4861 7.5969924,-6.7292 0.999066,0 1.998131,0 2.997197,0 -0.643345,2.2431 -1.286691,4.4861 -1.930064,6.7292 z" style="stroke-width:1.0;fill:none;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none"></path>
-    </svg>
-  </a>
 </body>
 </html>
