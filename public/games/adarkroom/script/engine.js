@@ -234,7 +234,7 @@
         Ship.init();
       }
 
-      if($SM.get('config.lightsOff', true)){
+      if($SM.get('config.lightsOff', false)){
         Engine.turnLightsOff();
       }
 

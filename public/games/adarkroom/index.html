@@ -16,12 +16,7 @@
 	<meta itemprop="name" property="og:title" content="A Dark Room" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="image_src" href="img/adr.png" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-	<script>
-		if(!window.jQuery) {
-			document.write('<script src="lib/jquery.min.js"><\/script>')
-		}
-	</script>
+	<script src="lib/jquery.min.js"></script>
 	<script src="lib/jquery.color-2.1.2.min.js"></script>
 	<script src="lib/jquery.event.move.js"></script>
 	<script src="lib/jquery.event.swipe.js"></script>
@@ -89,16 +84,71 @@
   <link rel="stylesheet" type="text/css" href="css/fabricator.css" />
 	
 	<script src="script/localization.js"></script>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-606P6J79WH"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
 
-		gtag('config', 'G-606P6J79WH');
+	<!-- ===== Games-Craftisle iframe fixes ===== -->
+	<style>
+		/* Make game fill the iframe/container */
+		html, body {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+			background: #000;
+		}
+		body {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		/* Scale wrapper to fit viewport while preserving aspect ratio */
+		#wrapper {
+			transform-origin: top left;
+			padding: 0 !important;
+			margin: 0 !important;
+			width: 920px !important;
+		}
+		#content {
+			height: auto !important;
+			min-height: 700px;
+			overflow: visible !important;
+		}
+		/* Ensure menu stays visible */
+		.menu {
+			position: fixed;
+			bottom: 8px;
+			right: 8px;
+			z-index: 999;
+		}
+		.logo {
+			display: none;
+		}
+	</style>
+	<script>
+		// Auto-scale #wrapper to fit the container
+		function scaleGame() {
+			var w = window.innerWidth;
+			var h = window.innerHeight;
+			var wrapper = document.getElementById('wrapper');
+			if (!wrapper) return;
+			// Game native size: ~920x720 (700+220 padding x 700+20 padding)
+			var GW = 920, GH = 740;
+			var sx = w / GW;
+			var sy = h / GH;
+			var s = Math.min(sx, sy);
+			// Don't scale up beyond native size
+			if (s > 1.5) s = 1.5;
+			wrapper.style.transform = 'scale(' + s + ')';
+			// Center after scale
+			var scaledW = GW * s;
+			var scaledH = GH * s;
+			wrapper.style.marginLeft = ((w - scaledW) / 2) + 'px';
+			wrapper.style.marginTop = ((h - scaledH) / 2) + 'px';
+		}
+		window.addEventListener('resize', scaleGame);
+		window.addEventListener('load', scaleGame);
 	</script>
-	
+
 </head>
 <body>
 	<div id="wrapper">
