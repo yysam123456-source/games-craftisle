@@ -512,6 +512,32 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-24"),
     updatedAt: new Date("2026-06-24"),
   },
+
+  // ===== Samsy Ninja - 3D Interactive VRM Experience =====
+  {
+    id: "samsy-ninja",
+    slug: "samsy-ninja",
+    title: "Samsy Ninja",
+    description: "A stunning 3D interactive experience with VRM character models, WebGPU rendering, particle effects, and cinematic visuals.",
+    category: "casual",
+    tags: ["3d", "ninja", "vrm", "webgpu", "three.js", "interactive", "cinematic"],
+    source: "self-hosted",
+    sourceUrl: "/games/samsy-ninja/index.html",
+    thumbnail: "/games/samsy-ninja/thumbnail.svg",
+    instructions: "Scroll to navigate the 3D scene. Click to interact with elements. Enjoy the cinematic VRM character showcase!",
+    controls: { keyboard: true, mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.9,
+    difficulty: "Easy",
+    estimatedTime: "Explore at your pace",
+    featured: true,
+    hasNativeUI: true,
+    disableSandbox: true,
+    createdAt: new Date("2026-06-30"),
+    updatedAt: new Date("2026-06-30"),
+  },
 ];
 
 // ===== Helper Functions =====

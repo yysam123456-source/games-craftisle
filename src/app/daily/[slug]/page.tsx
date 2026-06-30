@@ -1,6 +1,7 @@
 import { games } from "@/data/games";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Game } from "@/types/game";
 
 interface DailyPageProps {
   params: Promise<{
@@ -8,14 +9,16 @@ interface DailyPageProps {
   }>;
 }
 
+const DAILY_GAMES = ["messenger", "samsy-ninja"];
+
 export async function generateMetadata({ params }: DailyPageProps): Promise<Metadata> {
   const { slug } = await params;
   const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
-    title: `${game.title} Daily Challenge | Craftisle Games`,
-    description: `Play ${game.title} daily challenge! New puzzle every day. Challenge your limits and improve your skills.`,
-    keywords: [`${game.title} daily`, `${game.title} challenge`, `${game.title} today`, game.title, "daily game", "free online game"],
+    title: `Game of the Day: ${game.title} | Craftisle Games`,
+    description: `Play today's featured games including ${game.title}! New challenges every day.`,
+    keywords: [game.title, "daily game", "free online game", "game of the day", "samsy ninja", "messenger"],
     alternates: {
       canonical: `/daily/${game.slug}`,
     },
@@ -23,22 +26,28 @@ export async function generateMetadata({ params }: DailyPageProps): Promise<Meta
       type: "website",
       locale: "en_US",
       url: `https://games.craftisle.com/daily/${game.slug}`,
-      title: `${game.title} Daily Challenge | Craftisle Games`,
-      description: `Play ${game.title} daily challenge! New puzzle every day.`,
+      title: `Game of the Day: ${game.title} | Craftisle Games`,
+      description: `Play today's featured games including ${game.title}!`,
       siteName: "Craftisle Games",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${game.title} Daily Challenge | Craftisle Games`,
-      description: `Play ${game.title} daily challenge! New puzzle every day.`,
+      title: `Game of the Day: ${game.title} | Craftisle Games`,
+      description: `Play today's featured games including ${game.title}!`,
     },
   };
 }
 
 export default async function DailyPage({ params }: DailyPageProps) {
   const { slug } = await params;
-  const game = games.find(g => g.slug === slug);
-  if (!game) return notFound();
+  const primaryGame = games.find(g => g.slug === slug);
+  if (!primaryGame) return notFound();
+
+  const secondarySlug = DAILY_GAMES.find(s => s !== primaryGame.slug) || DAILY_GAMES[1];
+  const secondaryGame = games.find(g => g.slug === secondarySlug);
+  if (!secondaryGame) return notFound();
+
+  const featuredGames: Game[] = [primaryGame, secondaryGame];
 
   // Generate daily challenge seed based on date (deterministic, same result on same day)
   const today = new Date();
@@ -53,7 +62,10 @@ export default async function DailyPage({ params }: DailyPageProps) {
           <a href="/" className="font-bold text-lg">Craftisle Games</a>
           <div className="hidden md:flex gap-4 text-sm">
             <a href="/" className="hover:underline">All Games</a>
-            <a href={`/play/${game.slug}`} className="hover:underline">Play Game</a>
+            <a href={`/play/${primaryGame.slug}`} className="hover:underline">Play {primaryGame.title}</a>
+            {secondaryGame && (
+              <a href={`/play/${secondaryGame.slug}`} className="hover:underline">Play {secondaryGame.title}</a>
+            )}
           </div>
         </div>
       </nav>
@@ -62,8 +74,7 @@ export default async function DailyPage({ params }: DailyPageProps) {
         {/* Breadcrumb */}
         <div className="text-sm text-muted-foreground mb-4">
           <a href="/" className="hover:underline">Home</a> / 
-          <a href={`/play/${game.slug}`} className="hover:underline">{game.title}</a> / 
-          <span>Daily Challenge</span>
+          <a href={`/daily/${primaryGame.slug}`} className="hover:underline">Daily Challenge</a>
         </div>
 
         {/* Daily Challenge Header */}
@@ -71,26 +82,43 @@ export default async function DailyPage({ params }: DailyPageProps) {
           <div className="flex items-center gap-3 mb-4">
             <span className="text-4xl">🎯</span>
             <div>
-              <h1 className="text-3xl font-bold">{game.title} Daily Challenge</h1>
+              <h1 className="text-3xl font-bold">Game of the Day</h1>
               <p className="text-muted-foreground">Day #{dayNumber} · {today.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
             </div>
           </div>
           <p className="text-lg mb-6">
-            A brand new challenge every day! {getDailyDescription(game.category)}
+            Two featured experiences today! Explore both games and challenge yourself.
           </p>
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={`/play/${game.slug}`}
-              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
-            >
-              Start Today's Challenge →
-            </a>
-            <a
-              href={`/daily/${game.slug}`}
-              className="inline-block bg-secondary text-secondary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-80 transition"
-            >
-              Share Challenge
-            </a>
+
+          {/* Featured Games Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {featuredGames.map((game) => (
+              <a
+                key={game.slug}
+                href={`/play/${game.slug}`}
+                className="group block bg-background/70 backdrop-blur-sm rounded-lg border hover:border-primary transition overflow-hidden"
+              >
+                <div className="relative h-28 w-full overflow-hidden">
+                  <img
+                    src={game.thumbnail}
+                    alt={game.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute top-2 left-2">
+                    <span className="px-1.5 py-0.5 bg-black/60 text-white text-[10px] rounded font-medium capitalize">
+                      {game.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-3">
+                  <h3 className="text-base font-bold mb-1 group-hover:text-primary transition">{game.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{game.description}</p>
+                  <span className="inline-block bg-primary text-primary-foreground px-3 py-1 rounded-md text-xs font-semibold group-hover:opacity-90 transition">
+                    Play →
+                  </span>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
 
@@ -102,28 +130,28 @@ export default async function DailyPage({ params }: DailyPageProps) {
               <span className="text-2xl">📋</span>
               <div>
                 <h3 className="font-semibold">Challenge Goal</h3>
-                <p className="text-sm text-muted-foreground mt-1">{getDailyGoal(game.category, game.title)}</p>
+                <p className="text-sm text-muted-foreground mt-1">Explore both featured games and complete their unique experiences. Enjoy the journey!</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-2xl">⏱️</span>
               <div>
                 <h3 className="font-semibold">Time Limit</h3>
-                <p className="text-sm text-muted-foreground mt-1">{getTimeLimit(game.category)}</p>
+                <p className="text-sm text-muted-foreground mt-1">No strict time limit. Play at your own pace and discover both worlds.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-2xl">🏆</span>
               <div>
                 <h3 className="font-semibold">Scoring</h3>
-                <p className="text-sm text-muted-foreground mt-1">{getScoringCriteria(game.category)}</p>
+                <p className="text-sm text-muted-foreground mt-1">Multi-dimensional scoring: exploration, interaction quality, and creative discovery.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-2xl">💡</span>
               <div>
                 <h3 className="font-semibold">Today's Hint</h3>
-                <p className="text-sm text-muted-foreground mt-1">{getDailyTip(game.category, game.title, dayNumber)}</p>
+                <p className="text-sm text-muted-foreground mt-1">{getDailyTip("casual", "Daily", dayNumber)}</p>
               </div>
             </div>
           </div>
@@ -143,7 +171,7 @@ export default async function DailyPage({ params }: DailyPageProps) {
                 return (
                   <a
                     key={i}
-                    href={isFuture ? "#" : `/daily/${game.slug}`}
+                    href={isFuture ? "#" : `/daily/${primaryGame.slug}`}
                     className={`text-center p-2 rounded-lg text-sm transition ${
                       isToday
                         ? "bg-primary text-primary-foreground font-bold"
@@ -167,11 +195,11 @@ export default async function DailyPage({ params }: DailyPageProps) {
           <div className="bg-card rounded-lg p-6 border">
             <div className="space-y-3">
               {[
-                { rank: 1, name: "🥇 PlayerOne", score: getMockScore(game.category), time: "02:34" },
-                { rank: 2, name: "🥈 GameMaster", score: getMockScore(game.category) - 50, time: "03:12" },
-                { rank: 3, name: "🥉 SpeedRunner", score: getMockScore(game.category) - 120, time: "03:45" },
-                { rank: 4, name: "ProGamer_2026", score: getMockScore(game.category) - 200, time: "04:01" },
-                { rank: 5, name: "CasualPlayer", score: getMockScore(game.category) - 350, time: "05:20" },
+                { rank: 1, name: "🥇 PlayerOne", score: 12500, time: "02:34" },
+                { rank: 2, name: "🥈 GameMaster", score: 12450, time: "03:12" },
+                { rank: 3, name: "🥉 SpeedRunner", score: 12380, time: "03:45" },
+                { rank: 4, name: "ProGamer_2026", score: 12200, time: "04:01" },
+                { rank: 5, name: "CasualPlayer", score: 12050, time: "05:20" },
               ].map((entry) => (
                 <div key={entry.rank} className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
                   <span className="w-8 h-8 flex items-center justify-center bg-background rounded-full font-bold text-sm">
@@ -210,35 +238,43 @@ export default async function DailyPage({ params }: DailyPageProps) {
 
         {/* CTA */}
         <section className="text-center py-8">
-          <a
-            href={`/play/${game.slug}`}
-            className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
-          >
-            Start Today's {game.title} Challenge →
-          </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href={`/play/${primaryGame.slug}`}
+              className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+            >
+              Play {primaryGame.title} →
+            </a>
+            <a
+              href={`/play/${secondaryGame.slug}`}
+              className="inline-block bg-secondary text-secondary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-80 transition"
+            >
+              Play {secondaryGame.title} →
+            </a>
+          </div>
         </section>
 
         {/* Related Links */}
         <section>
           <h2 className="text-2xl font-semibold mb-4">More Content</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <a href={`/play/${game.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
+            <a href={`/play/${primaryGame.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
               <span className="text-2xl">🎮</span>
-              <div className="text-sm font-medium mt-2">Play Free</div>
+              <div className="text-sm font-medium mt-2">Play {primaryGame.title}</div>
             </a>
-            <a href={`/strategy/${game.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
+            <a href={`/play/${secondaryGame.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
+              <span className="text-2xl">🥷</span>
+              <div className="text-sm font-medium mt-2">Play {secondaryGame.title}</div>
+            </a>
+            <a href={`/strategy/${primaryGame.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
               <span className="text-2xl">📖</span>
               <div className="text-sm font-medium mt-2">Strategy</div>
             </a>
-            <a href={`/solver/${game.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
-              <span className="text-2xl">🧮</span>
-              <div className="text-sm font-medium mt-2">Solver</div>
-            </a>
-            <a href={`/archive/${game.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
+            <a href={`/archive/${primaryGame.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
               <span className="text-2xl">📚</span>
               <div className="text-sm font-medium mt-2">Archive</div>
             </a>
-            <a href={`/alternatives/${game.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
+            <a href={`/alternatives/${primaryGame.slug}`} className="bg-card rounded-lg p-4 border hover:border-primary transition text-center">
               <span className="text-2xl">🔗</span>
               <div className="text-sm font-medium mt-2">Alternatives</div>
             </a>
