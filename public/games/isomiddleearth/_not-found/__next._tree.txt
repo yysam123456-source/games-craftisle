@@ -1,0 +1,3 @@
+:HL["/games/isomiddleearth/_next/static/chunks/9e236004d616964d.css","style"]
+:HL["/games/isomiddleearth/_next/static/chunks/26c890a20fa0098e.css","style"]
+0:{"buildId":"pH4FIMi9CYhBAF1gWvF6J","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"/_not-found","paramType":null,"paramKey":"/_not-found","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

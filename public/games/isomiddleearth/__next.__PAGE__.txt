@@ -1,0 +1,9 @@
+1:"$Sreact.fragment"
+2:I[60893,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/a1a5ec99fb00da7f.js"],"default"]
+3:I[28613,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/a1a5ec99fb00da7f.js"],"default"]
+4:I[75411,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/a1a5ec99fb00da7f.js"],"default"]
+5:I[19665,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/a1a5ec99fb00da7f.js"],"default"]
+6:I[36345,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/c4d90098b4abc498.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+0:{"buildId":"pH4FIMi9CYhBAF1gWvF6J","rsc":["$","$1","c",{"children":[["$","main",null,{"className":"flex h-dvh flex-col overflow-hidden","children":[["$","$L2",null,{"snapshot":null}],["$","$L3",null,{}],["$","$L4",null,{}],["$","$L5",null,{}]]}],[["$","script","script-0",{"src":"/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","async":true}],["$","script","script-1",{"src":"/games/isomiddleearth/_next/static/chunks/a1a5ec99fb00da7f.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
+8:null

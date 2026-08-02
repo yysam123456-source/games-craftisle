@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#aee0ff"/>
+      <stop offset="100%" stop-color="#e8f7ff"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7cc36b"/>
+      <stop offset="100%" stop-color="#4e9e44"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <circle cx="330" cy="55" r="28" fill="#FFE08A" opacity="0.9"/>
+  <ellipse cx="70" cy="50" rx="34" ry="14" fill="white" opacity="0.85"/>
+  <ellipse cx="100" cy="46" rx="24" ry="11" fill="white" opacity="0.85"/>
+
+  <!-- isometric ground tiles -->
+  <g>
+    <polygon points="200,150 260,185 200,220 140,185" fill="url(#grass)" stroke="#3c7a35" stroke-width="1"/>
+    <polygon points="200,185 260,220 200,255 140,220" fill="#5fb052" stroke="#3c7a35" stroke-width="1"/>
+    <polygon points="260,185 320,220 260,255 200,220" fill="#6cbb5e" stroke="#3c7a35" stroke-width="1"/>
+    <polygon points="140,185 200,220 140,255 80,220" fill="#6cbb5e" stroke="#3c7a35" stroke-width="1"/>
+    <polygon points="200,120 260,155 200,190 140,155" fill="#8ad07b" stroke="#3c7a35" stroke-width="1"/>
+  </g>
+
+  <!-- hobbit hole -->
+  <ellipse cx="200" cy="180" rx="34" ry="24" fill="#6b4a2b"/>
+  <ellipse cx="200" cy="178" rx="30" ry="21" fill="#7d5836"/>
+  <circle cx="200" cy="178" r="11" fill="#3a2716"/>
+  <ellipse cx="200" cy="205" rx="40" ry="10" fill="#5a8a4a" opacity="0.7"/>
+
+  <!-- trees -->
+  <circle cx="130" cy="200" r="13" fill="#3f8f3a"/>
+  <circle cx="270" cy="205" r="11" fill="#4ca34a"/>
+  <rect x="127" y="210" width="6" height="12" fill="#6b4a2b"/>
+  <rect x="267" y="214" width="5" height="10" fill="#6b4a2b"/>
+
+  <!-- small water pond -->
+  <polygon points="265,225 290,238 265,251 240,238" fill="#5fc8e8" opacity="0.85" stroke="#3ba6c9" stroke-width="1"/>
+
+  <text x="200" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#2f5d2a" stroke="#ffffff" stroke-width="3" paint-order="stroke">Iso Middle Earth</text>
+</svg>

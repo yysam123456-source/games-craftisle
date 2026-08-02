@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[36345,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/c4d90098b4abc498.js"],"ViewportBoundary"]
+3:I[36345,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/c4d90098b4abc498.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[20414,["/games/isomiddleearth/_next/static/chunks/33074d3ff5d0cd2d.js","/games/isomiddleearth/_next/static/chunks/c4d90098b4abc498.js"],"IconMark"]
+0:{"buildId":"pH4FIMi9CYhBAF1gWvF6J","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Iso Middle Earth — Isometric Realm Builder"}],["$","meta","1",{"name":"description","content":"Build your own isometric realm in Middle-earth"}],["$","link","2",{"rel":"icon","href":"/games/isomiddleearth/favicon.ico?favicon.a7632d16.ico","sizes":"256x256","type":"image/x-icon"}],["$","$L5","3",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"loading":null,"isPartial":false}

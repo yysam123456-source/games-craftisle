@@ -538,6 +538,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-06-30"),
     updatedAt: new Date("2026-06-30"),
   },
+
+  // ===== Iso Middle Earth - Isometric Realm Builder =====
+  {
+    id: "isomiddleearth",
+    slug: "isomiddleearth",
+    title: "Iso Middle Earth",
+    description: "An isometric Middle-earth realm builder. Pick a realm (Shire, Mordor, Rivendell, Rohan, Moria, Lothlorien...), paint terrain tiles, place hobbits, trees and structures, then export your map as a PNG image or JSON project. Pure client-side, auto-saved to your browser — no login, no server.",
+    category: "building",
+    tags: ["isometric", "builder", "middle-earth", "creative", "tolkien", "sandbox"],
+    source: "self-hosted",
+    sourceUrl: "/games/isomiddleearth/index.html",
+    thumbnail: "/games/isomiddleearth/thumbnail.svg",
+    instructions: "1) Pick a realm from the top location dropdown. 2) Select a terrain tile in the asset picker, then click or drag on the grid to paint. 3) Switch to characters/structures to place hobbits, trees and buildings. 4) Right-click a tile to clear it; use Undo (Cmd/Ctrl+Z) to step back. 5) Export your creation as PNG or JSON — progress auto-saves to localStorage.",
+    controls: { keyboard: ["Cmd/Ctrl + Z — Undo"], mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.8,
+    difficulty: "Easy",
+    estimatedTime: "Endless creativity",
+    featured: true,
+    hasNativeUI: true,
+    createdAt: new Date("2026-08-02"),
+    updatedAt: new Date("2026-08-02"),
+  },
 ];
 
 // ===== Helper Functions =====
