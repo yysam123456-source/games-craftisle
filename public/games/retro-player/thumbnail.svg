@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#161a2e"/>
+      <stop offset="1" stop-color="#0c0e18"/>
+    </linearGradient>
+    <linearGradient id="cart" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7a4d"/>
+      <stop offset="1" stop-color="#ff5a3c"/>
+    </linearGradient>
+    <linearGradient id="cart2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd23c"/>
+      <stop offset="1" stop-color="#f5a623"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#bg)"/>
+
+  <!-- pixel grid backdrop -->
+  <g opacity="0.12" fill="#4a5278">
+    <rect x="40" y="40" width="22" height="22"/><rect x="84" y="40" width="22" height="22"/>
+    <rect x="128" y="40" width="22" height="22"/><rect x="470" y="40" width="22" height="22"/>
+    <rect x="514" y="40" width="22" height="22"/><rect x="40" y="330" width="22" height="22"/>
+    <rect x="514" y="330" width="22" height="22"/><rect x="470" y="330" width="22" height="22"/>
+  </g>
+
+  <!-- cartridge -->
+  <g transform="translate(210 90)">
+    <rect x="0" y="0" width="180" height="220" rx="14" fill="url(#cart)" stroke="#1a1206" stroke-width="3"/>
+    <rect x="22" y="22" width="136" height="70" rx="8" fill="#1d2238"/>
+    <rect x="38" y="36" width="104" height="10" rx="5" fill="#ffd23c"/>
+    <rect x="38" y="54" width="70" height="8" rx="4" fill="#8b90a8"/>
+    <rect x="22" y="108" width="136" height="14" rx="6" fill="url(#cart2)"/>
+    <!-- connector pins -->
+    <g fill="#c9ccda">
+      <rect x="40" y="196" width="10" height="16" rx="3"/><rect x="64" y="196" width="10" height="16" rx="3"/>
+      <rect x="88" y="196" width="10" height="16" rx="3"/><rect x="112" y="196" width="10" height="16" rx="3"/>
+      <rect x="136" y="196" width="10" height="16" rx="3"/>
+    </g>
+  </g>
+
+  <!-- play triangle -->
+  <circle cx="430" cy="200" r="46" fill="#ffd23c"/>
+  <path d="M418 178 L452 200 L418 222 Z" fill="#1a1206"/>
+
+  <text x="300" y="360" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="30" font-weight="800" fill="#e8eaf2">Retro ROM Player</text>
+  <text x="300" y="386" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#8b90a8">Bring your own cartridge</text>
+</svg>

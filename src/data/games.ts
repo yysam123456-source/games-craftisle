@@ -563,6 +563,32 @@ export const games: Game[] = [
     createdAt: new Date("2026-08-02"),
     updatedAt: new Date("2026-08-02"),
   },
+
+  // ===== Retro ROM Player - EmulatorJS, bring-your-own-ROM =====
+  {
+    id: "retro-player",
+    slug: "retro-player",
+    title: "Retro ROM Player",
+    description: "A browser-based retro game emulator powered by the open-source EmulatorJS engine. Play your own legally-owned ROM backups for NES, SNES, Game Boy / GBC, Game Boy Advance, Sega Genesis / Game Gear / Master System, Atari 2600, PlayStation (PSX) and Nintendo 64. 100% client-side: your ROM is loaded straight from your device into the emulator and never touches a server. No games are bundled or hosted — you bring your own cartridge.",
+    category: "arcade",
+    tags: ["retro", "emulator", "nes", "snes", "gba", "genesis", "psx", "n64", "gameboy", "atari"],
+    source: "self-hosted",
+    sourceUrl: "/games/retro-player/index.html",
+    thumbnail: "/games/retro-player/thumbnail.svg",
+    instructions: "1) Open the player and pick your console from the dropdown (NES, SNES, GBA, GB/GBC, Genesis, Game Gear, Master System, Atari 2600, PSX, N64). 2) Click the drop zone (or drag & drop) to choose a ROM file from your device. 3) Press 'Load & Play' — the emulator boots instantly inside the page. 4) Use your keyboard and mouse to play; the on-screen menu (gear icon) offers save states, fullscreen and reset. 5) To switch games, click 'Load another ROM' to return to the setup screen.",
+    controls: { keyboard: ["Arrow keys / D-pad — Move", "Z / A — Action 1", "X / B — Action 2", "Enter / Start — Start", "Shift / Select — Select"], mouse: true, touch: true, gamepad: true },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.7,
+    difficulty: "Easy",
+    estimatedTime: "As long as you like",
+    featured: true,
+    hasNativeUI: true,
+    disableSandbox: true,
+    createdAt: new Date("2026-08-02"),
+    updatedAt: new Date("2026-08-02"),
+  },
 ];
 
 // ===== Helper Functions =====
