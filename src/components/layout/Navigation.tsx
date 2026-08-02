@@ -9,7 +9,7 @@ import { Menu, X, Gamepad2, Search, Heart, Home, Grid3X3 } from "lucide-react";
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/search", label: "Search", icon: Search },
-  { href: "#categories", label: "Categories", icon: Grid3X3 },
+  { href: "/categories", label: "Categories", icon: Grid3X3 },
   { href: "/favorites", label: "Favorites", icon: Heart },
 ];
 
