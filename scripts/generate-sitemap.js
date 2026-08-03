@@ -68,9 +68,17 @@ categorySlugs.forEach(slug => {
   sitemap += '  </url>\n';
 });
 
+// ROM Loader standalone page
+sitemap += '  <url>\\n';
+sitemap += `    <loc>${baseUrl}/rom-loader/</loc>\\n`;
+sitemap += `    <lastmod>${today}</lastmod>\\n`;
+sitemap += '    <changefreq>weekly</changefreq>\\n';
+sitemap += '    <priority>0.7</priority>\\n';
+sitemap += '  </url>\\n';
+
 sitemap += '</urlset>';
 
 // Write to public/sitemap.xml
 const outputPath = path.join(__dirname, '../public/sitemap.xml');
 fs.writeFileSync(outputPath, sitemap);
-console.log(`✅ Generated sitemap.xml with ${gameSlugs.length * 2 + 1 + categorySlugs.length + 1} URLs (${gameSlugs.length} games, ${categorySlugs.length} categories)`);
+console.log(`✅ Generated sitemap.xml with ${gameSlugs.length * 2 + 1 + categorySlugs.length + 1 + 1} URLs (${gameSlugs.length} games, ${categorySlugs.length} categories, 1 rom-loader)`);

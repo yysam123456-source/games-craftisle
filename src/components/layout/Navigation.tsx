@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Gamepad2, Search, Heart, Home, Grid3X3 } from "lucide-react";
+import { Menu, X, Gamepad2, Search, Heart, Home, Grid3X3, Disc } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/search", label: "Search", icon: Search },
   { href: "/categories", label: "Categories", icon: Grid3X3 },
+  { href: "/rom-loader", label: "ROM Loader", icon: Disc },
   { href: "/favorites", label: "Favorites", icon: Heart },
 ];
 
