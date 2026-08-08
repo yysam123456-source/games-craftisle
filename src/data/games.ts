@@ -590,6 +590,32 @@ export const games: Game[] = [
     updatedAt: new Date("2026-08-08"),
   },
 
+  // ===== Jungle Trail - First-person procedural jungle walk =====
+  {
+    id: "jungle-trail",
+    slug: "jungle-trail",
+    title: "Jungle Trail",
+    description: "A first-person walk through a procedurally generated jungle trail into overgrown stone ruins and a waterfall. Built in Three.js with zero external art assets — every texture, mesh, and sound is generated in code. No objectives, no score: just explore.",
+    category: "casual",
+    tags: ["jungle", "trail", "three.js", "walking sim", "first-person", "exploration", "procedural", "webgl", "open source"],
+    source: "self-hosted",
+    sourceUrl: "/games/jungle-trail/index.html",
+    thumbnail: "/games/jungle-trail/thumbnail.svg",
+    instructions: "Click START GAME, then click the scene to lock the pointer. Walk with WASD, look with the mouse, sprint with Shift, and jump with Space. Warp along the trail with keys 1–5. Press F3 for a debug overlay. Best experienced on a desktop GPU.",
+    controls: { keyboard: ["W A S D — move", "Shift — sprint", "Space — jump", "1–5 — teleport along trail", "F3 — debug overlay", "Mouse — look"], mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.7,
+    difficulty: "Relaxed",
+    estimatedTime: "5-15 minutes",
+    featured: true,
+    disableSandbox: true,
+    hasNativeUI: true,
+    createdAt: new Date("2026-08-08"),
+    updatedAt: new Date("2026-08-08"),
+  },
+
 ];
 
 // ===== Helper Functions =====

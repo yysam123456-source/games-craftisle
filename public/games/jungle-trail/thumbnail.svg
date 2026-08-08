@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Jungle Trail">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c211a"/>
+      <stop offset="0.55" stop-color="#0a1714"/>
+      <stop offset="1" stop-color="#05090a"/>
+    </linearGradient>
+    <linearGradient id="canopy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0e3326"/>
+      <stop offset="1" stop-color="#06140f"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#3a2f22"/>
+      <stop offset="1" stop-color="#16241c"/>
+    </linearGradient>
+    <radialGradient id="fall" cx="0.5" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#bfeee0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#bfeee0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- backdrop -->
+  <rect width="600" height="400" fill="url(#sky)"/>
+
+  <!-- distant waterfall glow -->
+  <ellipse cx="300" cy="120" rx="150" ry="160" fill="url(#fall)"/>
+
+  <!-- canopy arch -->
+  <path d="M0,170 C90,90 210,70 300,70 C390,70 510,90 600,170 L600,0 L0,0 Z" fill="url(#canopy)"/>
+  <g fill="#0a241a" opacity="0.9">
+    <path d="M0,150 C40,110 90,96 140,104 C110,120 70,150 40,180 Z"/>
+    <path d="M600,150 C560,110 510,96 460,104 C490,120 530,150 560,180 Z"/>
+    <path d="M250,66 C270,40 330,40 350,66 C330,58 270,58 250,66 Z"/>
+  </g>
+
+  <!-- side foliage silhouettes -->
+  <g fill="#08201a" opacity="0.95">
+    <path d="M30,250 C10,200 30,150 70,140 C60,190 80,230 110,260 Z"/>
+    <path d="M570,250 C590,200 570,150 530,140 C540,190 520,230 490,260 Z"/>
+  </g>
+
+  <!-- winding trail in perspective -->
+  <path d="M300,400 C290,330 262,300 250,270 C238,240 250,215 285,200 C300,193 300,193 315,200 C350,215 362,240 350,270 C338,300 310,330 300,400 Z" fill="url(#trail)"/>
+  <path d="M300,400 C292,330 266,300 255,272" fill="none" stroke="#5c4a36" stroke-width="3" opacity="0.5"/>
+  <path d="M300,400 C308,330 334,300 345,272" fill="none" stroke="#5c4a36" stroke-width="3" opacity="0.5"/>
+
+  <!-- stone ruins hint -->
+  <g fill="#15302a" opacity="0.85">
+    <rect x="232" y="186" width="36" height="58" rx="3"/>
+    <rect x="332" y="180" width="30" height="64" rx="3"/>
+    <rect x="270" y="172" width="22" height="40" rx="2"/>
+  </g>
+
+  <!-- floating spores / light -->
+  <g fill="#bfeee0" opacity="0.7">
+    <circle cx="180" cy="210" r="2"/>
+    <circle cx="420" cy="190" r="2.4"/>
+    <circle cx="360" cy="250" r="1.6"/>
+    <circle cx="210" cy="280" r="1.8"/>
+    <circle cx="450" cy="260" r="2"/>
+  </g>
+
+  <!-- title plate -->
+  <g transform="translate(300,350)" filter="url(#soft)">
+    <text x="0" y="0" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#e8f6e4">JUNGLE TRAIL</text>
+  </g>
+  <text x="300" y="352" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#eaf6e4">JUNGLE TRAIL</text>
+</svg>
