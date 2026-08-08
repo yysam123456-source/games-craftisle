@@ -564,6 +564,32 @@ export const games: Game[] = [
     updatedAt: new Date("2026-08-02"),
   },
 
+  // ===== Mindustry Classic - Factory Tower Defense =====
+  {
+    id: "mindustry-classic",
+    slug: "mindustry-classic",
+    title: "Mindustry Classic",
+    description: "The classic build of Mindustry — an open-source factory-building tower-defense game. Mine resources, build conveyor belts, craft ammo, and defend your core from endless waves of enemies. Pure browser version based on build 40.",
+    category: "strategy",
+    tags: ["mindustry", "classic", "tower defense", "factory", "automation", "strategy", "sandbox", "open source"],
+    source: "self-hosted",
+    sourceUrl: "/games/mindustry/game.html",
+    thumbnail: "/games/mindustry/thumbnail.svg",
+    instructions: "Build your factory to mine resources, route materials with conveyors, craft ammo, and defend your core from waves. WASD or arrow keys to pan the camera, mouse to build and aim, scroll to zoom. Start a custom game or sandbox to learn the basics.",
+    controls: { keyboard: ["WASD / arrows — pan camera", "Mouse — build / aim", "Scroll — zoom", "Esc — menu / pause"], mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "20-60 minutes",
+    featured: true,
+    disableSandbox: true,
+    hasNativeUI: true,
+    createdAt: new Date("2026-08-08"),
+    updatedAt: new Date("2026-08-08"),
+  },
+
 ];
 
 // ===== Helper Functions =====
