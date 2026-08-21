@@ -139,6 +139,30 @@ export default function HomePage() {
       {/* Schema.org JSON-LD */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaWebSite }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaItemList }} />
+      {/* Hub JSON-LD linking this sub-site to the Craftisle organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://craftisle.com/#organization",
+                name: "Craftisle",
+                url: "https://craftisle.com",
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://games.craftisle.com/#website",
+                url: "https://games.craftisle.com",
+                name: "Craftisle Games",
+                publisher: { "@id": "https://craftisle.com/#organization" },
+              },
+            ],
+          }),
+        }}
+      />
       {/* ===== Hero Section ===== */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Three.js Particle Background */}
