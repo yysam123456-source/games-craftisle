@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { getActiveGames } from "@/data/games";
 import { ALL_CATEGORY_SLUGS } from "@/lib/categories";
 
+// Required for `output: 'export'` static builds in Next 16.
+export const dynamic = "force-static";
+
 const BASE_URL = "https://games.craftisle.com";
 
 /**
