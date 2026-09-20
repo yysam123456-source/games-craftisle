@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 // Required for `output: 'export'` static builds in Next 16.
 export const dynamic = "force-static";
 
-const BASE_URL = "https://games.craftisle.com";
+const BASE_URL = "https://game.craftisle.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

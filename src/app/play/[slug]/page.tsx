@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: GamePageProps) {
   }
 
   return {
-    title: `${game.title} - Play Free Online | Craftisle Games`,
+    title: `${game.title} - Play Free Online`,
     description: game.description,
     keywords: [...game.tags, "free games", "online games", game.title, "play online", "free browser game"],
     alternates: {
@@ -31,13 +31,13 @@ export async function generateMetadata({ params }: GamePageProps) {
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: `https://games.craftisle.com/play/${game.slug}`,
+      url: `https://game.craftisle.com/play/${game.slug}`,
       title: `${game.title} - Play Free Online | Craftisle Games`,
       description: game.description,
       siteName: "Craftisle Games",
       images: [
         {
-          url: `https://games.craftisle.com${game.thumbnail}`,
+          url: `https://game.craftisle.com${game.thumbnail}`,
           width: 1200,
           height: 630,
           alt: `${game.title} - Free Online Game`,
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: GamePageProps) {
       card: "summary_large_image",
       title: `${game.title} - Play Free Online | Craftisle Games`,
       description: game.description,
-      images: [`https://games.craftisle.com${game.thumbnail}`],
+      images: [`https://game.craftisle.com${game.thumbnail}`],
     },
   };
 }
@@ -66,6 +66,10 @@ export default async function GamePage({ params }: GamePageProps) {
   try {
     const mdPath = path.join(process.cwd(), "src", "content", "games", `${slug}.md`);
     gameGuide = fs.readFileSync(mdPath, "utf-8");
+    // Drop the YAML frontmatter block. The page renders its own title and
+    // description from games.ts, so left in place the raw `---` header shows
+    // up as body text at the top of the guide.
+    gameGuide = gameGuide.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
   } catch {
     // No guide found, that's ok
   }
@@ -78,8 +82,8 @@ export default async function GamePage({ params }: GamePageProps) {
     "@type": "VideoGame",
     name: game.title,
     description: game.description,
-    url: `https://games.craftisle.com/play/${game.slug}`,
-    image: `https://games.craftisle.com${game.thumbnail}`,
+    url: `https://game.craftisle.com/play/${game.slug}`,
+    image: `https://game.craftisle.com${game.thumbnail}`,
     genre: game.category,
     gamePlatform: "Web Browser",
     operatingSystem: "Any",

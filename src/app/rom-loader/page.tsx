@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "ROM Loader — Play Your Own Retro Games in the Browser",
     description:
       "Bring your own ROMs and play 11 classic systems right in your browser. Open-source, client-side, privacy-first.",
-    url: "https://games.craftisle.com/rom-loader/",
+    url: "https://game.craftisle.com/rom-loader/",
     type: "website",
   },
 };

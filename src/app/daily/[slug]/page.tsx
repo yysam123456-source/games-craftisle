@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: DailyPageProps): Promise<Meta
   const game = games.find(g => g.slug === slug);
   if (!game) return {};
   return {
-    title: `Game of the Day: ${game.title} | Craftisle Games`,
+    title: `Game of the Day: ${game.title}`,
     description: `Play today's featured games including ${game.title}! New challenges every day.`,
     keywords: [game.title, "daily game", "free online game", "game of the day", "samsy ninja", "messenger"],
     alternates: {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: DailyPageProps): Promise<Meta
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: `https://games.craftisle.com/daily/${game.slug}`,
+      url: `https://game.craftisle.com/daily/${game.slug}`,
       title: `Game of the Day: ${game.title} | Craftisle Games`,
       description: `Play today's featured games including ${game.title}!`,
       siteName: "Craftisle Games",

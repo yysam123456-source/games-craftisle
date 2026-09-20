@@ -212,4 +212,4 @@ export function getCategoryContent(slug: string): CategoryContent | undefined {
 }
 
 // Canonical site origin used for JSON-LD absolute URLs.
-export const SITE_ORIGIN = "https://games.craftisle.com";
+export const SITE_ORIGIN = "https://game.craftisle.com";

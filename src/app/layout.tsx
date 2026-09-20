@@ -24,20 +24,20 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://games.craftisle.com"),
+  metadataBase: new URL("https://game.craftisle.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://games.craftisle.com",
+    url: "https://game.craftisle.com",
     title: "Craftisle Games - Free Online HTML5 Games",
     description: "Play the best free HTML5 games online! No download required, play directly in your browser.",
     siteName: "Craftisle Games",
     images: [
       {
-        url: "https://games.craftisle.com/og-image.svg",
+        url: "https://game.craftisle.com/og-image.svg",
         width: 1200,
         height: 630,
         alt: "Craftisle Games - Free Online HTML5 Games",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Craftisle Games - Free Online HTML5 Games",
     description: "Play the best free HTML5 games online! No download required, play directly in your browser.",
-    images: ["https://games.craftisle.com/og-image.svg"],
+    images: ["https://game.craftisle.com/og-image.svg"],
     creator: "@craftislegames",
   },
   robots: {

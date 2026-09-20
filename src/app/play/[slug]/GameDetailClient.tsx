@@ -56,7 +56,7 @@ export function GameDetailClient({
   }, [isFavorite, game.slug]);
 
   const shareGame = useCallback(() => {
-    const shareData = { title: game.title, text: game.description, url: `https://games.craftisle.com/play/${game.slug}` };
+    const shareData = { title: game.title, text: game.description, url: `https://game.craftisle.com/play/${game.slug}` };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
     } else {
@@ -275,9 +275,9 @@ export function GameDetailClient({
               <h3 className="text-lg font-bold mb-4">Share This Game</h3>
               <div className="flex flex-wrap gap-2">
                 <button onClick={shareGame} className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-white/[0.05] text-muted-foreground hover:bg-white/[0.08] border border-white/[0.04] flex items-center justify-center gap-1.5"><Share2 className="w-3.5 h-3.5" /> Share</button>
-                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${game.title}!`)}&url=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 border border-[#1DA1F2]/20 text-center" onClick={() => sounds.buttonClick()}>🐦 Twitter</a>
-                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 border border-[#1877F2]/20 text-center" onClick={() => sounds.buttonClick()}>📘 Facebook</a>
-                <a href={`https://wa.me/?text=${encodeURIComponent(`${game.title} - Free online!`)} ${encodeURIComponent(`https://games.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 border border-[#25D366]/20 text-center" onClick={() => sounds.buttonClick()}>💬 WhatsApp</a>
+                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${game.title}!`)}&url=${encodeURIComponent(`https://game.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1DA1F2]/10 text-[#1DA1F2] hover:bg-[#1DA1F2]/20 border border-[#1DA1F2]/20 text-center" onClick={() => sounds.buttonClick()}>🐦 Twitter</a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://game.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 border border-[#1877F2]/20 text-center" onClick={() => sounds.buttonClick()}>📘 Facebook</a>
+                <a href={`https://wa.me/?text=${encodeURIComponent(`${game.title} - Free online!`)} ${encodeURIComponent(`https://game.craftisle.com/play/${game.slug}`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[80px] py-2 rounded-xl text-xs font-medium bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 border border-[#25D366]/20 text-center" onClick={() => sounds.buttonClick()}>💬 WhatsApp</a>
               </div>
             </motion.section>
           </div>

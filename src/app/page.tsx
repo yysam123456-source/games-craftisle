@@ -97,11 +97,11 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Craftisle Games",
-    "url": "https://games.craftisle.com",
+    "url": "https://game.craftisle.com",
     "description": "Play 15+ free HTML5 games online! No download required, play directly in your browser.",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://games.craftisle.com/search?q={search_term_string}",
+      "target": "https://game.craftisle.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   });
@@ -119,8 +119,8 @@ export default function HomePage() {
         "@type": "VideoGame",
         "name": game.title,
         "description": game.description,
-        "url": `https://games.craftisle.com/play/${game.slug}`,
-        "image": `https://games.craftisle.com${game.thumbnail}`,
+        "url": `https://game.craftisle.com/play/${game.slug}`,
+        "image": `https://game.craftisle.com${game.thumbnail}`,
         "genre": game.category,
         "gamePlatform": "Web Browser",
         "operatingSystem": "Any",
@@ -154,8 +154,8 @@ export default function HomePage() {
               },
               {
                 "@type": "WebSite",
-                "@id": "https://games.craftisle.com/#website",
-                url: "https://games.craftisle.com",
+                "@id": "https://game.craftisle.com/#website",
+                url: "https://game.craftisle.com",
                 name: "Craftisle Games",
                 publisher: { "@id": "https://craftisle.com/#organization" },
               },

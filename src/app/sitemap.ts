@@ -5,10 +5,10 @@ import { ALL_CATEGORY_SLUGS } from "@/lib/categories";
 // Required for `output: 'export'` static builds in Next 16.
 export const dynamic = "force-static";
 
-const BASE_URL = "https://games.craftisle.com";
+const BASE_URL = "https://game.craftisle.com";
 
 /**
- * Sitemap for games.craftisle.com.
+ * Sitemap for game.craftisle.com.
  * Covers the indexable surface: home, category hub, every active game's
  * /play/<slug> detail page, and every /category/<slug> page.
  * Previously MISSING — without it Google discovers game pages far slower,
@@ -25,22 +25,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${BASE_URL}/categories`,
+      url: `${BASE_URL}/categories/`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/rom-loader/`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
   ];
 
   const gameRoutes: MetadataRoute.Sitemap = games.map((g) => ({
-    url: `${BASE_URL}/play/${g.slug}`,
+    url: `${BASE_URL}/play/${g.slug}/`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
   const categoryRoutes: MetadataRoute.Sitemap = ALL_CATEGORY_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/category/${slug}`,
+    url: `${BASE_URL}/category/${slug}/`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.7,

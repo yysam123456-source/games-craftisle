@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-sitemap.js && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy:cf": "npm run build && wrangler pages deploy out --project-name=games-craftisle",
-    "generate-sitemap": "node scripts/generate-sitemap.js"
+    "deploy:cf": "npm run build && wrangler pages deploy out --project-name=games-craftisle"
   },
   "dependencies": {
     "@types/three": "^0.184.1",
