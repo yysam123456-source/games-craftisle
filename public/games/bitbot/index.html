@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="author" content="R. E. Cardona-Rivera" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		
+	    <script src="./lib/jaws/jaws.js"></script>
+	    <script src="./lib/jaws/tile_map.js"></script>
+	    <script src="./lib/howler.js"></script>
+	    <script src="./lib/closure/goog/base.js"></script>
+	    <script src="./lib/closure/goog/debug/error.js"></script>
+	    <script src="./lib/closure/goog/string/string.js"></script>
+	    <script src="./lib/closure/goog/string/stringbuffer.js"></script>
+	    <script src="./lib/closure/goog/asserts/asserts.js"></script>
+	    <script src="./lib/closure/goog/array/array.js"></script>
+	    <script src="./lib/closure/goog/structs/queue.js"></script>
+	    <script src="./lib/jquery/jquery-2.0.3.min.js"></script>
+	    <script src="./lib/jquery.cookie.js"></script>
+   	    <link type="text/css" rel="stylesheet" href="./css/game.css" />
+	    <link rel="icon" href="favicon.ico">
+
+		<script src="main.js"></script>
+		<script src="./src/util/game_util.js"></script>
+		<script src="./src/gameobjects/HUD.js"></script>
+		<script src="./src/gameobjects/Tile.js"></script>
+		<script src="./src/gameobjects/Robot.js"></script>
+		<script src="./src/gameobjects/Battery.js"></script>
+		<script src="./src/gameobjects/DialogueSequence.js"></script>
+		<script src="./src/gameobjects/Level.js"></script>
+
+		<script src="./src/stages/LevelStage.js"></script>
+		<script src="./src/stages/NarrativeStage.js"></script>
+		<script src="./src/states/MenuState.js"></script>
+		<script src="./src/states/AboutState.js"></script>
+		<script src="./src/states/LevelSelectState.js"></script>
+		<script src="./src/states/PlayState.js"></script>
+
+	    <title>BitBot</title>
+	</head>
+
+	<body>
+		
+	    <canvas width=576 height=576 id="canvas"> </canvas>
+	    
+	    <!-- FPS: <span id="fps"> </span>. --> 
+	
+		<script>
+		var fps = document.getElementById("fps")
+		init();
+		</script>
+		<noscript>This game relies on JavaScript to run.  Please enable it in your browser, or download a browser that supports JavaScript.</noscript>
+		
+		<footer>
+			<p>
+				Hit Enter to select a menu item.  Hit Spacebar to advance text. 
+			</p>
+			
+			<p>
+				Hit Escape to exit a menu or pause in-game. Press arrows to move around.
+			</p>
+			
+			<p>
+					&copy; Copyright by R. E. Cardona-Rivera and Jos&eacute; D. V&eacute;lez
+			</p>
+		</footer>
+	
+	</body>
+</html>
+

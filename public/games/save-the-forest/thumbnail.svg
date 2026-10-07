@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Save The Forest thumbnail">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1a12"/>
+      <stop offset="0.5" stop-color="#7a3b18"/>
+      <stop offset="1" stop-color="#c96a20"/>
+    </linearGradient>
+    <filter id="fire" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#sky)"/>
+
+  <!-- smoke column -->
+  <g fill="#3a2a22" opacity="0.5">
+    <ellipse cx="200" cy="60" rx="60" ry="26"/>
+    <ellipse cx="228" cy="40" rx="44" ry="20"/>
+    <ellipse cx="176" cy="34" rx="36" ry="16"/>
+  </g>
+
+  <!-- burning treeline -->
+  <g>
+    <g transform="translate(70,206)">
+      <rect x="-5" y="-30" width="10" height="34" fill="#3b2a1c"/>
+      <polygon points="0,-72 -22,-28 22,-28" fill="#1d5c34"/>
+      <polygon points="0,-52 -26,-6 26,-6" fill="#256b3b" opacity="0.9"/>
+      <polygon points="-14,-46 -8,-58 0,-48 -6,-38 Z" fill="#ff6b1a" filter="url(#fire)"/>
+    </g>
+    <g transform="translate(126,214)">
+      <rect x="-5" y="-28" width="10" height="32" fill="#3b2a1c"/>
+      <polygon points="0,-66 -20,-26 20,-26" fill="#1d5c34"/>
+      <polygon points="0,-48 -24,-4 24,-4" fill="#256b3b" opacity="0.9"/>
+      <polygon points="4,-40 -2,-52 6,-44 10,-52 12,-38 Z" fill="#ff8c1a" filter="url(#fire)"/>
+    </g>
+    <g transform="translate(184,208)">
+      <rect x="-5" y="-26" width="10" height="30" fill="#3b2a1c"/>
+      <polygon points="0,-58 -18,-24 18,-24" fill="#1d5c34"/>
+      <polygon points="0,-42 -22,-2 22,-2" fill="#256b3b" opacity="0.9"/>
+    </g>
+    <g transform="translate(244,216)">
+      <rect x="-5" y="-30" width="10" height="34" fill="#3b2a1c"/>
+      <polygon points="0,-70 -22,-26 22,-26" fill="#1d5c34"/>
+      <polygon points="0,-52 -26,-4 26,-4" fill="#256b3b" opacity="0.9"/>
+      <polygon points="-10,-42 -4,-54 2,-44 -2,-34 Z" fill="#ff6b1a" filter="url(#fire)"/>
+    </g>
+    <g transform="translate(310,210)">
+      <rect x="-5" y="-28" width="10" height="32" fill="#3b2a1c"/>
+      <polygon points="0,-64 -20,-26 20,-26" fill="#1d5c34"/>
+      <polygon points="0,-46 -24,-2 24,-2" fill="#256b3b" opacity="0.9"/>
+      <polygon points="8,-36 2,-48 10,-40 14,-48 16,-34 Z" fill="#ff8c1a" filter="url(#fire)"/>
+    </g>
+  </g>
+
+  <!-- fire on the ground -->
+  <g fill="#ff9d2f" filter="url(#fire)">
+    <path d="M96 240 q6 -18 12 0 q6 -22 12 0 z"/>
+    <path d="M212 246 q5 -14 10 0 q5 -18 10 0 z"/>
+    <path d="M286 238 q5 -14 10 0 q5 -18 10 0 z"/>
+  </g>
+
+  <!-- ground -->
+  <path d="M0 262 H400 V300 H0 Z" fill="#4a2f1c"/>
+  <path d="M0 262 H400 V272 H0 Z" fill="#5c3a22"/>
+
+  <!-- the firefighter / water drop -->
+  <g transform="translate(352,254)">
+    <path d="M0,-30 C10,-14 14,-6 14,2 A14,14 0 0 1 -14,2 C-14,-6 -10,-14 0,-30 Z"
+          fill="#38bdf8" opacity="0.95"/>
+    <ellipse cx="-4" cy="-2" rx="4" ry="6" fill="#bae6fd" opacity="0.7"/>
+  </g>
+
+  <text x="200" y="292" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="19" font-weight="bold" fill="#ffd9a0" letter-spacing="3">SAVE THE FOREST</text>
+</svg>

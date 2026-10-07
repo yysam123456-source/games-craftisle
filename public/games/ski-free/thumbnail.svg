@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Ski Free thumbnail">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c2b4a"/>
+      <stop offset="0.55" stop-color="#4a6a9c"/>
+      <stop offset="1" stop-color="#9db8d8"/>
+    </linearGradient>
+    <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#cfe0f2"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#sky)"/>
+
+  <!-- distant peaks -->
+  <polygon points="0,190 70,96 130,190" fill="#2f4468"/>
+  <polygon points="90,190 190,64 300,190" fill="#24374f"/>
+  <polygon points="250,190 330,120 400,190" fill="#2f4468"/>
+  <polygon points="52,124 70,96 88,124" fill="#e8f1fb"/>
+  <polygon points="170,96 190,64 212,96" fill="#e8f1fb"/>
+
+  <!-- slope -->
+  <polygon points="0,300 400,300 400,168 0,220" fill="url(#snow)"/>
+  <path d="M0 240 L400 186" stroke="#a9c4de" stroke-width="2" opacity="0.5" fill="none"/>
+
+  <!-- rocks -->
+  <polygon points="238,214 258,206 278,216 262,226" fill="#8fa4bd"/>
+  <polygon points="292,204 310,198 328,206 306,212" fill="#8fa4bd"/>
+  <polygon points="120,238 142,230 162,240 140,248" fill="#a3b7cd"/>
+
+  <!-- pine tree -->
+  <g transform="translate(348,180)">
+    <rect x="-3" y="0" width="6" height="18" fill="#4a3a2c"/>
+    <polygon points="0,-42 -14,-14 14,-14" fill="#1f4d3a"/>
+    <polygon points="0,-28 -17,-2 17,-2" fill="#27614a"/>
+    <polygon points="0,-14 -20,10 20,10" fill="#2f7458"/>
+    <polygon points="0,-42 -14,-14 0,-14" fill="#ffffff" opacity="0.35"/>
+  </g>
+
+  <!-- skier -->
+  <g transform="translate(168,206) rotate(-16)">
+    <circle cx="0" cy="-24" r="6" fill="#e63946"/>
+    <rect x="-5" y="-19" width="10" height="16" fill="#e63946"/>
+    <rect x="-6" y="-4" width="12" height="4" fill="#1d3557"/>
+    <rect x="-16" y="0" width="32" height="3" rx="1.5" fill="#1d3557"/>
+    <rect x="-4" y="2" width="3" height="14" fill="#1d3557"/>
+    <rect x="3" y="2" width="3" height="14" fill="#1d3557"/>
+  </g>
+
+  <!-- yeti -->
+  <g transform="translate(66,208)">
+    <ellipse cx="0" cy="0" rx="18" ry="22" fill="#f4f7fb"/>
+    <ellipse cx="0" cy="-20" rx="12" ry="11" fill="#f4f7fb"/>
+    <circle cx="-4" cy="-21" r="2.2" fill="#20304a"/>
+    <circle cx="4" cy="-21" r="2.2" fill="#20304a"/>
+    <ellipse cx="0" cy="-15" rx="5" ry="3" fill="#d8e2ee"/>
+    <rect x="-20" y="-6" width="8" height="16" rx="4" fill="#f4f7fb"/>
+    <rect x="12" y="-6" width="8" height="16" rx="4" fill="#f4f7fb"/>
+    <rect x="-10" y="18" width="7" height="10" rx="3" fill="#e2e9f2"/>
+    <rect x="3" y="18" width="7" height="10" rx="3" fill="#e2e9f2"/>
+  </g>
+
+  <!-- snow spray -->
+  <g fill="#ffffff" opacity="0.8">
+    <circle cx="150" cy="228" r="3"/>
+    <circle cx="142" cy="236" r="2.2"/>
+    <circle cx="158" cy="238" r="2"/>
+    <circle cx="134" cy="228" r="1.8"/>
+  </g>
+
+  <text x="200" y="46" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="23" font-weight="bold" fill="#ffffff" letter-spacing="6">SKI FREE</text>
+</svg>

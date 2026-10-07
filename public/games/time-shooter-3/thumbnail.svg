@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Time Shooter 3">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1030"/>
+      <stop offset="0.6" stop-color="#120a20"/>
+      <stop offset="1" stop-color="#080510"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff4d6d" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff4d6d" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd166" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffd166" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#bg)"/>
+
+  <!-- perspective floor grid -->
+  <g stroke="#3a2a5c" stroke-width="1" opacity="0.55">
+    <path d="M300,190 L60,400 M300,190 L540,400 M300,190 L150,400 M300,190 L450,400 M300,190 L0,400 M300,190 L600,400"/>
+    <path d="M240,215 L360,215 M190,245 L410,245 M140,280 L460,280 M90,320 L510,320 M40,365 L560,365"/>
+  </g>
+
+  <!-- horizon glow -->
+  <ellipse cx="300" cy="188" rx="150" ry="26" fill="url(#glow)" filter="url(#soft)"/>
+
+  <!-- enemy silhouettes -->
+  <g fill="#2a1a44" opacity="0.9">
+    <path d="M228,190 L240,158 L252,190 Z"/>
+    <path d="M348,190 L360,154 L372,190 Z"/>
+    <path d="M288,190 L298,166 L308,190 Z"/>
+  </g>
+  <g fill="#ff4d6d" opacity="0.85">
+    <circle cx="240" cy="160" r="2.6"/>
+    <circle cx="360" cy="156" r="2.6"/>
+    <circle cx="298" cy="168" r="2.2"/>
+  </g>
+
+  <!-- player weapon barrel (first person) -->
+  <path d="M262,400 L276,250 L324,250 L338,400 Z" fill="#241a3a"/>
+  <path d="M276,250 L324,250 L318,206 L282,206 Z" fill="#33244f"/>
+  <rect x="284" y="196" width="32" height="12" rx="3" fill="#4a3668"/>
+  <ellipse cx="300" cy="196" rx="20" ry="7" fill="#ffd166" opacity="0.9"/>
+
+  <!-- muzzle flash / tracer -->
+  <path d="M300,196 L300,120" stroke="#ffd166" stroke-width="3" opacity="0.5"/>
+  <circle cx="300" cy="188" r="26" fill="url(#glow)"/>
+
+  <!-- clock HUD (time only moves when you move) -->
+  <g transform="translate(300,86)">
+    <circle r="30" fill="none" stroke="#ffd166" stroke-width="2.5" opacity="0.9"/>
+    <path d="M0,-30 L0,0 L18,10" fill="none" stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+    <circle r="3" fill="#ffd166"/>
+  </g>
+
+  <!-- falling sparks -->
+  <g fill="#ffd166" opacity="0.7">
+    <circle cx="150" cy="120" r="2"/>
+    <circle cx="452" cy="140" r="2.4"/>
+    <circle cx="400" cy="90" r="1.8"/>
+    <circle cx="190" cy="70" r="1.6"/>
+  </g>
+
+  <text x="300" y="366" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27" font-weight="800" letter-spacing="2" fill="#f0e6ff">TIME SHOOTER 3</text>
+  <text x="300" y="388" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="3" fill="#8b7aa8">TIME MOVES ONLY WHEN YOU MOVE</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Roguish thumbnail">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="75%">
+      <stop offset="0" stop-color="#1c1c1c"/>
+      <stop offset="1" stop-color="#000000"/>
+    </radialGradient>
+    <radialGradient id="torch" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffd98a" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="px" x="0" y="0" width="100%" height="100%">
+      <feMorphology operator="dilate" radius="1"/>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- fog of war boundary -->
+  <circle cx="200" cy="150" r="104" fill="url(#torch)"/>
+
+  <!-- pixel dungeon tiles -->
+  <g shape-rendering="crispEdges">
+    <rect x="104" y="100" width="16" height="16" fill="#4a4a52"/>
+    <rect x="120" y="100" width="16" height="16" fill="#5b5b66"/>
+    <rect x="136" y="100" width="16" height="16" fill="#4a4a52"/>
+    <rect x="104" y="116" width="16" height="16" fill="#5b5b66"/>
+    <rect x="152" y="116" width="16" height="16" fill="#3c3c44"/>
+
+    <rect x="248" y="100" width="16" height="16" fill="#4a4a52"/>
+    <rect x="264" y="116" width="16" height="16" fill="#5b5b66"/>
+    <rect x="248" y="132" width="16" height="16" fill="#4a4a52"/>
+
+    <rect x="104" y="180" width="16" height="16" fill="#5b5b66"/>
+    <rect x="136" y="180" width="16" height="16" fill="#4a4a52"/>
+    <rect x="120" y="196" width="16" height="16" fill="#4a4a52"/>
+
+    <rect x="248" y="180" width="16" height="16" fill="#4a4a52"/>
+    <rect x="264" y="180" width="16" height="16" fill="#5b5b66"/>
+    <rect x="280" y="164" width="16" height="16" fill="#3c3c44"/>
+  </g>
+
+  <!-- player sprite -->
+  <g shape-rendering="crispEdges">
+    <rect x="192" y="140" width="8" height="8" fill="#e8e8f0"/>
+    <rect x="200" y="140" width="8" height="8" fill="#c8c8d8"/>
+    <rect x="192" y="148" width="8" height="8" fill="#c8c8d8"/>
+    <rect x="200" y="148" width="8" height="8" fill="#7ad0ff"/>
+  </g>
+
+  <!-- treasure chest -->
+  <g shape-rendering="crispEdges">
+    <rect x="216" y="196" width="24" height="8" fill="#8a5a2b"/>
+    <rect x="216" y="204" width="24" height="8" fill="#6b4420"/>
+    <rect x="224" y="200" width="8" height="4" fill="#ffd24a"/>
+  </g>
+
+  <!-- hostile robot -->
+  <g shape-rendering="crispEdges">
+    <rect x="152" y="132" width="8" height="8" fill="#ff6b6b"/>
+    <rect x="160" y="132" width="8" height="8" fill="#ff6b6b"/>
+    <rect x="152" y="140" width="16" height="8" fill="#c23b3b"/>
+  </g>
+
+  <!-- health bar -->
+  <rect x="104" y="236" width="120" height="8" fill="#2a2a30"/>
+  <rect x="104" y="236" width="92" height="8" fill="#4ade80"/>
+  <rect x="104" y="232" width="120" height="2" fill="#6a6a76"/>
+
+  <text x="200" y="278" text-anchor="middle" font-family="Courier New,monospace"
+        font-size="22" font-weight="bold" fill="#e8e8f0" letter-spacing="6">ROGUISH</text>
+</svg>

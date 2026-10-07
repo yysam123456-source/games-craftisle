@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Hextris thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b2a4a"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4fc3f7"/>
+      <stop offset="1" stop-color="#1565c0"/>
+    </linearGradient>
+    <linearGradient id="tile2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb74d"/>
+      <stop offset="1" stop-color="#e65100"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- hex grid, pointy-top, 3 columns x 3 rows -->
+  <g opacity="0.28" fill="none" stroke="#7fd4ff" stroke-width="1.5">
+    <polygon points="150,60 178,75 178,105 150,120 122,105 122,75"/>
+    <polygon points="222,60 250,75 250,105 222,120 194,105 194,75"/>
+    <polygon points="186,90 214,105 214,135 186,150 158,135 158,105"/>
+    <polygon points="150,120 178,135 178,165 150,180 122,165 122,135"/>
+    <polygon points="222,120 250,135 250,165 222,180 194,165 194,135"/>
+    <polygon points="186,150 214,165 214,195 186,210 158,195 158,165"/>
+    <polygon points="150,180 178,195 178,225 150,240 122,225 122,195"/>
+    <polygon points="222,180 250,195 250,225 222,240 194,225 194,195"/>
+  </g>
+
+  <!-- settled blocks -->
+  <g filter="url(#glow)">
+    <polygon points="150,60 178,75 178,105 150,120 122,105 122,75" fill="url(#tile)"/>
+    <polygon points="186,90 214,105 214,135 186,150 158,135 158,105" fill="url(#tile2)"/>
+    <polygon points="222,120 250,135 250,165 222,180 194,165 194,135" fill="url(#tile)"/>
+    <polygon points="150,180 178,195 178,225 150,240 122,225 122,195" fill="url(#tile2)"/>
+  </g>
+
+  <!-- falling piece -->
+  <polygon points="186,20 214,35 214,65 186,80 158,65 158,35"
+           fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.9"/>
+
+  <!-- side panel hint -->
+  <g opacity="0.55">
+    <rect x="288" y="66" width="76" height="16" rx="3" fill="#4fc3f7" opacity="0.6"/>
+    <rect x="288" y="92" width="76" height="16" rx="3" fill="#ffb74d" opacity="0.5"/>
+    <rect x="288" y="118" width="76" height="16" rx="3" fill="#4fc3f7" opacity="0.35"/>
+    <rect x="288" y="144" width="76" height="16" rx="3" fill="#ffb74d" opacity="0.25"/>
+  </g>
+
+  <text x="200" y="278" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="22" font-weight="bold" fill="#e8f4ff" letter-spacing="4">HEXTRIS</text>
+</svg>

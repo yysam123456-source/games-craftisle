@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="BitBot thumbnail">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="72%">
+      <stop offset="0" stop-color="#1b2b3a"/>
+      <stop offset="1" stop-color="#050a10"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- pixel-art dungeon grid -->
+  <g shape-rendering="crispEdges">
+    <rect x="88" y="72" width="16" height="16" fill="#243746"/>
+    <rect x="104" y="72" width="16" height="16" fill="#1b2a36"/>
+    <rect x="120" y="88" width="16" height="16" fill="#243746"/>
+    <rect x="88" y="104" width="16" height="16" fill="#1b2a36"/>
+    <rect x="136" y="72" width="16" height="16" fill="#2c4256"/>
+
+    <rect x="248" y="88" width="16" height="16" fill="#243746"/>
+    <rect x="264" y="104" width="16" height="16" fill="#1b2a36"/>
+    <rect x="280" y="88" width="16" height="16" fill="#2c4256"/>
+    <rect x="264" y="72" width="16" height="16" fill="#1b2a36"/>
+
+    <rect x="104" y="184" width="16" height="16" fill="#1b2a36"/>
+    <rect x="120" y="200" width="16" height="16" fill="#243746"/>
+    <rect x="88" y="200" width="16" height="16" fill="#2c4256"/>
+
+    <rect x="264" y="184" width="16" height="16" fill="#243746"/>
+    <rect x="280" y="200" width="16" height="16" fill="#1b2a36"/>
+    <rect x="248" y="216" width="16" height="16" fill="#2c4256"/>
+  </g>
+
+  <!-- walls -->
+  <g shape-rendering="crispEdges" fill="#0d141c">
+    <rect x="72" y="56" width="96" height="16"/>
+    <rect x="72" y="72" width="16" height="48"/>
+    <rect x="232" y="56" width="96" height="16"/>
+    <rect x="312" y="72" width="16" height="48"/>
+    <rect x="72" y="216" width="96" height="16"/>
+    <rect x="72" y="184" width="16" height="32"/>
+    <rect x="232" y="216" width="96" height="16"/>
+    <rect x="312" y="184" width="16" height="32"/>
+  </g>
+
+  <!-- battery pickup -->
+  <g shape-rendering="crispEdges" filter="url(#glow)">
+    <rect x="168" y="96" width="12" height="20" fill="#4ade80"/>
+    <rect x="171" y="92" width="6" height="4" fill="#86efac"/>
+  </g>
+
+  <!-- the robot -->
+  <g shape-rendering="crispEdges">
+    <rect x="188" y="132" width="8" height="8" fill="#e2e8f0"/>
+    <rect x="196" y="132" width="8" height="8" fill="#cbd5e1"/>
+    <rect x="204" y="132" width="8" height="8" fill="#e2e8f0"/>
+    <rect x="188" y="140" width="8" height="8" fill="#cbd5e1"/>
+    <rect x="196" y="140" width="8" height="8" fill="#38bdf8"/>
+    <rect x="204" y="140" width="8" height="8" fill="#cbd5e1"/>
+    <rect x="188" y="148" width="8" height="8" fill="#94a3b8"/>
+    <rect x="196" y="148" width="8" height="8" fill="#64748b"/>
+    <rect x="204" y="148" width="8" height="8" fill="#94a3b8"/>
+  </g>
+  <!-- antenna -->
+  <rect x="199" y="124" width="2" height="8" fill="#cbd5e1"/>
+  <circle cx="200" cy="122" r="3" fill="#f87171" filter="url(#glow)"/>
+
+  <!-- hazard -->
+  <g shape-rendering="crispEdges" opacity="0.9">
+    <rect x="236" y="140" width="8" height="8" fill="#ef4444"/>
+    <rect x="244" y="148" width="8" height="8" fill="#ef4444"/>
+    <rect x="236" y="156" width="8" height="8" fill="#ef4444"/>
+  </g>
+
+  <text x="200" y="278" text-anchor="middle" font-family="Courier New,monospace"
+        font-size="24" font-weight="bold" fill="#cbd5e1" letter-spacing="8">BITBOT</text>
+</svg>

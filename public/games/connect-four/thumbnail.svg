@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Connect Four thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12314f"/>
+      <stop offset="1" stop-color="#061524"/>
+    </linearGradient>
+    <radialGradient id="red" cx="35%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#ff8a8a"/>
+      <stop offset="1" stop-color="#dc2626"/>
+    </radialGradient>
+    <radialGradient id="yellow" cx="35%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#ffe58a"/>
+      <stop offset="1" stop-color="#eab308"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- board frame -->
+  <rect x="98" y="44" width="204" height="212" rx="12" fill="#0f2440" stroke="#1e4a78" stroke-width="3"/>
+
+  <!-- 7x6 grid of holes -->
+  <g fill="#08192b" stroke="#1e4a78" stroke-width="1">
+    <!-- row 1 -->
+    <circle cx="126" cy="72" r="13"/><circle cx="155" cy="72" r="13"/><circle cx="184" cy="72" r="13"/>
+    <circle cx="213" cy="72" r="13"/><circle cx="242" cy="72" r="13"/><circle cx="271" cy="72" r="13"/>
+    <!-- row 2 -->
+    <circle cx="126" cy="104" r="13"/><circle cx="155" cy="104" r="13"/><circle cx="184" cy="104" r="13"/>
+    <circle cx="213" cy="104" r="13"/><circle cx="242" cy="104" r="13"/><circle cx="271" cy="104" r="13"/>
+    <!-- row 3 -->
+    <circle cx="126" cy="136" r="13"/><circle cx="155" cy="136" r="13"/><circle cx="184" cy="136" r="13"/>
+    <circle cx="213" cy="136" r="13"/><circle cx="242" cy="136" r="13"/><circle cx="271" cy="136" r="13"/>
+    <!-- row 4 -->
+    <circle cx="126" cy="168" r="13"/><circle cx="155" cy="168" r="13"/><circle cx="184" cy="168" r="13"/>
+    <circle cx="213" cy="168" r="13"/><circle cx="242" cy="168" r="13"/><circle cx="271" cy="168" r="13"/>
+    <!-- row 5 -->
+    <circle cx="126" cy="200" r="13"/><circle cx="155" cy="200" r="13"/><circle cx="184" cy="200" r="13"/>
+    <circle cx="213" cy="200" r="13"/><circle cx="242" cy="200" r="13"/><circle cx="271" cy="200" r="13"/>
+    <!-- row 6 -->
+    <circle cx="126" cy="232" r="13"/><circle cx="155" cy="232" r="13"/><circle cx="184" cy="232" r="13"/>
+    <circle cx="213" cy="232" r="13"/><circle cx="242" cy="232" r="13"/><circle cx="271" cy="232" r="13"/>
+  </g>
+
+  <!-- red disc vertical win: column 1, rows 2-5 -->
+  <g fill="url(#red)" stroke="#7f1d1d" stroke-width="1">
+    <circle cx="126" cy="104" r="12"/>
+    <circle cx="126" cy="136" r="12"/>
+    <circle cx="126" cy="168" r="12"/>
+    <circle cx="126" cy="200" r="12"/>
+  </g>
+
+  <!-- yellow diagonal: (6,1)(5,2)(4,3)(3,4) -->
+  <g fill="url(#yellow)" stroke="#a16207" stroke-width="1">
+    <circle cx="271" cy="72" r="12"/>
+    <circle cx="242" cy="104" r="12"/>
+    <circle cx="213" cy="136" r="12"/>
+    <circle cx="184" cy="168" r="12"/>
+  </g>
+
+  <!-- extra discs -->
+  <g fill="#f87171" opacity="0.95"><circle cx="184" cy="232" r="12"/></g>
+  <g fill="#fde047" opacity="0.95"><circle cx="242" cy="232" r="12"/><circle cx="271" cy="200" r="12"/></g>
+  <g fill="#f87171" opacity="0.95"><circle cx="155" cy="200" r="12"/><circle cx="155" cy="168" r="12"/></g>
+
+  <!-- drop column hint -->
+  <polygon points="126,32 116,44 136,44" fill="#ffffff" opacity="0.55"/>
+
+  <text x="200" y="288" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="21" font-weight="bold" fill="#e2f0ff" letter-spacing="4">CONNECT FOUR</text>
+</svg>

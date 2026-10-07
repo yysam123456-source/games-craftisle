@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Shape Experiment thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f9fc"/>
+      <stop offset="1" stop-color="#dde4ee"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- partially revealed star (the canvas being drawn pixel by pixel) -->
+  <g transform="translate(200,128)">
+    <polygon points="0,-62 -21,-20 -56,-14 -34,17 -44,54 0,36 44,54 34,17 56,-14 21,-20"
+             fill="#eef2f7" stroke="#c3ccd9" stroke-width="1.5"/>
+
+    <!-- revealed pixels -->
+    <g fill="#2f3b4c">
+      <rect x="-4" y="-58" width="8" height="8"/>
+      <rect x="-4" y="-50" width="8" height="8"/>
+      <rect x="-12" y="-42" width="8" height="8"/>
+      <rect x="-4" y="-42" width="8" height="8"/>
+      <rect x="4"  y="-42" width="8" height="8"/>
+      <rect x="-12" y="-34" width="8" height="8"/>
+      <rect x="-4" y="-34" width="8" height="8"/>
+      <rect x="4"  y="-34" width="8" height="8"/>
+      <rect x="12" y="-34" width="8" height="8"/>
+      <rect x="-20" y="-26" width="8" height="8"/>
+      <rect x="-12" y="-26" width="8" height="8"/>
+      <rect x="-4"  y="-26" width="8" height="8"/>
+      <rect x="4"   y="-26" width="8" height="8"/>
+      <rect x="12"  y="-26" width="8" height="8"/>
+      <rect x="20"  y="-26" width="8" height="8"/>
+      <rect x="-28" y="-18" width="8" height="8"/>
+      <rect x="-20" y="-18" width="8" height="8"/>
+      <rect x="-12" y="-18" width="8" height="8"/>
+      <rect x="-4"  y="-18" width="8" height="8"/>
+      <rect x="4"   y="-18" width="8" height="8"/>
+      <rect x="12"  y="-18" width="8" height="8"/>
+      <rect x="20"  y="-18" width="8" height="8"/>
+      <rect x="28"  y="-18" width="8" height="8"/>
+      <rect x="-36" y="-10" width="8" height="8"/>
+      <rect x="-28" y="-10" width="8" height="8"/>
+      <rect x="28"  y="-10" width="8" height="8"/>
+      <rect x="36"  y="-10" width="8" height="8"/>
+    </g>
+  </g>
+
+  <!-- answer buttons -->
+  <g font-family="Helvetica,Arial,sans-serif" font-size="9" fill="#5a6678">
+    <rect x="52" y="212" width="66" height="26" rx="4" fill="#ffffff" stroke="#c3ccd9"/>
+    <text x="85" y="229" text-anchor="middle">circle</text>
+
+    <rect x="128" y="212" width="66" height="26" rx="4" fill="#ffffff" stroke="#c3ccd9"/>
+    <text x="161" y="229" text-anchor="middle">triangle</text>
+
+    <rect x="204" y="212" width="66" height="26" rx="4" fill="#ffffff" stroke="#c3ccd9"/>
+    <text x="237" y="229" text-anchor="middle">square</text>
+
+    <rect x="280" y="212" width="66" height="26" rx="4" fill="#eaf7ea" stroke="#6aa96a" stroke-width="2"/>
+    <text x="313" y="229" text-anchor="middle" fill="#3d7a3d">star</text>
+  </g>
+
+  <!-- progress readout -->
+  <rect x="52" y="248" width="294" height="6" rx="3" fill="#d5dde8"/>
+  <rect x="52" y="248" width="126" height="6" rx="3" fill="#4a90d9"/>
+
+  <text x="200" y="46" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="19" font-weight="bold" fill="#2f3b4c" letter-spacing="2">SHAPE EXPERIMENT</text>
+</svg>

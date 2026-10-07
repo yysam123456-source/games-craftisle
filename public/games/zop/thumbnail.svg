@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Zop thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2b1055"/>
+      <stop offset="1" stop-color="#0a0418"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- radiating rays -->
+  <g stroke="#7c3aed" stroke-width="2" opacity="0.35">
+    <path d="M200 150 L200 20 M200 150 L286 52 M200 150 L330 150 M200 150 L286 248 M200 150 L200 280 M200 150 L114 248 M200 150 L70 150 M200 150 L114 52"/>
+  </g>
+
+  <!-- the flipping cube (the game's namesake table-flip emote) -->
+  <g transform="translate(200,146)">
+    <!-- shadow -->
+    <ellipse cx="0" cy="66" rx="46" ry="12" fill="#000" opacity="0.45"/>
+    <!-- top face -->
+    <polygon points="0,-52 46,-28 0,-4 -46,-28" fill="#a78bfa"/>
+    <!-- left face -->
+    <polygon points="-46,-28 0,-4 0,44 -46,20" fill="#6d28d9"/>
+    <!-- right face -->
+    <polygon points="46,-28 0,-4 0,44 46,20" fill="#7c3aed"/>
+    <!-- edge highlights -->
+    <polyline points="0,-52 46,-28 0,-4 -46,-28" fill="none" stroke="#ddd6fe" stroke-width="2"/>
+    <!-- impact burst -->
+    <g stroke="#fbbf24" stroke-width="4" stroke-linecap="round" filter="url(#glow)">
+      <path d="M-60 44 l-16 16 M60 44 l16 16 M0 58 v20"/>
+    </g>
+  </g>
+
+  <!-- the table being flipped, mid-air -->
+  <g transform="translate(200,58) rotate(-24)" opacity="0.75">
+    <rect x="-34" y="-5" width="68" height="9" rx="2" fill="#c4b5fd"/>
+    <rect x="-24" y="4" width="5" height="20" fill="#8b5cf6"/>
+    <rect x="19" y="4" width="5" height="20" fill="#8b5cf6"/>
+  </g>
+
+  <!-- kaomoji, the game's signature -->
+  <text x="200" y="272" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="26" fill="#e9d5ff" letter-spacing="2">(╯°□°）╯︵ ┻━┻</text>
+</svg>

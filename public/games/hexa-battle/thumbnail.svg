@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Hexa Battle thumbnail">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="72%">
+      <stop offset="0" stop-color="#1e2a4a"/>
+      <stop offset="1" stop-color="#070b16"/>
+    </radialGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fca5a5"/>
+      <stop offset="1" stop-color="#dc2626"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- hex field: pointy-top, offset rows -->
+  <g stroke="#3b4a6b" stroke-width="1.2" fill="#151d33" opacity="0.9">
+    <polygon points="110,80 134,95 134,125 110,140 86,125 86,95"/>
+    <polygon points="170,80 194,95 194,125 170,140 146,125 146,95"/>
+    <polygon points="230,80 254,95 254,125 230,140 206,125 206,95"/>
+    <polygon points="140,112 164,127 164,157 140,172 116,157 116,127"/>
+    <polygon points="200,112 224,127 224,157 200,172 176,157 176,127"/>
+    <polygon points="260,112 284,127 284,157 260,172 236,157 236,127"/>
+    <polygon points="110,144 134,159 134,189 110,204 86,189 86,159"/>
+    <polygon points="170,144 194,159 194,189 170,204 146,189 146,159"/>
+    <polygon points="230,144 254,159 254,189 230,204 206,189 206,159"/>
+    <polygon points="140,176 164,191 164,221 140,236 116,221 116,191"/>
+    <polygon points="200,176 224,191 224,221 200,236 176,221 176,191"/>
+  </g>
+
+  <!-- blue faction -->
+  <g fill="url(#blue)" stroke="#bfdbfe" stroke-width="1.5">
+    <polygon points="110,88 127,98 127,118 110,128 93,118 93,98"/>
+    <polygon points="170,152 187,162 187,182 170,192 153,182 153,162"/>
+    <polygon points="140,120 157,130 157,150 140,160 123,150 123,130"/>
+  </g>
+
+  <!-- red faction -->
+  <g fill="url(#red)" stroke="#fecaca" stroke-width="1.5">
+    <polygon points="230,88 247,98 247,118 230,128 213,118 213,98"/>
+    <polygon points="260,120 277,130 277,150 260,160 243,150 243,130"/>
+    <polygon points="200,184 217,194 217,214 200,224 183,214 183,194"/>
+  </g>
+
+  <!-- contested hex -->
+  <polygon points="170,120 187,130 187,150 170,160 153,150 153,130"
+           fill="#fbbf24" stroke="#fde68a" stroke-width="2"/>
+
+  <!-- HUD bars -->
+  <g>
+    <rect x="52" y="44" width="70" height="7" rx="3.5" fill="#1d4ed8"/>
+    <rect x="278" y="44" width="70" height="7" rx="3.5" fill="#dc2626"/>
+    <text x="52" y="36" font-family="Courier New,monospace" font-size="11" fill="#93c5fd">UNITS</text>
+    <text x="348" y="36" text-anchor="end" font-family="Courier New,monospace" font-size="11" fill="#fca5a5">CPU</text>
+  </g>
+
+  <text x="200" y="276" text-anchor="middle" font-family="Courier New,monospace"
+        font-size="21" font-weight="bold" fill="#dbeafe" letter-spacing="4">HEXA BATTLE</text>
+</svg>

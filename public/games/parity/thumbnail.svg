@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Parity thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f5f2ea"/>
+      <stop offset="1" stop-color="#e3ddd0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- the 3x3 board -->
+  <g transform="translate(126,66)">
+    <!-- cells -->
+    <g stroke="#c9c2b2" stroke-width="1.5" fill="#fbf9f4">
+      <rect x="0"   y="0"   width="48" height="48"/>
+      <rect x="48"  y="0"   width="48" height="48"/>
+      <rect x="96"  y="0"   width="48" height="48"/>
+      <rect x="0"   y="48"  width="48" height="48"/>
+      <rect x="48"  y="48"  width="48" height="48"/>
+      <rect x="96"  y="48"  width="48" height="48"/>
+      <rect x="0"   y="96"  width="48" height="48"/>
+      <rect x="48"  y="96"  width="48" height="48"/>
+      <rect x="96"  y="96"  width="48" height="48"/>
+    </g>
+    <!-- values -->
+    <g font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="bold"
+       fill="#3c3a34" text-anchor="middle">
+      <text x="24"  y="34">4</text>
+      <text x="72"  y="34">4</text>
+      <text x="120" y="34">4</text>
+      <text x="24"  y="82">4</text>
+      <text x="72"  y="82">2</text>
+      <text x="120" y="82">4</text>
+      <text x="24"  y="130">4</text>
+      <text x="72"  y="130">8</text>
+      <text x="120" y="130">4</text>
+    </g>
+    <!-- selected cell -->
+    <rect x="48" y="96" width="48" height="48" fill="none" stroke="#d96500" stroke-width="3"/>
+  </g>
+
+  <!-- selection bracket -->
+  <path d="M172 214 v10 h-10 M220 214 v10 h10" stroke="#d96500" stroke-width="3"
+        fill="none" stroke-linecap="square"/>
+
+  <!-- up arrow (increment) -->
+  <path d="M196 60 l-9 14 h6 v14 h6 v-14 h6 z" fill="#d96500"/>
+  <!-- down arrow (decrement) -->
+  <path d="M196 244 l-9 -14 h6 v-14 h6 v14 h6 z" fill="#7a8b99"/>
+
+  <!-- selector knob -->
+  <circle cx="264" cy="110" r="20" fill="#fdfbf6" stroke="#c9c2b2" stroke-width="1.5"/>
+  <circle cx="264" cy="110" r="9" fill="#d96500"/>
+
+  <text x="200" y="284" text-anchor="middle" font-family="Georgia,serif"
+        font-size="24" fill="#3c3a34" letter-spacing="10">PARITY</text>
+</svg>

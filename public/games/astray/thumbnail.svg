@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Astray thumbnail">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#243447"/>
+      <stop offset="1" stop-color="#080c12"/>
+    </radialGradient>
+    <radialGradient id="ball" cx="35%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#e8eef5"/>
+      <stop offset="0.5" stop-color="#8d9bab"/>
+      <stop offset="1" stop-color="#2b3542"/>
+    </radialGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- maze walls drawn as an isometric brick lattice -->
+  <g stroke="#c2703f" stroke-width="1" fill="#8a4429" opacity="0.9">
+    <rect x="96" y="96" width="34" height="34"/>
+    <rect x="164" y="62" width="34" height="34"/>
+    <rect x="232" y="96" width="34" height="34"/>
+    <rect x="96" y="164" width="34" height="34"/>
+    <rect x="300" y="62" width="34" height="34"/>
+    <rect x="232" y="198" width="34" height="34"/>
+    <rect x="164" y="232" width="34" height="34"/>
+    <rect x="300" y="130" width="34" height="34"/>
+  </g>
+  <!-- mortar highlight -->
+  <g stroke="#d98f57" stroke-width="0.6" fill="none" opacity="0.5">
+    <path d="M96 96h34v34H96zM164 62h34v34h-34zM232 96h34v34h-34zM96 164h34v34H96zM300 62h34v34h-34zM232 198h34v34h-34zM164 232h34v34h-34zM300 130h34v34h-34z"/>
+  </g>
+
+  <!-- glowing exit tile -->
+  <rect x="300" y="198" width="34" height="34" fill="#7ef0c8" opacity="0.9" filter="url(#soft)"/>
+  <rect x="300" y="198" width="34" height="34" fill="none" stroke="#7ef0c8" stroke-width="2"/>
+
+  <!-- the steel ball -->
+  <circle cx="181" cy="180" r="19" fill="url(#ball)"/>
+  <ellipse cx="174" cy="172" rx="6" ry="4" fill="#ffffff" opacity="0.55"/>
+
+  <!-- motion trail -->
+  <path d="M181 180 L 140 150 L 108 132" stroke="#9fd4ff" stroke-width="2"
+        stroke-dasharray="4 5" opacity="0.55" fill="none"/>
+
+  <text x="200" y="278" text-anchor="middle" font-family="Helvetica,Arial,sans-serif"
+        font-size="22" font-weight="bold" fill="#e8eef5" letter-spacing="6">ASTRAY</text>
+</svg>

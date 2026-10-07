@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>One Button Games</title>
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height,
+    user-scalable=no, initial-scale=1, maximum-scale=1"
+    />
+    <script src="https://unpkg.com/sounds-some-sounds@2.0.0/build/index.js"></script>
+    <script src="https://unpkg.com/gif-capture-canvas@1.1.0/build/index.js"></script>
+    <script src="https://unpkg.com/pixi.js@5.3.0/dist/pixi.min.js"></script>
+    <script src="https://unpkg.com/pixi-filters@3.1.1/dist/pixi-filters.js"></script>
+    <script>
+      var module = {};
+    </script>
+    <script src="https://unpkg.com/lodash.clonedeep@4.5.0/index.js"></script>
+    <script src="https://unpkg.com/crisp-game-lib@1.0.2/docs/bundle.js"></script>
+    <script>
+      // Self-hosted build of "crisp-game-lib-games" by ABA Games (MIT).
+      //
+      // `addGameScript()` reads the game name from the query string
+      // (`?<gameName>`) and appends `<gameName>/main.js`. This build ships two
+      // curated games, so instead of relying on a query parameter we resolve the
+      // game name from the hash first, then the query string, then fall back to
+      // the default entry below. Everything else is upstream behaviour.
+      (function () {
+        var GAMES = {
+          rebirth: "REBIRTH",
+          colorroll: "COLOR ROLL",
+        };
+        var DEFAULT_GAME = "rebirth";
+
+        function sanitize(name) {
+          return String(name || "").replace(/[^A-Za-z0-9_-]/g, "");
+        }
+
+        function resolveGameName() {
+          var fromHash = sanitize(window.location.hash.replace(/^#/, ""));
+          if (GAMES[fromHash]) {
+            return fromHash;
+          }
+          var fromQuery = sanitize(window.location.search.replace(/^\?/, ""));
+          if (GAMES[fromQuery]) {
+            return fromQuery;
+          }
+          return DEFAULT_GAME;
+        }
+
+        var gameName = resolveGameName();
+
+        var script = document.createElement("script");
+        script.setAttribute("src", gameName + "/main.js");
+        document.head.appendChild(script);
+
+        // Swap between the bundled games without leaving the page.
+        window.addEventListener("load", function () {
+          if (typeof onLoad !== "function") {
+            return;
+          }
+          if (typeof gameName === "string") {
+            document.title = GAMES[gameName] + " — One Button Games";
+          }
+          onLoad();
+        });
+      })();
+    </script>
+  </head>
+  <body style="background: #ddd"></body>
+</html>

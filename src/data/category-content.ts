@@ -18,8 +18,9 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
     intro:
       "Puzzle games turn simple rules into satisfying “aha” moments — and our collection leans hard into logic, language, and numbers.",
     paragraphs: [
-      "Every title here rewards careful thinking over fast reflexes. Sudoku and 2048 train numerical pattern recognition; Minesweeper and the Geo Quiz sharpen deductive reasoning; Wordle and the Password Game play with language and constraints. React Tetris bridges the gap with spatial planning under pressure.",
-      "What makes puzzles so enduring is the loop: a clear goal, limited moves, and that click when the solution finally lands. They are perfect for a short brain warm-up between tasks, and many — like Sudoku or Wordle — build a daily habit that genuinely improves focus.",
+      "Every title here rewards careful thinking over fast reflexes. Sudoku and 2048 train numerical pattern recognition; Minesweeper and the Geo Quiz sharpen deductive reasoning; Wordle and the Password Game play with language and constraints. React Tetris bridges the gap with spatial planning under pressure. The open-source shelf goes further: Cube Composer teaches functional programming through ninety puzzles, Hextris puts Tetris on a hex grid, Parity reduces arithmetic to a 3×3 invariants puzzle, and Astray and BitBot turn maze-crawling and crate-shoving into pure deduction.",
+      "What makes puzzles so enduring is the loop: a clear goal, limited moves, and that click when the solution finally lands. They are perfect for a short brain warm-up between tasks, and many — like Sudoku or Wordle — build a daily habit that genuinely improves focus. Several here are the author's own favourites, imported whole from their open-source repositories so you can play exactly the versions their creators shipped.",
+
       "Best of all, there is nothing to install. The whole shelf runs in your browser and is free to play, so you can jump straight into a five-minute mental stretch whenever you like.",
     ],
     faqs: [
@@ -50,7 +51,8 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
     intro:
       "Arcade games are pure, immediate fun — the kind you can pick up in five seconds and chase a high score on for an hour.",
     paragraphs: [
-      "Our arcade shelf is a love letter to the classics. Snake and Space Invaders recreate the 1978–90s coin-op feel; Slope and HexGL push it into 3D with neon speed and breakneck racing. They are built for reflexes, not for reading manuals.",
+      "Our arcade shelf is a love letter to the classics. Snake and Space Invaders recreate the 1978–90s coin-op feel; Slope and HexGL push it into 3D with neon speed and breakneck racing. Ski Free is a faithful port of the 1984 Apple II original, yeti and all. Beatrix, Shape Experiment and Zop are all one-input or one-verb games that turn a single button into a score chase. They are built for reflexes, not for reading manuals.",
+
       "The magic of arcade gaming is the score chase. Because rounds are short and failure is instant, you are always one run away from beating your best — that tight feedback loop is exactly why these games have lasted 40+ years.",
       "All of them run right in your browser with keyboard, mouse, or gamepad support, so you can relive the arcade anywhere, on any device.",
     ],
@@ -82,7 +84,8 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
     intro:
       "Strategy games reward patience and planning — every decision compounds, and the best players think two moves ahead.",
     paragraphs: [
-      "This shelf spans the whole strategic spectrum. Chess is the timeless test of pure tactics; Mindustry Classic blends factory-building with tower defense; 1255 Burgomaster adds medieval town management and RPG campaigns. If you prefer watching systems grow, Progress Knight and Evolve are idle/incremental strategy — train, earn, and rebirth.",
+      "This shelf spans the whole strategic spectrum. Chess is the timeless test of pure tactics; Mindustry Classic blends factory-building with tower defense; 1255 Burgomaster adds medieval town management and RPG campaigns. If you prefer watching systems grow, Progress Knight and Evolve are idle/incremental strategy — train, earn, and rebirth. The open-source additions push the same buttons harder: Tower Defense is a full 3D build with three turret types and a physically-based terrain shader, and Hexa Battle is turn-based tactics on a hex grid where units have six neighbours instead of four.",
+
       "Unlike arcade titles, strategy games rarely punish you for slowing down. You can spend ten minutes or an hour on a single session, weighing trade-offs and long-term payoffs — which is exactly what makes them so satisfying for analytical minds.",
       "All run in-browser, free to play, with no downloads: whether you want a five-minute chess puzzle or a deep factory run, the session is yours to shape.",
     ],
@@ -114,7 +117,8 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
     intro:
       "Casual games are the digital equivalent of a comfortable chair — no pressure, no fail state, just gentle fun on your schedule.",
     paragraphs: [
-      "This is our most relaxing corner. Infinite Craft lets you combine elements and discover 1,200+ surprises; A Dark Room and Messenger are story-rich, low-key adventures; Samsy Ninja and Jungle Trail are beautiful 3D explorations you simply wander through. None of them demand reflexes or punish mistakes.",
+      "This is our most relaxing corner. Infinite Craft lets you combine elements and discover 1,200+ surprises; A Dark Room and Messenger are story-rich, low-key adventures; Samsy Ninja and Jungle Trail are beautiful 3D explorations you simply wander through. Connect Four adds a laid-out opponent that never gets bored of losing. None of them demand reflexes or punish mistakes.",
+
       "Casual titles are built for real life: pick up for two minutes, put down without losing progress. They are ideal during a break, on a commute, or whenever you want to unwind without commitment.",
       "Everything here is free, runs in your browser, and needs no download — pure, low-stress play.",
     ],
@@ -147,6 +151,8 @@ export const CATEGORY_CONTENT: Record<string, CategoryContent> = {
       "Action games are where reaction speed meets adrenaline — and our standout, Time Shooter 3, flips the genre on its head.",
     paragraphs: [
       "Time Shooter 3 is a first-person shooter with a brilliant twist: time only moves when you move. Stand still and the world freezes, letting you line up the perfect shot before stepping forward and unleashing chaos. It is a puzzle and a shooter at once.",
+      "The open-source additions take the opposite approach — turn-based and deliberate. Roguish is a full roguelike dungeon crawl with up to four heroes, fog of war and procedural maps; Diablo JS is contact-combat action-RPG in under a thousand lines of dependency-free canvas code. Both reward positioning over reflexes.",
+
       "Because action games live or die on responsiveness, we have optimized controls for keyboard + mouse and gamepad, with low-latency play right in the browser. More fast-paced titles are on the way as the shelf grows.",
       "Free to play, no download — just load up and test your limits.",
     ],
