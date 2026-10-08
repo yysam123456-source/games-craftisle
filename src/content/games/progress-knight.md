@@ -1,90 +1,157 @@
 ---
-id: "progress-knight"
-slug: "progress-knight"
 title: "Progress Knight"
-description: "一款放置类RPG游戏，从骑士侍从开始，逐步成长为传奇骑士。"
-category: "rpg"
-tags: ["idle", "rpg", "knight", "progression", "medieval"]
-difficulty: "Easy"
-estimatedTime: "Endless"
-featured: true
-createdAt: "2026-06-24"
+slug: "progress-knight"
+description: "An idle life-simulation RPG where you climb a career ladder from beggar to legendary knight, then rebirth for permanent multipliers."
+category: "strategy"
+tags: ["idle", "rpg", "medieval", "progression", "career", "rebirth"]
 ---
 
-# Progress Knight - 进步骑士
+# Progress Knight
 
-## 游戏简介
+**Progress Knight** is a text-based incremental life simulation set in a fantasy
+medieval world. You begin as a beggar at **age 14** with nothing, and work your
+way up a career ladder while paying your expenses every single day. Eventually
+you die of old age — and then you start again, stronger.
 
-《Progress Knight》是一款放置类RPG游戏，你扮演一名中世纪骑士侍从，通过训练、任务和冒险，逐步提升自己的能力和地位，最终成为传奇骑士。
+The core tension is simple and it never really goes away: **income versus
+expenses**. A better job earns more, but so does a better house, so the net gain
+can be zero. Most of the game is finding combinations that push net positive.
 
-游戏融合了放置游戏和RPG元素，即使离线也能获得进度。适合喜欢慢慢养成、不想紧张操作的玩家。
+## How to Play
 
-## 游戏特色
+1. **Pick a task** from the Tasks table to start accumulating XP. Concentration
+   trains the skill XP, Productivity the job XP.
+2. **Promote** when a task has enough XP to advance a rank. Auto Promote does this
+   for you once unlocked.
+3. **Watch net income.** Every day you accrue income from your job, pay expenses
+   from your property, and adjust happiness. If net goes negative you are slowly
+   losing ground.
+4. **Buy property and skills** as coins allow. The Shop unlocks once you can afford
+   50x a tent's expenses.
+5. **Avoid evil** — or embrace it deliberately. Blood meditation and dark magic
+   raise your evil stat, which raises your net income but shortens your lifespan.
+   **Evil control** mitigates that cost.
+6. **Die, then Rebirth.** At 25 you unlock the Rebirth tab. Rebirth resets your
+   levels, job, property and coins, but keeps **max levels** as permanent
+   multipliers and unlocks more of the interface.
 
-- **放置玩法**：离线也能获得经验值和金币
-- **职业系统**：从侍从到骑士，多种职业发展
-- **技能树**：解锁和升级各种技能
-- **装备系统**：收集和升级装备
-- **任务系统**：完成任务是快速提升的方式
+## Controls
 
-## 游戏玩法
+- **Click a task row** — select it as your active training task
+- **Promote button** — rank up the selected task when it is eligible
+- **Auto Promote / Auto Learn** — toggle automatic ranking and automatic skill
+  purchases once unlocked
+- **Scheduling slider** — divide your day between tasks
+- **Shop tab** — buy property and permanent unlocks with coins
+- **Pause button** — stop the clock
+- **Rebirth tab** — perform Rebirth One or Rebirth Two
+- **Settings** — export or import your save
 
-### 初始阶段
-1. **选择职业**：游戏开始时选择初始职业（侍从）
-2. **基础训练**：提升力量、敏捷、智力等基础属性
-3. **完成任务**：接受任务获得经验和金币
+## Jobs
 
-### 成长阶段
-1. **升级技能**：用技能点升级各项技能
-2. **购买装备**：用金币购买更好的装备
-3. **转职**：达到一定条件后可以转职
+Three separate ladders, each a different route to the top:
 
-### 进阶阶段
-1. **挑战副本**：挑战困难的副本获得稀有奖励
-2. **PVP竞技**：与其他玩家竞争排名
-3. **解锁新内容**：随着进度解锁新的地区和任务
+| Commoner | Military | Academic |
+|----------|----------|----------|
+| Beggar | Squire | Student |
+| Farmer | Footman | Apprentice mage |
+| Fisherman | Veteran footman | Mage |
+| Miner | Knight | Wizard |
+| Blacksmith | Veteran knight | Master wizard |
+| Merchant | Elite knight | Chairman |
+| | Holy knight | |
+| | Legendary knight | |
 
-## 操作说明
+## Skills
 
-- **点击任务**：接受和完成任务
-- **升级技能**：点击技能按钮升级
-- **购买装备**：在商店购买装备
-- **自动进行**：游戏会自动进行训练和任务
+All 16 skills cap at **level 100**, each with a small per-level percentage effect:
 
-## 技能系统
+| Skill | Effect per level |
+|-------|------------------|
+| Concentration | +1% skill XP |
+| Productivity | +1% job XP |
+| Bargaining | **−1% expenses** |
+| Meditation | +1% happiness |
+| Strength | +1% military pay |
+| Battle tactics | +1% military XP |
+| Muscle memory | +1% strength XP |
+| Mana control | +1% T.A.A. XP |
+| Immortality | +1% lifespan |
+| Time warping | +1% game speed |
+| Super immortality | +1% lifespan |
+| Dark influence | +1% all XP |
+| Evil control | +1% evil gain |
+| Intimidation | **−1% expenses** |
+| Demon training | +1% all XP |
+| Blood meditation | +1% evil gain |
 
-### 战斗技能
-- **剑术**：提升攻击力
-- **防御**：提升防御力
-- **敏捷**：提升闪避和暴击
+Note that **Bargaining** and **Intimidation** have *negative* expense effects —
+those are reductions, and they are your two pure income multipliers on the cost
+side.
 
-### 生活技能
-- **采矿**：收集矿石
-- **锻造**：制作装备
-- **炼金**：制作药水
+## Property
 
-### 特殊技能
-- **领导力**：提升队友能力
-- **魅力**：降低商店价格
-- **幸运**：提升稀有掉落率
+Property determines your **expenses** — the cost of living, which scales with what
+you own. This is the main brake on progress: a grand palace earns nothing but costs
+a fortune every day.
 
-## 游戏提示
+Starting from **Homeless**, the ladder runs through Tent, Wooden hut, Cottage,
+House, Large house, Small palace, Grand palace, plus Study desk, Library,
+Dumbbells, Steel longsword, Sapphire charm, Butler and Personal squire.
 
-- 优先升级自动训练技能，提升离线收益
-- 合理分配技能点，不要平均分配
-- 定期检查任务，完成任务快速提升
-- 装备要及时升级，保持战斗力
+## Dark Arts and Evil
 
-## 关于开发者
+The game has a deliberate moral choice built into its economy. **Blood
+meditation** and **Dark magic** raise your evil stat; evil raises your net income
+— and evil shortens your lifespan. **Evil control** raises your evil *gain*, which
+is how you push the income as high as possible before the lifespan cost catches
+up. The **Arcane Association** and dark magic unlock late and gate the academic
+and demonic branches respectively.
 
-《Progress Knight》由未知开发者制作，是一款受欢迎的放置类RPG游戏。
+## Time Warping
 
-- 游戏类型：放置RPG
-- 平台：Web浏览器
+**Time warping** is the late-game progression mechanic: the Time warping skill
+raises **game speed**, so days pass and XP accrues faster as you level it. It
+pairs with Immortality, because running the clock faster burns through your
+remaining lifespan proportionally.
 
-## 类似游戏推荐
+## Lifespan and Death
 
-如果你喜欢《Progress Knight》，你可能也会喜欢：
-- **Idle Knight** - 类似的放置骑士游戏
-- **Clicker Heroes** - 点击放置游戏
-- **Realm Grinder** - 放置策略游戏
+Base lifespan is **70 years**; you start at 14. Lifespan is extended by
+**Immortality** and **Super immortality** — both are skills that raise it, and
+both cap at level 100. Death triggers the rebirth prompt.
+
+## Rebirth
+
+Two levels of rebirth, both of which reset job, property, coins and all current
+task levels while preserving max levels as multipliers:
+
+- **Rebirth One** — a clean reset. Raises your rebirth count, which improves the
+  multipliers you get back.
+- **Rebirth Two** — resets harder, **clearing max levels on every task**, but
+  awards **evil** based on your performance. The trade is permanent power in
+  exchange for a much harder climb.
+
+## Offline Progress
+
+`js/HackTimer.js` reconciles elapsed real time when you return, so the game keeps
+running while it is closed. It uses a Blob-based Web Worker and deliberately
+skips Internet Explorer 10.
+
+## Save Data
+
+Progress is kept in `localStorage`. The Settings panel exports and imports a save,
+which is also how you move progress between browsers and machines.
+
+## About
+
+Progress Knight was created by **Ihtasham42** and is released into the **public
+domain** under The Unlicense — the most permissive license there is. There are no
+restrictions on use, modification or redistribution, and no attribution
+obligation.
+
+- Original game source: <https://github.com/Ihtasham42/progress-knight>
+- Original live build: <https://ihtasham42.github.io/progress-knight/>
+
+It is also distributed through Armor Games and Crazy Games. See
+`public/games/progress-knight/ATTRIBUTION.md` for the full provenance record.

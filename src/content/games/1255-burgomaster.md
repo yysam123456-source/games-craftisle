@@ -1,98 +1,130 @@
 ---
-id: "1255-burgomaster"
-slug: "1255-burgomaster"
 title: "1255 Burgomaster"
-description: "一款中世纪城市建设游戏，你是领主，需要建设城市、管理资源、发展经济。"
+slug: "1255-burgomaster"
+description: "A medieval city-building and RPG management game in vanilla JavaScript — build a frontier town, send a hero into the wilds, research, and survive the events."
 category: "strategy"
-tags: ["medieval", "city-builder", "strategy", "resource-management"]
-difficulty: "Medium"
-estimatedTime: "Endless"
-featured: false
-createdAt: "2026-06-24"
+tags: ["city-builder", "medieval", "rpg", "resource-management", "tactics"]
 ---
 
-# 1255 Burgomaster - 领主
+# 1255 Burgomaster
 
-## 游戏简介
+**1255 Burgomaster** is a medieval city-builder and RPG management game set around
+the year 1255. You run a frontier settlement: raise buildings, balance treasury
+and happiness, send a hero out into wild territory, fight bandits, collect
+artefacts, research a technology tree, and cope with whatever the event system
+throws at you.
 
-《1255 Burgomaster》是一款中世纪城市建设游戏。你扮演一名领主（Burgomaster），负责建设和管理你的城市。游戏结合了城市建设、资源管理、经济发展等元素，需要平衡各种因素才能让城市繁荣发展。
+It is a deliberate exercise in dependency-free development. Per the upstream
+README, it is written in vanilla JavaScript "without even using jQuery and modern
+whistlers and jugglers, such as JS frameworks, TS->JS compilers, Node.js, web
+servers and so on". It renders with `HTML5.Canvas`, saves to `localStorage` via
+`JSON.parse()`, and targets any ES5/ES6 browser. Stated minimum requirements were
+1024 MB RAM and an 800 MHz single-core CPU.
 
-游戏背景设定在1255年的中世纪欧洲，你需要从零开始建设城市，吸引移民，发展贸易，抵御外敌。
+The design goal was to stay small and fast enough to run on aging devices and
+phones — the whole game plus assets was budgeted at around 5 MB.
 
-## 游戏特色
+## How to Play
 
-- **城市建设**：建造各种建筑（房屋、工坊、市场等）
-- **资源管理**：管理木材、石头、食物、金币等资源
-- **人口管理**：吸引移民，满足居民需求
-- **经济发展**：发展贸易，增加税收
-- **科技树**：研究新技术，解锁新建筑和功能
+1. **Build.** Take income-producing buildings, keep your population housed, and
+   watch happiness.
+2. **Set taxes and rates.** Taxes, birthrate and happiness respond to your policy
+   levers, and your choices compound.
+3. **Recruit and garrison.** Hire sergeants, knights and turkopols. Units can sit
+   in the **garrison** or travel with your **hero**.
+4. **Send the hero to the adventure map.** This is a HoMM-style overland map with
+   bandit camps, goblins and treasure. Battles resolve as a **battle journal**
+   log you can open and read afterwards.
+5. **Research at the University.** Konigsberg University holds the **technology
+   tree**; discoveries unlock further buildings.
+6. **Handle events.** Random events include thefts from the treasury, fires and
+   plagues. Time-limited **Halloween** and **New Year** events also fire.
+7. **Automate what you can.** **Autocampaigns** send your hero out repeatedly
+   without you, and a **blackmarket** trades in goods and artefacts.
 
-## 游戏玩法
+## Controls
 
-### 建设阶段
-1. **建造房屋**：吸引移民居住
-2. **建造工坊**：生产资源和商品
-3. **建造市场**：促进贸易
-4. **建造防御**：保护城市免受攻击
+The entire game is mouse clicks — there is no keyboard input in the source.
 
-### 管理阶段
-1. **资源管理**：确保有足够的资源供应
-2. **人口管理**：保持高幸福度，吸引更多移民
-3. **经济管理**：平衡收支，增加税收
-4. **科技研究**：研究新技术，提升效率
+- **Click a building** in the build list to construct it
+- **Click tabs** to switch between the city, adventure map, university, troops,
+  blackmarket, journal and settings panels
+- **Click a unit** to move it between garrison and hero's squad
+- **Click a tile on the adventure map** to travel there
+- **Buy selected / Sell selected** — trade in the blackmarket
+- **Send hero to autocampaign** — automate exploration
+- **Save / Export / Import / Load game** — your progress lives in `localStorage`,
+  and export/import is the supported way to move a save between browsers and PCs
+- **Settings** — autosave toggle, event-log size, tutorial messages, colour mode,
+  Mobile UI, sound settings
 
-### 进阶阶段
-1. **扩建城市**：解锁新的建筑类型
-2. **外交关系**：与其他城市建立贸易关系
-3. **军事力量**：组建军队，抵御外敌
+## Buildings
 
-## 操作说明
+Buildings appear in the interface as their requirements are met. Named ones
+include:
 
-- **建造建筑**：在建造菜单中选择建筑，放置在空地上
-- **管理资源**：在资源面板中查看和管理资源
-- **调整税收**：在政策菜单中调整税率
-- **研究科技**：在科技树中研究新技术
+- **Fountain** — happiness
+- **Inn** — housing and morale
+- **Stables** — mounted units
+- **Archery Range** — ranged units
+- **Treasury** — gold income; several things require it
+- **Fire brigade** — fire response, which has a recurring **sustain cost**
+- **Gallows** — as the README puts it, with the Gallows built *"the game could
+  become a clicker game if you build the Gallows, and like to execute your
+  citizens"*
+- **Konigsberg University** — the tech tree
+- **Towngate** — travel via scroll
 
-## 建筑类型
+## Units
 
-### 住宅建筑
-- **小屋**：基础住房，容纳 5 人
-- **房屋**：进阶住房，容纳 10 人
-- **豪宅**：高级住房，容纳 20 人
+Three recruitable unit types, each assignable to garrison or hero's squad:
+**Sergeants**, **Knights** and **Turkopols**. Mercenary **spearmen** and
+**swordmen** are also available.
 
-### 生产建筑
-- **伐木场**：生产木材
-- **采石场**：生产石头
-- **农场**：生产食物
-- **工坊**：生产商品
+## Artefacts
 
-### 商业建筑
-- **市场**：促进贸易
-- **酒馆**：提升幸福度
-- **教堂**：提升幸福度
+Collectible items with real effects, including the **Crusader's Sword**, **Dark
+Pact Sword**, **Ring of Protection**, **Ring of Strength**, **Vial of Lifeblood**,
+**Glyph of Knight's Valor** and **Glyph of Monk's Virtue**. Artefacts can be sold
+on the blackmarket or used, and several have class restrictions.
 
-### 防御建筑
-- **城墙**：保护城市
-- **箭塔**：防御敌人
-- **兵营**：训练士兵
+Hero units have **Attack** and **Defence** stats that can increase on level-up —
+with a high chance for some items — and there is a separate **Magic power** stat
+using **manapoints** and **spellpower**.
 
-## 游戏提示
+## Currency
 
-- 优先建造住宅，吸引移民
-- 保持资源平衡，避免短缺
-- 适当征税，不要太高或太低
-- 及时研究科技，提升效率
+**Amber** is the game's own currency and, per the interface text, *"Amber is the
+most valued currency"*. Gold, population and happiness are the other tracked
+resources, each with its own history tab so you can see when a trend started.
 
-## 关于开发者
+## Tips
 
-《1255 Burgomaster》是一款独立开发的中世纪城市建设游戏。
+- **Amber is the real currency, not gold.** Most meaningful progress is gated on
+  amber rather than gold, so prioritise amber income once the early buildings are up.
+- **The blackmarket is an artefact sink and income source.** Selling artefacts is
+  a legitimate and fast route to amber.
+- **Autocampaigns beat manual play once set up.** Manual exploring is for when you
+  need a specific artefact; otherwise let it run.
+- **Read the event log.** The tabs for gold history, population history and the
+  battle journal tell you *why* something went wrong, which the summary numbers do
+  not.
 
-- 游戏类型：城市建设策略
-- 平台：Web浏览器
+## About
 
-## 类似游戏推荐
+1255 Burgomaster was created by **Anton Gladyshev** and is licensed under
+**GPL v3** for the source code.
 
-如果你喜欢《1255 Burgomaster》，你可能也会喜欢：
-- **Banished** - 类似的城市建设游戏
-- **Settlers** - 经典城市建设游戏
-- **Foundation** - 中世纪城市建设游戏
+- Original game source: <https://github.com/Areso/1255-burgomaster>
+- Original live build: <https://1255.areso.pro>
+
+It is inspired by Travian, Townsmen, Stronghold, Stronghold Crusader, Heroes of
+Might and Magic, Lords of the Realm and the Anno series. It ships with German,
+English, Esperanto, Spanish, French and Russian localization.
+
+⚠️ **Asset license restriction.** The upstream README states: *"ALL GRAPHIC AND
+SOUND ASSETS UNDER PROPRIETARY LICENSE. YOU MAY NOT REDISTRIBUTE THE GAME WITH THE
+ASSETS VIA PUBLISHING IN INTERNET, STORES, OR ANY OTHER WAY. YOU MAY USE ASSETS
+ONLY FOR LOCAL RUNNING."* The code is GPL, but the sprites, sounds and tiles are
+not. See `public/games/1255-burgomaster/ATTRIBUTION.md` before redistributing
+this build further.

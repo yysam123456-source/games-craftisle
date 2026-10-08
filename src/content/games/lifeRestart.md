@@ -1,81 +1,99 @@
 ---
-id: "lifeRestart"
+title: "Life Restart"
 slug: "lifeRestart"
-title: "人生重来"
-description: "一个关于人生选择的文字游戏，每次选择都会影响你的人生轨迹。"
+description: "A Chinese life-simulation text game: get a random birth, live through event after event, then restart and try to do better."
 category: "simulation"
-tags: ["life", "simulation", "text", "choices", "replayable"]
-difficulty: "Easy"
-estimatedTime: "5-30 minutes per life"
-featured: true
-createdAt: "2026-06-24"
+tags: ["life", "simulation", "text", "choices", "replayable", "random"]
 ---
 
-# 人生重来 - Life Restart
+# Life Restart
 
-## 游戏简介
+**Life Restart** is a Chinese life-simulation text game by **VickScarlet** — its
+name translates as "Life Restart Simulator". The premise is the title: you are
+born, you live a whole life, you die — and then you start over, rolling a new
+character and hoping you do better this time.
 
-《人生重来》（Life Restart）是一款文字模拟游戏，模拟一个人从出生到死亡的全过程。游戏开始时，你会随机获得一些初始属性（天赋、家庭背景、出生地等），然后通过一系列随机事件和选择，体验不同的人生轨迹。
+The project's tagline, in Japanese, reads roughly: *"Start over. And do it
+properly next time."*
 
-游戏的核心在于"重来"——每次人生结束后，你可以重新开始，尝试不同的选择和策略，看看能否活出更精彩的人生。
+Its appeal is variance. A run is decided in the first seconds — you are rolled a
+name, a background and a small set of **talents** — and then events fire for the
+rest of your life, weighted by your age and by your attributes. The same seed
+never repeats, so a bad start is genuinely a different experience rather than a
+failed one.
 
-## 游戏特色
+## How to Play
 
-- **随机生成**：每次游戏都是独特的人生体验
-- **选择影响命运**：你的每个选择都会影响人生轨迹
-- **多重结局**：根据选择不同，有数十种不同结局
-- **重玩价值高**：每次重来都有新发现
-- **幽默文案**：事件描述充满黑色幽默
+1. **A character is generated** — you are given a random name, a family background,
+   and your starting attributes.
+2. **Talents are rolled.** These are the run-defining modifiers, and they come in
+   four rarities: **White**, **Blue**, **Purple** and **Orange**.
+3. **Live.** Events fire according to your age and your current attributes. Each
+   event may present a **choice**, and the choice changes your stats.
+4. **Stats compound.** Because talents and events both feed the same attributes,
+   small early gains compound into very different lives.
+5. **You die eventually.** The game scores the life and shows a summary.
+6. **Restart.** Roll a new character and run it again.
 
-## 游戏玩法
+## Attributes
 
-### 初始阶段
-1. **生成属性**：游戏随机生成你的初始属性
-   - 天赋：智力、体质、魅力、运气等
-   - 家庭：富裕、普通、贫困
-   - 出生地：城市、农村、海外等
+The game tracks **four** core properties:
 
-2. **童年阶段**：经历童年事件，做出选择
+| Stat | Meaning |
+|------|---------|
+| **CHR** | Appearance |
+| **INT** | Intelligence |
+| **STR** | Constitution |
+| **MNY** | Family background |
 
-### 成长阶段
-1. **学习教育**：上学、选择专业、考大学
-2. **职业发展**：选择职业、升职加薪、创业
-3. **人际关系**：恋爱、结婚、生子
+Alongside them, talents can grant **SPR** (happiness) and **RND** (a randomised
+attribute bonus). Each event can also contribute its own partial delta to any of
+these, which is how a single choice permanently shifts the rest of the run.
 
-### 人生后期
-1. **中年危机**：面对事业、家庭、健康的挑战
-2. **退休生活**：享受晚年或继续奋斗
-3. **人生回顾**：查看你的人生总结和成就
+## Age Stages
 
-## 操作说明
+Events are organised into an **age-indexed event pool** — each age has its own
+weighted list, so the game that gives you childhood events is not the game that
+gives you midlife events. Some events are **level-gated**, meaning they only
+become eligible once a property is high enough; others are entered into a pool
+with a weight, so common outcomes appear often and rare ones occasionally.
 
-- **鼠标点击**：点击选项进行决策
-- **自动进行**：部分事件会自动触发
-- **重来按钮**：人生结束后可以重新开始
+## Achievements
 
-## 游戏提示
+There is a full **achievement** system, separate from simply living to the end.
 
-- 运气很重要，但不是唯一因素
-- 教育和职业选择影响后半生
-- 健康和人际关系也很重要
-- 多试几次，体验不同的人生轨迹
+## Tech Notes
 
-## 关于开发者
+The game is a TypeScript **monorepo**:
 
-《人生重来》是一款国产文字游戏，最初在微博上走红，后来被移植到网页版。
+- `apps/web` — the browser build
+- `apps/console` — a console version
+- `packages/core` — the engine: `event.ts` implements the weighted event picker,
+  `talent.ts` handles talent rolls and blind-box selection
+- `packages/condition` — the condition expression evaluator
+- `packages/data` — all game data, stored as **Excel spreadsheets** that compile to
+  TypeScript: `talent.xlsx`, `event.xlsx`, `character.xlsx`, `age.xlsx`,
+  `achievement.xlsx`
 
-- 原作者：未知
-- 开源版本：https://github.com/VickScarlet/lifeRestart
+The talent system supports both **weighted selection** and **blind boxes** — both
+"roll only from this specific list" and "roll at this rarity tier". Package
+manager is `pnpm`; runtime is `bun`.
 
-## 游戏截图说明
+## About
 
-- 游戏以文字为主，配合简单的图标
-- 界面简洁，操作直观
-- 人生回顾页面展示详细的统计数据
+Life Restart was created by **VickScarlet** and is licensed under the **MIT
+License**.
 
-## 类似游戏推荐
+- Original game source: <https://github.com/VickScarlet/lifeRestart>
+- Original live build: <http://liferestart.syaro.io/>
 
-如果你喜欢《人生重来》，你可能也会喜欢：
-- **A Dark Room** - 文字冒险游戏
-- **Universal Paperclips** - 文字模拟游戏
-- **Reigns** - 卡片式决策游戏
+⚠️ **Two notes.** First, the upstream repository has been renamed to
+[`VickScarlet/remake`](https://github.com/VickScarlet/remake) — the `lifeRestart`
+URL redirects there — and the project is a much larger TypeScript monorepo now
+rather than the single-page build the older guides describe. Second, the game is
+**in Chinese**, with no English localization; the interface language is upstream's
+own. This guide describes the mechanics of the project as it now stands.
+
+This game also has **no directory in this site's `public/games/` and no entry in
+`src/data/games.ts`** — the guide is retained for reference but the game is not
+currently integrated or playable here.

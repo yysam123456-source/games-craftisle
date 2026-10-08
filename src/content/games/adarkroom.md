@@ -1,79 +1,119 @@
 ---
-id: "adarkroom"
-slug: "adarkroom"
 title: "A Dark Room"
-description: "一个神秘的文字冒险游戏，从黑暗的房间开始，逐渐揭开世界的真相。"
-category: "adventure"
-tags: ["adventure", "text", "mystery", "survival", "story"]
-difficulty: "Easy"
-estimatedTime: "1-3 hours"
-featured: true
-createdAt: "2026-06-24"
+slug: "adarkroom"
+description: "A minimalist text adventure that opens in a pitch-black room with nothing but fire, and slowly expands into a ruined world."
+category: "casual"
+tags: ["text", "incremental", "resource-management", "mystery", "classic"]
 ---
 
-# A Dark Room - 黑暗房间
+# A Dark Room
 
-## 游戏简介
+**A Dark Room** is a minimalist text adventure by Michael Townsend. It opens
+with one line — *"awake. head throbbing. vision blurry. come light the fire."* —
+and for its first act that is literally all you have: a dark room, and the means
+to make fire.
 
-《A Dark Room》是一款极简主义的文字冒险游戏，由 Michael Townsend 开发。游戏从一个黑暗的房间开始，你只能生火。随着游戏的进行，你会逐渐揭开这个世界的秘密，从简单的生存到探索废土世界。
+Then a stranger appears, and stoking the fire starts to cost you wood. Everything
+after that expands outward in stages — a hut, a village, a trading post, then
+outside, into a burned world of landmarks and mines, and finally a spacecraft.
+It is remarkable how much story it tells with almost no interface: no map, no
+inventory grid, mostly a row of buttons and a great deal of silence.
 
-游戏以其独特的叙事方式和渐进式的游戏体验而闻名，玩家需要在资源管理和探索之间找到平衡。
+## How to Play
 
-## 游戏特色
+1. **Light the fire.** Click to add wood. The fire is the entire first act — it
+   must not go out, and you must not let the wood run out.
+2. **Keep it fed.** A stranger shows up and asks for help with the fire; in
+   exchange, wanderers start leaving supplies. Wood arrives at intervals.
+3. **Build up.** The **builder** appears and unlocks construction. Build a
+   **cart** to carry more wood, then **huts** so more wanderers will work, then a
+   **trading post**, **tannery**, **smokehouse**, **workshop**, **steelworks** and
+   **armoury**. Costs scale with each building already standing.
+4. **Go outside.** Once you have enough, you leave. Out there are landmarks, and
+   each one unlocks a further step — **iron mine**, **coal mine**, **sulphur
+   mine**, **water tank**, and eventually a **ship**.
+5. **Prestige.** There is a Prestige option in the menu. It resets your world for
+   permanent bonuses.
 
-- **渐进式叙事**：从黑暗的房间开始，逐渐揭开世界真相
-- **资源管理**：收集木材、煤炭、皮毛等资源
-- **建造系统**：建造和升级建筑
-- **探索模式**：离开房间，探索废土世界
-- **极简界面**：纯文字和简单图形，充满神秘感
+## Controls
 
-## 游戏玩法
+The entire game is mouse clicks — **there is no keyboard input anywhere in the
+source.**
 
-### 初始阶段
-1. **生火**：点击"生火"按钮，保持火焰不灭
-2. **收集资源**：火焰会吸引流浪者，他们会带来资源
-3. **建造建筑**：用资源建造房屋、作坊等建筑
+- **Click the fire room** — add wood
+- **Click craftable buttons** — build when the cost is met (they appear once
+  unlocked)
+- **Click the trade buttons** — buy from the trading post
+- **Click "outside" / "leave"** — travel out of the room and back
+- **Click landmarks and encounters** — travel, gather, and interact
+- **Click the compass icon** — the equipment/scouting panel
+- **Menu → Settings** — save, export, import and language
 
-### 发展阶段
-1. **升级建筑**：提升建筑等级，解锁新功能
-2. **训练技能**：提升角色的生存技能
-3. **探索外界**：当足够强大时，可以离开房间探索
+## Getting Resources
 
-### 探索阶段
-1. **地图探索**：在废土世界中探索新地点
-2. **战斗系统**：与敌对的NPC战斗
-3. **解锁剧情**：发现世界的真相
+The production chains are worth knowing before you set out, because the mid game
+is about unlocking them in the right order:
 
-## 操作说明
+| Building | Produces |
+|----------|----------|
+| cart | increases wood carried per trip |
+| huts | more workers, which means more supply income |
+| hunting lodge | fur and meat |
+| trading post | trades for diamond, cured meat, and scales |
+| tannery | turns hides into cured meat and leather |
+| smokehouse | turns meat into dried rations that travel better |
+| workshop | bolts, rope and fabric |
+| steelworks | unlocks steel and armour |
+| armoury | weapons and armour |
 
-- **鼠标点击**：所有操作都通过鼠标点击完成
-- **菜单导航**：使用顶部菜单切换不同界面
-- **资源查看**：随时查看当前资源库存
+Outside, the **iron mine**, **coal mine** and **sulphur mine** feed the **workshop**
+and **steelworks**; **alien alloy** and **energy cells** come from the spacecraft
+sequence.
 
-## 游戏提示
+## The Endgame
 
-- 保持火焰不灭，这是游戏的核心
-- 优先升级资源生产建筑
-- 探索时要带足够的补给
-- 注意角色的生命值和饱食度
+Once you have spacecraft, the **Fabricator** opens and starts consuming alien
+alloy to build:
 
-## 关于开发者
+- **weapons** — energy blade, disruptor, plasma rifle ("the peak of wanderer
+  weapons technology, sleek and deadly")
+- **armour** — kinetic armour ("wanderer soldiers succeed by subverting the
+  enemy's rage")
+- **tools** — hypos and stims
+- **upgrades** — fluid recycler ("water out, water in. waste not, want not") and
+  cargo drone
 
-《A Dark Room》由 Michael Townsend 开发，最初发布于 2013 年。游戏灵感来自《Candy Box》和《A Game of Changes》等渐进式文字游戏。
+Several of these **require a blueprint** found in the world, and several land on
+specific encounters — the **Executioner** in particular is the fight the whole
+game is building toward.
 
-- 官网：https://adarkroom.doublespeakgames.com/
-- 开发者：Michael Townsend (doublespeak games)
-- 开源：https://github.com/doublespeakgames/adarkroom
+## Multiplayer Mode
 
-## 游戏截图说明
+**Yes** — there is an optional co-op mode, driven by Dropbox (`script/dropbox.js`).
+It is not the default path and requires a Dropbox account.
 
-- 游戏以纯文字为主，配合简单的像素图形
-- 界面极简，充满神秘感
-- 随着游戏进展，界面会逐渐丰富
+## Language
 
-## 类似游戏推荐
+The game reads a `lang` query parameter and supports more than twenty languages:
+Chinese (Simplified and Traditional), English, French, German, Greek,
+Esperanto, Indonesian, Italian, Japanese, Korean, Lithuanian, Latvian,
+Norwegian, Polish, Portuguese, Portuguese (Brazil), Russian, Spanish, Swedish,
+Thai, Turkish, Ukrainian and Vietnamese. It falls back to English when the
+parameter is absent, which is what happens on this site.
 
-如果你喜欢《A Dark Room》，你可能也会喜欢：
-- **Lifeless** - 类似的文字生存游戏
-- **Universal Paperclips** - 渐进式文字游戏
-- **A Game of Changes** - 文字冒险游戏
+## Save Data
+
+Progress saves to `localStorage` automatically. Settings offers **export** and
+**import** for moving a save between browsers and machines.
+
+## About
+
+A Dark Room was created by **Michael Townsend** of doublespeak games and first
+published in 2013. It is licensed under the **Mozilla Public License 2.0**.
+
+- Original live build: <http://adarkroom.doublespeakgames.com>
+- Original game source: <https://github.com/doublespeakgames/adarkroom>
+
+It has since been ported to the App Store, Google Play and Steam. See
+`public/games/adarkroom/ATTRIBUTION.md` for the full provenance record, including
+the individual credits of the bundled audio libraries.

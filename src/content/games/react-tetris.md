@@ -1,99 +1,111 @@
 ---
-id: "react-tetris"
-slug: "react-tetris"
 title: "React Tetris"
-description: "使用 React 和 Redux 制作的精美俄罗斯方块游戏，支持键盘、鼠标和触摸控制。"
+slug: "react-tetris"
+description: "A pixel-perfect Tetris built with React, Redux and Immutable.js — responsive on keyboard and touch, with full localStorage persistence."
 category: "puzzle"
-tags: ["tetris", "blocks", "puzzle", "classic", "react", "redux"]
-difficulty: "Medium"
-estimatedTime: "Endless"
-featured: true
-createdAt: "2026-06-24"
+tags: ["tetris", "blocks", "react", "redux", "classic", "pixel"]
 ---
 
-# React Tetris - 俄罗斯方块
+# React Tetris
 
-## 游戏简介
+**React Tetris** is a Tetris implementation by **Chvin**, built with React, Redux
+and Immutable.js — the author's stated aim being to code Tetris with that stack.
+The upstream description is simply *"Use React, Redux, Immutable to code Tetris."*
 
-《React Tetris》是一款使用 React、Redux 和 Immutable.js 制作的现代化俄罗斯方块游戏。游戏不仅还原了经典俄罗斯方块的玩法，还添加了精美的视觉效果和流畅的操作体验。
+Two things set it apart from a plain Tetris clone. The first is **responsive
+input** — full keyboard on PC, full touch on mobile. The second is **complete
+state persistence**: the game subscribes to the Redux store and writes state to
+`localStorage` on every change, recording it precisely enough that closing the
+tab, refreshing, a crash or a dead phone battery all resume the game exactly where
+you left off.
 
-本项目是开源项目，由 chvin 开发，展示了 React 和 Redux 在实际游戏开发中的应用。
+The architecture is the third point. Because an Immutable.js object cannot be
+modified in place, every change returns a new object, and the Redux store holds
+those immutable structures directly as its state. It is a genuinely readable
+example of the stack rather than a game bolted onto it.
 
-## 游戏特色
+## How to Play
 
-- **现代化实现**：使用 React + Redux + Immutable.js
-- **流畅操作**：支持键盘、鼠标和触摸控制
-- **精美视觉效果**：粒子效果、动画流畅
-- **多平台支持**：PC 和移动端都能完美运行
-- **开源项目**：代码质量高，适合学习
+1. The game starts **paused** — press `P` or `S` to begin.
+2. Pieces fall from the top. Move and rotate them to fill horizontal lines.
+3. Fill a line completely to clear it. Clearing **more lines at once is worth far
+   more** — see the scoring table below.
+4. Every 10 lines cleared increases the fall speed, in six discrete steps.
+5. Stack pieces to the top of the 20-row field and the game ends.
 
-## 游戏玩法
+## Controls
 
-### 基本操作
-- **左右箭头**：移动方块
-- **上箭头**：旋转方块
-- **下箭头**：加速下落
-- **空格键**：直接落到底部
-- **P 键**：暂停游戏
+The keyboard map is defined literally in the bundle as `keyboard = { 37: 'left',
+38: 'rotate', 39: 'right', 40: 'down', 32: 'space', 83: 's', 82: 'r', 80: 'p' }`,
+and the listeners are bound to `document` with `keydown` and `keyup`:
 
-### 游戏规则
-1. 方块从顶部落下
-2. 可以移动和旋转方块
-3. 当一行被填满时，该行会消除
-4. 消除行数越多，得分越高
-5. 游戏速度会随着等级提升而加快
-6. 当方块堆到顶部无法放置时，游戏结束
+- **←** (37) — move left
+- **→** (39) — move right
+- **↑** (38) — rotate
+- **↓** (40) — soft drop
+- **Space** (32) — hard drop straight to the bottom
+- **P** (80) — pause / resume. Also **starts** the game if no piece is active
+- **S** (83) — toggle music
+- **R** (82) — reset
 
-### 得分规则
-- 消除 1 行：100 分 × 当前等级
-- 消除 2 行：300 分 × 当前等级
-- 消除 3 行：500 分 × 当前等级
-- 消除 4 行：800 分 × 当前等级
+There is also a set of **on-screen buttons** rendered beneath the board, which
+work with mouse and touch — the arrows, rotate, and the like.
 
-## 操作说明
+Note that `P` and `S` are **toggle** keys with the same handler: if a piece is
+active, `P` pauses; if the board is empty, it starts the game. So `S` both starts
+the game and toggles music.
 
-### 键盘控制
-- **← →**：左右移动
-- **↑**：旋转
-- **↓**：加速下落
-- **Space**：硬降（直接落到底）
-- **P**：暂停
+## Scoring
 
-### 触摸控制（移动端）
-- **左右滑动**：移动方块
-- **上滑**：旋转方块
-- **下滑**：加速下落
-- **双击**：硬降
+Clearing one to four lines at once awards a flat number of points — the values in
+the bundle are `clearPoints = [100, 300, 700, 1500]`:
 
-### 鼠标控制
-- **点击左右按钮**：移动方块
-- **点击旋转按钮**：旋转方块
+| Lines cleared at once | Points |
+|----------------------|--------|
+| 1 | 100 |
+| 2 | 300 |
+| 3 | 700 |
+| 4 (Tetris) | 1500 |
 
-## 游戏提示
+## Speed
 
-- 优先消除多行，得分更高
-- 保留 I 方块（长条）用于消除 4 行
-- 注意预留空间，避免无法放置方块
-- 速度会随着等级提升，保持冷静
+Fall speed steps through six levels, with a gravity interval per level:
 
-## 关于开发者
+| Speed level | Gravity interval |
+|-------------|------------------|
+| 1 | 800 ms |
+| 2 | 650 ms |
+| 3 | 500 ms |
+| 4 | 370 ms |
+| 5 | 250 ms |
+| 6 (max) | 160 ms |
 
-《React Tetris》由 chvin 开发，是一个展示 React 和 Redux 技术栈的优秀开源项目。
+Speed increases by one level for every 10 lines cleared, and **caps at level 6**.
 
-- 开发者：chvin
-- GitHub：https://github.com/chvin/react-tetris
-- 技术栈：React, Redux, Immutable.js, Webpack
+## Save Data
 
-## 技术亮点
+State is stored under the `localStorage` key `REACT_TETRIS`, base64-encoded and
+URL-encoded on write and decoded on load. High scores are read back through
+`lastRecord()`.
 
-- **React**：组件化开发，代码可维护性强
-- **Redux**：状态管理清晰，便于调试
-- **Immutable.js**：不可变数据结构，提升性能
-- **CSS3 动画**：流畅的视觉效果
+## About
 
-## 类似游戏推荐
+React Tetris was created by **Chvin** and is licensed under the **Apache License
+2.0**, per the upstream `package.json`.
 
-如果你喜欢《React Tetris》，你可能也会喜欢：
-- **Tetris 99** - 大逃杀模式俄罗斯方块
-- **Tetris Effect** - 沉浸式俄罗斯方块
-- **Puyo Puyo Tetris** - 俄罗斯方块 + 噗哟噗哟
+- Original game source: <https://github.com/chvin/react-tetris>
+- Original live build: <https://chvin.github.io/react-tetris/>
+
+The project's own README also links to several forks, including
+`learner-yu/react-tetris` and `daoruliu/react-tetris`.
+
+⚠️ **Note on the license.** The `package.json` declares `"license": "Apache-2.0"`,
+but **no `LICENSE` file exists in the repository**, and GitHub therefore reports
+no license for it. Apache 2.0 requires the license text to be redistributed with
+copies, so treat the grant as unverified and contact the author before
+redistributing a derivative. See `public/games/react-tetris/ATTRIBUTION.md` for
+the full provenance record.
+
+**The interface text is Chinese**, as shipped upstream — the game detects locale
+and falls back accordingly. That is upstream's own UI language, not something this
+integration changed.

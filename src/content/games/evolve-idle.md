@@ -1,100 +1,90 @@
 ---
-id: "evolve-idle"
+title: "Evolve Idle"
 slug: "evolve-idle"
-title: "Evolve"
-description: "一款文明进化放置游戏，从单细胞生物开始，逐步进化到未来文明。"
+description: "An incremental game about evolving a civilization from primordial ooze into a spacefaring empire, with micromanagement throughout."
 category: "strategy"
-tags: ["evolution", "civilization", "idle", "sci-fi", "progression"]
-difficulty: "Easy"
-estimatedTime: "Endless"
-featured: true
-createdAt: "2026-06-24"
+tags: ["incremental", "civilization", "idle", "sci-fi", "management", "spire"]
 ---
 
-# Evolve - 进化
+# Evolve Idle
 
-## 游戏简介
+**Evolve** is an incremental game about evolving a civilization from primordial
+ooze into a spacefaring empire. The upstream README describes the mix exactly:
+it "combines elements of a clicker with an idler and has lots of micromanagement",
+and poses the question the whole game is built around — *What will you evolve
+into?*
 
-《Evolve》是一款文明进化放置游戏。你从单细胞生物开始，通过采集资源、进化生物、发展文明，最终建立起庞大的未来文明。
+The shape is a **city tier ladder** with eight rungs, then a set of late-game
+systems that open on top of it:
 
-游戏融合了放置游戏和文明进化的元素，即使离线也能获得进度。游戏中有多个时代（时代、中世纪、工业时代、信息时代、未来时代等），每个时代都有独特的玩法和内容。
+**Camp → Hamlet → Village → Town → City → Metropolis → Megalopolis →
+Ecumenopolis**
 
-## 游戏特色
+Each tier unlocks more of the interface, and the late systems — **Space**,
+**Industry**, **Civics**, **Market**, **Storage**, **Government**, **Military**,
+**Mech Lab**, **Ship Yard**, **Power Grid**, **Spire Supply** and **Outer Solar
+System** — are where the actual difficulty lives.
 
-- **文明进化**：从单细胞到未来文明
-- **放置玩法**：离线也能获得资源
-- **多个时代**：解锁不同时代的科技和建筑
-- **科技树**：研究新技术，解锁新功能
-- **多种资源**：食物、木材、石头、金属、石油、稀土等
+## How to Play
 
-## 游戏玩法
+1. **Gather resources.** At the start that is manual clicks, and it is the only
+   manual part; everything downstream runs on production rates.
+2. **Advance your civilization tier.** Higher tiers unlock new tabs and new
+   production chains rather than just bigger numbers.
+3. **Build production.** Balance resources against each other — the game punishes
+   running a single resource dry more than it rewards a full inventory.
+4. **Research** technologies to open the next tier and new mechanics.
+5. **Expand outward.** Industry, Power Grid and Mech Lab feed the **Ship Yard**,
+   which is how you reach **Space** and the **Outer Solar System**.
+6. **Set your government** once Civics unlocks — it is a long-term modifier, not a
+   combat system.
+7. **Prestige** when you have a run worth restarting. The wiki has a dedicated
+   Prestige section under its calculators.
 
-### 初始阶段（单细胞时代）
-1. **采集资源**：点击采集食物和木材
-2. **进化生物**：解锁新的生物形态
-3. **发展种群**：增加种群数量
+## Controls
 
-### 发展阶段（石器时代到中世纪）
-1. **建造建筑**：建造各种生产建筑
-2. **研究科技**：解锁新技术
-3. **发展经济**：建立贸易和税收系统
+The whole game is mouse clicks — there are no keyboard shortcuts:
 
-### 进阶阶段（工业时代到未来）
-1. **工业革命**：机械化生产
-2. **信息时代**：数字化和互联网
-3. **未来科技**：太空探索和超科技
+- **Click a resource** to gather it manually (early game only)
+- **Click a tab** across the top to switch panels
+- **Click a building or upgrade** to buy or queue it
+- **Click the Market** to trade resources
+- **Wiki button** — opens the in-game wiki, which is extensive and includes
+  mechanics guides, FAQ and a set of **calculators** (mass ejector, prestige and
+  others)
+- **Reset button** — permanently wipes all progress
 
-## 操作说明
+⚠️ The game is explicit about the reset button: *"This completely resets all your
+progress and cannot be undone. This is NOT a prestige mechanic; you are wiping out
+your game data. Keep this button disabled."* Prestige is the intended reset path,
+and reset is not undoable.
 
-- **点击采集**：点击资源图标采集资源
-- **建造建筑**：在建造菜单中选择建筑
-- **研究科技**：在科技树中研究新技术
-- **升级**：用资源升级建筑和科技
+## Offline Progress
 
-## 时代系统
+Evolve keeps accumulating while the tab is closed. The **Mass Ejector**
+(interstellar mass ejector) and the outer-space systems push this further, so
+there is a real incentive to check back periodically rather than never.
 
-### 石器时代
-- 基础资源：食物、木材、石头
-- 基础建筑：帐篷、工坊
-- 基础科技：火、工具
+## Tips
 
-### 中世纪时代
-- 新资源：金属
-- 新建筑：城堡、教堂
-- 新科技：农业、冶金
+- **Check the wiki's calculators before you prestige.** The Mass Ejector and
+  prestige math both reward planning against projected values.
+- **Storage is worth buying early** — carrying caps bite harder than production
+  shortfalls once you have several chains running.
+- **Do not touch the reset button.** It is labeled a non-prestige mechanic and it
+  wipes everything.
 
-### 工业时代
-- 新资源：煤炭、石油
-- 新建筑：工厂、电站
-- 新科技：蒸汽机、电力
+## About
 
-### 信息时代
-- 新资源：稀有金属、数据
-- 新建筑：实验室、数据中心
-- 新科技：计算机、互联网
+Evolve was created by **Peter Motschmann** and is licensed under the **Mozilla
+Public License 2.0**.
 
-### 未来时代
-- 新资源：反物质、暗物质
-- 新建筑：太空站、时间机器
-- 新科技：超光速、时间旅行
+- Original game source: <https://github.com/pmotschmann/Evolve>
+- Original live build: <https://pmotschmann.github.io/Evolve/>
 
-## 游戏提示
+The package identifies itself as version **1.3.16**, so this is a mid-development
+snapshot. It ships an in-game **wiki** with 10,000+ translated string keys, which
+is the best reference for any mechanic the surface UI does not explain.
 
-- 优先升级资源生产，保持资源增长
-- 及时研究科技，解锁新功能
-- 平衡各种资源，避免短缺
-- 多个时代的内容要逐步解锁
-
-## 关于开发者
-
-《Evolve》是一款受欢迎的文明进化放置游戏。
-
-- 游戏类型：文明进化放置
-- 平台：Web浏览器
-
-## 类似游戏推荐
-
-如果你喜欢《Evolve》，你可能也会喜欢：
-- **Civilization Idle** - 类似的文明放置游戏
-- **Idle Civilization** - 文明进化游戏
-- **Progress Knight** - 放置RPG游戏
+See `public/games/evolve-idle/ATTRIBUTION.md` for the full provenance record,
+including the bundled open-source libraries.
