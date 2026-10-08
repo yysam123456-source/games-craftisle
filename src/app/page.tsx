@@ -12,7 +12,7 @@ import { soundManager } from "@/lib/sound-effects";
 import { motion, type Variants } from "motion/react";
 import { useState, useEffect } from "react";
 import {
-  Gamepad2, Download, Trophy, Smartphone, Users, Star, FolderOpen,
+  Gamepad2, Download, Trophy, Smartphone, Star, FolderOpen,
   Puzzle, Target, Zap, Building2, Calendar, Sparkles, Flame,
   Volume2, VolumeX, ChevronRight, Heart, Clock
 } from "lucide-react";
@@ -43,12 +43,12 @@ function CategoryIcon({ cat, className = "" }: { cat: string; className?: string
 }
 
 const categoryDescriptions: Record<string, string> = {
-  puzzle: "Challenge your logic and mind with Sudoku, Minesweeper, word puzzles and more!",
-  arcade: "Timeless classic arcade games. Snake, Tetris, Brick Breaker — can't stop playing!",
-  strategy: "Plan your moves, test your strategy. Chess and more await your challenge!",
-  casual: "Relaxing and fun, perfect for killing time anytime, anywhere!",
-  action: "Test your reaction speed, challenge your limits!",
-  building: "Unleash your creativity, build your own world!",
+  puzzle: "Logic, deduction and pattern recognition — from 3D mazes to hex-grid puzzles.",
+  arcade: "Fast reflex games: shmups, endless runners and one-button score chases.",
+  strategy: "Plan ahead and outsmart the opponent — tower defence, roguelikes and RTS.",
+  casual: "Unhurried and low-pressure. Puzzles, explorers and idle toys for a quiet break.",
+  action: "Shooters, slashers and anything that punishes a slow reaction.",
+  building: "Sandboxes and voxels — dig, stack and build a world of your own.",
 };
 
 const sectionVariants: Variants = {
@@ -61,7 +61,6 @@ const sectionVariants: Variants = {
 };
 
 const stats = [
-  { value: "15+", label: "Free Games", Icon: Gamepad2 },
   { value: "0", label: "No Download", Icon: Download },
   { value: "100%", label: "Free to Play", Icon: Trophy },
   { value: "", label: "Multi-Device", Icon: Smartphone },
@@ -73,6 +72,23 @@ export default function HomePage() {
   const [recentGames, setRecentGames] = useState<any[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [dailyGame, setDailyGame] = useState<any>(null);
+  // Single tabbed catalogue replaces the six stacked per-category sections.
+  const [activeCat, setActiveCat] = useState<string>("all");
+  const [showAllGames, setShowAllGames] = useState(false);
+  const PREVIEW_PER_CAT = 12;
+  const categoryGames = activeCat === "all" ? games : games.filter((g) => g.category === activeCat);
+  const visibleGames = showAllGames ? categoryGames : categoryGames.slice(0, PREVIEW_PER_CAT);
+  const hasMore = categoryGames.length > PREVIEW_PER_CAT;
+
+  // Catalogue-wide figures, derived from the registry so they can never drift.
+  const gameCount = games.length;
+  const avgRating = games.length
+    ? games.reduce((sum, g) => sum + (Number(g.rating) || 0), 0) / games.length
+    : 0;
+  const heroStats = [
+    { value: `${gameCount}`, label: "Free Games", Icon: Gamepad2 },
+    ...stats,
+  ];
 
   // 计算每日游戏 — 固定展示 Messenger
   useEffect(() => {
@@ -98,7 +114,7 @@ export default function HomePage() {
     "@type": "WebSite",
     "name": "Craftisle Games",
     "url": "https://game.craftisle.com",
-    "description": "Play 15+ free HTML5 games online! No download required, play directly in your browser.",
+    "description": `Play ${getAllGames().filter((g) => g.isActive).length} free HTML5 games online! No download required, play directly in your browser.`,
     "potentialAction": {
       "@type": "SearchAction",
       "target": "https://game.craftisle.com/search?q={search_term_string}",
@@ -257,7 +273,7 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 1.6 }}
             className="flex flex-wrap justify-center gap-8 md:gap-12"
           >
-            {stats.map((stat, i) => (
+            {heroStats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -318,10 +334,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
-              { value: 15, suffix: "+", label: "Free Games", Icon: Gamepad2 },
-              { value: 50, suffix: "K+", label: "Active Players", Icon: Users },
-              { value: 48, suffix: "/5", label: "Average Rating", Icon: Star },
-              { value: 6, suffix: "", label: "Game Categories", Icon: FolderOpen },
+              { value: gameCount, suffix: "", label: "Free Games", Icon: Gamepad2 },
+              { value: categories.length, suffix: "", label: "Game Categories", Icon: FolderOpen },
+              { value: Number(avgRating.toFixed(1)), suffix: "/5", label: "Average Rating", Icon: Star },
+              { value: games.reduce((n, g) => n + (g.tags?.length || 0), 0), suffix: "+", label: "Tags Indexed", Icon: Sparkles },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -511,7 +527,7 @@ export default function HomePage() {
                       </div>
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Gamepad2 className="w-3.5 h-3.5" strokeWidth={1.5} />
-                        <span className="text-xs">{(dailyGame.playCount / 1000).toFixed(1)}K plays</span>
+                        <span className="text-xs">{dailyGame.estimatedTime || "Quick play"}</span>
                       </div>
                       {dailyGame.difficulty && (
                         <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -536,54 +552,101 @@ export default function HomePage() {
         </motion.section>
       )}
 
-      {/* ===== Games by Category ===== */}
-      {categories.map((cat, catIdx) => {
-        const catGames = games.filter((g) => g.category === cat);
-        return (
-          <motion.section
-            id={`cat-${cat}`}
-            key={cat}
-            variants={sectionVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="py-20 md:py-28 border-b border-white/[0.04] last:border-0 relative"
-          >
-            {/* Section header */}
-            <div className="container mx-auto px-4 mb-12">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3 mb-3"
-              >
-                {(() => { const CatIcon = categoryIcons[cat] || Gamepad2; return <CatIcon className="w-8 h-8 text-primary" strokeWidth={1.5} />; })()}
-                <h2 className="text-2xl md:text-4xl font-extrabold">
-                  {categoryLabels[cat] || cat}
-                </h2>
-              </motion.div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-muted-foreground text-sm md:text-base max-w-2xl"
-              >
-                {categoryDescriptions[cat]}
-              </motion.p>
-            </div>
+      {/* ===== Games by Category — tabbed, single section ===== */}
+      <motion.section
+        id="all-games"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        className="py-16 md:py-24 border-b border-white/[0.04] relative"
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
+            >
+              <Gamepad2 className="w-4 h-4 mr-1 inline -mt-0.5" /> BROWSE THE LIBRARY
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
+              {gameCount} Free Games, Zero Downloads
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+              Pick a category or search the whole library. Everything runs instantly in your browser.
+            </p>
+          </div>
 
-            {/* Games grid */}
-            <div className="container mx-auto px-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {catGames.map((game, i) => (
-                  <GameCard key={game.id} game={game} index={i} />
-                ))}
-              </div>
-            </div>
-          </motion.section>
-        );
-      })}
+          {/* Category tabs */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            <button
+              onClick={() => { setActiveCat("all"); setShowAllGames(false); }}
+              className={
+                "px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 " +
+                (activeCat === "all"
+                  ? "bg-primary text-white shadow-lg shadow-primary/25"
+                  : "bg-white/[0.04] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground border border-white/[0.06]")
+              }
+            >
+              All
+              <span className="ml-2 text-xs opacity-60">{gameCount}</span>
+            </button>
+            {categories.map((cat) => {
+              const count = games.filter((g) => g.category === cat).length;
+              const CatIcon = categoryIcons[cat] || Gamepad2;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => { setActiveCat(cat); setShowAllGames(false); }}
+                  className={
+                    "px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 inline-flex items-center " +
+                    (activeCat === cat
+                      ? "bg-primary text-white shadow-lg shadow-primary/25"
+                      : "bg-white/[0.04] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground border border-white/[0.06]")
+                  }
+                >
+                  <CatIcon className="w-4 h-4 mr-1.5" strokeWidth={1.5} />
+                  {categoryLabels[cat] || cat}
+                  <span className="ml-2 text-xs opacity-60">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Grid for the active tab */}
+          <motion.div
+            key={activeCat}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          >
+            {visibleGames.map((game, i) => (
+              <GameCard key={game.id} game={game} index={i} />
+            ))}
+          </motion.div>
+
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            {hasMore && (
+              <button
+                onClick={() => setShowAllGames(true)}
+                className="px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20"
+              >
+                Show all {categoryGames.length} {activeCat === "all" ? "" : categoryLabels[activeCat] || activeCat} games
+              </button>
+            )}
+            <Link
+              href={activeCat === "all" ? "/search" : `/category/${activeCat}`}
+              className="px-6 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-foreground font-semibold transition-all duration-300 border border-white/[0.08] inline-flex items-center"
+            >
+              Open {activeCat === "all" ? "search & filters" : `all ${categoryLabels[activeCat] || activeCat} games`}
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+        </div>
+      </motion.section>
 
       {/* ===== Featured Games ===== */}
       <motion.section
@@ -697,46 +760,7 @@ export default function HomePage() {
       </motion.section>
 
       {/* ===== All Games ===== */}
-      <motion.section
-        id="all-games"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="py-20 md:py-28 relative"
-      >
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[150px]" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-14">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4"
-            >
-              ALL GAMES
-            </motion.div>
-            <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-4">
-              Every Game
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Curated {games.length} free HTML5 games, click to play!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {games.map((game, i) => (
-              <GameCard key={game.id} game={game} index={i} />
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      {/* ===== Recent Games ===== */}
+            {/* ===== Recent Games ===== */}
       {isClient && recentGames.length > 0 && (
         <motion.section
           initial={{ opacity: 0 }}

@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { Game } from "@/types/game";
 import { cn } from "@/lib/utils";
 import { TiltCard, MouseGlow } from "@/components/animations/mouse-follower";
-import { Heart } from "lucide-react";
+import { Heart, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { sounds } from "@/lib/sound-effects";
 import { soundManager } from "@/lib/sound-effects";
@@ -156,15 +156,16 @@ export function GameCard({ game, index = 0 }: GameCardProps) {
               ))}
             </div>
 
-            {/* Rating and play count */}
+            {/* Rating and category — playCount is placeholder data, so we show the
+                category instead of a fabricated "12K plays" figure. */}
             <div className="flex items-center justify-between pt-2 border-t border-white/[0.04]">
               <div className="flex items-center gap-1.5">
                 <span className="text-amber-400 text-sm">⭐</span>
                 <span className="text-sm font-semibold">{game.rating}</span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
-                <span className="text-sm">🎮</span>
-                <span className="text-xs">{(game.playCount / 1000).toFixed(0)}K plays</span>
+                <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <span className="text-xs">{game.estimatedTime || "Quick play"}</span>
               </div>
             </div>
           </div>

@@ -156,7 +156,6 @@ export function GameDetailClient({
                     {/* Meta 信息 */}
                     <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
                       <span>⭐ <strong className="text-foreground">{game.rating}</strong>/5.0</span>
-                      <span>🎮 {game.playCount.toLocaleString()} plays</span>
                       {game.difficulty && <span>📊 {game.difficulty}</span>}
                       {game.estimatedTime && <span>⏱️ {game.estimatedTime}</span>}
                     </div>
