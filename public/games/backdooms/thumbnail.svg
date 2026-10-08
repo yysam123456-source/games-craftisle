@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="The Backdooms">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2f2a"/><stop offset="1" stop-color="#141010"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><rect x="140" y="70" width="320" height="230" fill="#1a1a1e" stroke="#4a4a52" stroke-width="2"/><g fill="#f2e06a" opacity="0.85"><rect x="180" y="110" width="50" height="34"/><rect x="370" y="110" width="50" height="34"/><rect x="180" y="230" width="50" height="34"/><rect x="370" y="230" width="50" height="34"/></g><rect x="278" y="150" width="44" height="110" fill="#2a2a32"/></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">The Backdooms</text>
+</svg>

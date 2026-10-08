@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="The Pond">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e4a5a"/><stop offset="1" stop-color="#0c1a20"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><ellipse cx="300" cy="215" rx="190" ry="105" fill="#2d6a7a" opacity="0.85"/><ellipse cx="300" cy="215" rx="140" ry="72" fill="#3d8a9a" opacity="0.7"/><g fill="#4a9"><path d="M300,200 l0,0"/><ellipse cx="250" cy="205" rx="22" ry="8"/></g></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">The Pond</text>
+</svg>

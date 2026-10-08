@@ -1,0 +1,23 @@
+[
+  {
+    "name": "clone",
+    "src": "victorFork.wav",
+    "loop": false
+  },
+  {
+    "name": "door",
+    "src": "door.wav",
+    "loop": false
+  },
+  {
+    "name": "attack",
+    "src": "victorFork3.wav",
+    "loop": true
+  },
+  {
+    "name": "music",
+    "src": "background.m4a",
+    "loop": true,
+    "autoplay": true
+  }
+]

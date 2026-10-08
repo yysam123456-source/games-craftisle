@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Psiral - DEV</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
+<script>// Autoplay policy guard: howler calls HTMLMediaElement.play() internally and does
+// not handle the resulting rejection, which surfaces as an uncaught DOMException.
+// Wrapping play() once, here, silences it for the whole game.
+(function () {
+  var play = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () {
+    var r = play.apply(this, arguments);
+    if (r && typeof r.catch === 'function') { r.catch(function () {}); }
+    return r;
+  };
+})();
+</script>
+</head>
+<body>
+<!-- Canvas placeholder -->
+<div id="screen">
+    <div id="top"></div>
+</div>
+<div id="bottom">
+    <a id="quit" href="#" data-confirm="0">QUIT</a>
+</div>
+<!-- Versioning -->
+<script type="text/javascript">
+var _timestamp = (new Date()).getTime();
+var _version = {
+    buildnumber:_timestamp,
+};
+</script>
+<!-- vendor libs -->
+<script src="libs/underscore-min.js"></script>
+<script src="libs/howler.min.js"></script>
+<script src="libs/melonJS-0.9.11.js"></script>
+<script src="libs/plugins/debugPanel.js"></script>
+<script src="libs/plugins/fndelay.js"></script>
+<!-- our plugins -->
+<script src="js/howlerAudio.js"></script>
+<!-- commons -->
+<script src="js/common/globals.js"></script>
+<script src="js/common/l10n.js"></script>
+<script src="js/common/persistence.js"></script>
+<!-- bootstrap -->
+<script src="js/game.js"></script>
+<script src="js/resources.js"></script>
+<!-- game logic predicates -->
+<script src="js/backbone/map.js"></script>
+<script src="js/backbone/gamemaster.js"></script>
+<!-- scenes -->
+<script src="js/scenes/splash.js"></script>
+<script src="js/scenes/play.js"></script>
+<script src="js/scenes/menu.js"></script>
+<!-- client hud -->
+<script src="js/hud/play.js"></script>
+<script src="js/hud/widgets.js"></script>
+<script src="js/hud/menu.js"></script>
+<!-- entities -->
+<script src="js/entities/wizards.js"></script>
+<script src="js/entities/board.js"></script>
+<script src="js/entities/animations.js"></script>
+
+<script type="text/javascript">
+window.onReady(function onReady() {
+    game.onload();
+    
+    // Mobile optimization tricks/hacks
+    if (me.device.isMobile && !navigator.isCocoonJS) {
+        // Prevent the webview from moving on a swipe
+        window.document.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+            window.scroll(0, 0);
+            return false;
+        }, false);
+
+        // Scroll away mobile GUI
+        (function () {
+            window.scrollTo(0, 1);
+            me.video.onresize(null);
+        }).defer();
+
+        me.event.subscribe(me.event.WINDOW_ONRESIZE, function (e) {
+            window.scrollTo(0, 1);
+        });
+    }
+});
+</script>
+</body>
+</html>                

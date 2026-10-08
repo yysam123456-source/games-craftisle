@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="ZED INVADERS">
+  <defs>
+    <linearGradient id="g1" x1="85%" y1="15%" x2="15%" y2="85%"><stop offset="0%" stop-color="#0b0b1a"/><stop offset="100%" stop-color="#ff2d55"/></linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="72%">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#g1)"/>
+  <g fill="#ff2d55" fill-opacity="0.9">
+<rect x="162" y="100" width="16" height="16"/>
+<rect x="182" y="100" width="16" height="16"/>
+<rect x="202" y="100" width="16" height="16"/>
+<rect x="152" y="120" width="16" height="16"/>
+<rect x="172" y="120" width="16" height="16"/>
+<rect x="192" y="120" width="16" height="16"/>
+<rect x="212" y="120" width="16" height="16"/>
+<rect x="232" y="120" width="16" height="16"/>
+<rect x="152" y="140" width="16" height="16"/>
+<rect x="172" y="140" width="16" height="16"/>
+<rect x="192" y="140" width="16" height="16"/>
+<rect x="212" y="140" width="16" height="16"/>
+<rect x="232" y="140" width="16" height="16"/>
+<rect x="162" y="160" width="16" height="16"/>
+<rect x="182" y="160" width="16" height="16"/>
+<rect x="202" y="160" width="16" height="16"/>
+</g>
+  <rect width="400" height="300" fill="url(#v)"/>
+  <text x="200" y="278" font-family="Verdana,Geneva,sans-serif" font-size="21" font-weight="bold"
+        letter-spacing="3" text-anchor="middle" fill="#ffffff" fill-opacity="0.94">ZED INVADERS</text>
+</svg>

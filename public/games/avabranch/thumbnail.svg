@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Avabranch">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a4a2f"/><stop offset="1" stop-color="#101810"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><g fill="none" stroke="#7ed957" stroke-width="8"><rect x="120" y="90" width="120" height="90" rx="6"/><rect x="360" y="150" width="120" height="90" rx="6"/><rect x="180" y="230" width="100" height="70" rx="6"/></g><circle cx="300" cy="200" r="20" fill="#e8503a"/></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">Avabranch</text>
+</svg>

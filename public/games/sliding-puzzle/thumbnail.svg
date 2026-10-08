@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="SLIDING PUZZLE">
+  <defs>
+    <linearGradient id="g1" x1="85%" y1="15%" x2="15%" y2="85%"><stop offset="0%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#f77f00"/></linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="72%">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#g1)"/>
+  <g fill="#f77f00" fill-opacity="0.9">
+<rect x="110" y="100" width="52" height="52" rx="6"/>
+<rect x="170" y="100" width="52" height="52" rx="6" fill-opacity="0.55"/>
+<rect x="110" y="160" width="52" height="52" rx="6" fill-opacity="0.55"/>
+<rect x="238" y="100" width="4" height="112" fill-opacity="0.35"/>
+</g>
+  <rect width="400" height="300" fill="url(#v)"/>
+  <text x="200" y="278" font-family="Verdana,Geneva,sans-serif" font-size="21" font-weight="bold"
+        letter-spacing="3" text-anchor="middle" fill="#ffffff" fill-opacity="0.94">SLIDING PUZZLE</text>
+</svg>

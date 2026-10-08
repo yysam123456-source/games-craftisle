@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Psiral">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a4a3a"/><stop offset="1" stop-color="#101814"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><path d="M300,190 m20,0 a20,20 0 1,1 -20,20 a40,40 0 1,1 40,-40 a60,60 0 1,1 -60,60 a80,80 0 1,1 80,-80" fill="none" stroke="#7ed957" stroke-width="8" stroke-linecap="round"/></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">Psiral</text>
+</svg>

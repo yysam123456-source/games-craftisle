@@ -1,0 +1,73 @@
+/**
+ * main.css
+ * 
+ * Global CSS styles
+ */
+
+body {
+    background: #192b2f;
+    background-image: url('../assets/gui/bg.jpg');
+    background-position:top;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    /*border: 1px solid red;*/
+    margin: 0;
+    padding: 0;
+}
+@font-face {
+    font-family: 'dafont';
+    src: url('arkham_bold.ttf');
+}
+#top {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 91px;
+    background-image: url('../assets/gui/header_bg.png');
+    background-position:top;
+    background-repeat:repeat-x;
+    z-index: -1;
+}
+#bottom {
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-image: url('../assets/gui/footer_bg.png');
+    background-position:top;
+    background-repeat:repeat-x;
+    z-index: 1;
+}
+#screen {
+    width: 1024px;
+    height: 672;
+    margin: 0 auto;
+    /*https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering*/
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+    z-index: 1;
+}
+#quit {
+    text-decoration: none;
+    font-family: 'dafont';
+    font-size: 24px;
+    color: black;
+    text-shadow: 1px 1px white;
+    top: 24px;
+    right: -71%;
+    position: relative;
+}
+@media (min-width: 1023px) {
+    #canvas {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+    }
+}

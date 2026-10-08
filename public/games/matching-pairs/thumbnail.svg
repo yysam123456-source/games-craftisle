@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="MATCHING PAIRS">
+  <defs>
+    <linearGradient id="g1" x1="85%" y1="15%" x2="15%" y2="85%"><stop offset="0%" stop-color="#1a1035"/><stop offset="100%" stop-color="#a06cd5"/></linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="72%">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#g1)"/>
+  <g fill="#a06cd5" fill-opacity="0.9">
+<rect x="120" y="96" width="76" height="96" rx="8" fill-opacity="0.9"/>
+<rect x="146" y="106" width="76" height="96" rx="8" fill-opacity="0.68"/>
+<rect x="172" y="116" width="76" height="96" rx="8" fill-opacity="0.46"/>
+</g>
+  <rect width="400" height="300" fill="url(#v)"/>
+  <text x="200" y="278" font-family="Verdana,Geneva,sans-serif" font-size="21" font-weight="bold"
+        letter-spacing="3" text-anchor="middle" fill="#ffffff" fill-opacity="0.94">MATCHING PAIRS</text>
+</svg>

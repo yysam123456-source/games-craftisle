@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Onslaught Arena">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a2f2a"/><stop offset="1" stop-color="#180f10"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><g fill="#6a4a6a"><circle cx="300" cy="170" r="46"/><path d="M270,215 h60 l14,58 h-88 z"/></g><g fill="#e8503a"><rect x="180" y="250" width="16" height="50"/><rect x="404" y="250" width="16" height="50"/></g></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">Onslaught Arena</text>
+</svg>

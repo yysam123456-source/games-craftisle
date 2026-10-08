@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+        <title>Squirts</title>
+        <link rel="stylesheet" href="game.css"/>
+    </head>
+    <body>
+        <canvas></canvas>
+        
+        <div id="startScreen">
+            <a href="#" data-action="startGame">Start</a>
+        </div>
+
+        <div id="replayScreen">
+            <a href="#" data-action="startGame">Replay</a>
+        </div>
+
+        <div id="score">Blobs left: <span>0</span></div>
+
+        <footer>Lovingly coded by <a href="http://about.me/klemen.slavic" target="_blank">Klemen Slavič</a> and <a href="http://dribbble.com/KillerBee" target="_blank">Marko Novak</a>. Licensed under the MIT License and released on <a href="https://github.com/KrofDrakula/squirts" target="_blank">GitHub</a>.</footer>
+
+        <script src="lib/common.js"></script>
+        <script src="lib/math/rectangle.js"></script>
+        <script src="lib/math/vector_2d.js"></script>
+        <script src="lib/game/blob.js"></script>
+        <script src="lib/game/game_loop.js"></script>
+        <script src="lib/game/particle.js"></script>
+        <script src="lib/game/particle_emitter.js"></script>
+        <script src="lib/game/world.js"></script>
+        <script src="squirts.js"></script>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="BLK">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3a4a"/><stop offset="1" stop-color="#101418"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g opacity="0.9"><g stroke="#2a2a32" stroke-width="2"><path d="M150,300 L150,190 L230,150 L310,190 L310,300 Z" fill="#5a8a4a"/><path d="M310,300 L310,190 L390,150 L470,190 L470,300 Z" fill="#4a7a5a"/></g><g fill="#8ab86a"><rect x="180" y="200" width="34" height="34"/><rect x="340" y="200" width="34" height="34"/></g></g>
+  <text x="300" y="368" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="2" fill="#fff">BLK</text>
+</svg>
