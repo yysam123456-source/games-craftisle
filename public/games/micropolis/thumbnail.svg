@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="micropolisJS - the open-source SimCity, city builder">
+  <defs>
+    <linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fb2e5"/>
+      <stop offset="1" stop-color="#4a7fb5"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#mbg)"/>
+
+  <!-- grass base -->
+  <rect x="0" y="60" width="600" height="340" fill="#4f8f3f"/>
+  <!-- dirt / construction patches -->
+  <g fill="#9c7343" opacity="0.9">
+    <rect x="20" y="150" width="70" height="50"/>
+    <rect x="250" y="250" width="90" height="60"/>
+    <rect x="450" y="120" width="80" height="55"/>
+  </g>
+
+  <!-- road grid -->
+  <g stroke="#6d6d6d" stroke-width="10" opacity="0.9">
+    <path d="M0 120 H600"/>
+    <path d="M0 230 H600"/>
+    <path d="M0 330 H600"/>
+    <path d="M110 60 V400"/>
+    <path d="M300 60 V400"/>
+    <path d="M480 60 V400"/>
+  </g>
+  <g stroke="#f0d060" stroke-width="1.5" stroke-dasharray="8 10" opacity="0.85">
+    <path d="M0 120 H600"/><path d="M0 230 H600"/><path d="M0 330 H600"/>
+    <path d="M110 60 V400"/><path d="M300 60 V400"/><path d="M480 60 V400"/>
+  </g>
+
+  <!-- residential green -->
+  <g>
+    <rect x="126" y="138" width="48" height="34" fill="#5ec45e"/>
+    <rect x="190" y="138" width="48" height="34" fill="#7ad67a"/>
+    <rect x="126" y="248" width="48" height="34" fill="#7ad67a"/>
+    <rect x="190" y="248" width="48" height="34" fill="#5ec45e"/>
+    <rect x="316" y="138" width="48" height="34" fill="#7ad67a"/>
+    <rect x="380" y="248" width="48" height="34" fill="#5ec45e"/>
+    <rect x="496" y="248" width="48" height="34" fill="#7ad67a"/>
+    <rect x="126" y="348" width="48" height="34" fill="#5ec45e"/>
+  </g>
+
+  <!-- commercial blue -->
+  <g fill="#4a8fe0">
+    <rect x="316" y="76" width="48" height="34"/>
+    <rect x="380" y="76" width="48" height="34"/>
+    <rect x="380" y="348" width="48" height="34"/>
+    <rect x="316" y="348" width="48" height="34"/>
+  </g>
+
+  <!-- industrial yellow -->
+  <g fill="#e8c34a">
+    <rect x="126" y="76" width="48" height="34"/>
+    <rect x="190" y="76" width="48" height="34"/>
+    <rect x="496" y="76" width="48" height="34"/>
+    <rect x="190" y="348" width="48" height="34"/>
+  </g>
+
+  <!-- a couple of labelled buildings -->
+  <g>
+    <rect x="326" y="84" width="12" height="20" fill="#2f6bb5"/>
+    <rect x="348" y="92" width="10" height="12" fill="#2f6bb5"/>
+    <rect x="196" y="84" width="14" height="18" fill="#b8952e"/>
+  </g>
+
+  <!-- park -->
+  <g>
+    <rect x="496" y="138" width="60" height="34" fill="#3f7d33"/>
+    <circle cx="514" cy="155" r="8" fill="#2f6626"/>
+    <circle cx="536" cy="155" r="7" fill="#2f6626"/>
+  </g>
+
+  <!-- info bar -->
+  <g>
+    <rect x="0" y="0" width="600" height="46" fill="#1b2b3a" opacity="0.9"/>
+    <text x="14" y="21" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#8fe08f">FUNDS $20000</text>
+    <text x="150" y="21" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" fill="#e8f2ff">Jan 1900</text>
+    <text x="14" y="40" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#e8f2ff">Population: 0</text>
+    <text x="586" y="21" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#9fd4ff">MICROPOLIS</text>
+  </g>
+
+  <!-- title band -->
+  <rect x="0" y="346" width="600" height="54" fill="#12261a" opacity="0.92"/>
+  <text x="300" y="383" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="28" font-weight="800" letter-spacing="2" fill="#ffffff">MICROPOLISJS</text>
+</svg>
