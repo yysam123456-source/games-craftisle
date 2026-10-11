@@ -2322,6 +2322,31 @@ export const games: Game[] = [
     createdAt: new Date("2026-10-08"),
     updatedAt: new Date("2026-10-08"),
   },
+  // ===== Clay Safari — clay-style bilingual 3D animal world for kids =====
+  {
+    id: "clay-safari",
+    slug: "clay-safari",
+    title: "Clay Safari",
+    description: "A clay-style 3D bilingual animal world for kids. Walk around a small island, tap ten animals to hear their English names, their calls and their Chinese names, and collect them all in the explorer handbook.",
+    category: "casual",
+    tags: ["3d", "animals", "kids", "educational", "bilingual", "three.js", "voxel", "exploration", "open source"],
+    source: "self-hosted",
+    sourceUrl: "/games/clay-safari/index.html",
+    thumbnail: "/games/clay-safari/thumbnail.svg",
+    instructions: "Click 开始探险 (Start) on the loading screen once the clay is ready. Walk with WASD or arrow keys, click the ground to move toward a spot, click an animal to hear its English name, its call and its Chinese name. Each animal is added to the explorer handbook; collect all ten for confetti. Drag to rotate the camera, scroll to zoom, or press the robot button for an automatic tour.",
+    controls: { keyboard: ["W A S D / arrows — walk", "Click ground — walk to a spot", "M — overview poster", "T — guided tour", "L — toggle labels", "H — help", "Esc — close card / exit tour"], mouse: true, touch: true, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.6,
+    difficulty: "Relaxed",
+    estimatedTime: "10-20 minutes",
+    featured: true,
+    disableSandbox: true,
+    hasNativeUI: true,
+    createdAt: new Date("2026-10-11"),
+    updatedAt: new Date("2026-10-11"),
+  },
 ];
 
 // ===== Helper Functions =====

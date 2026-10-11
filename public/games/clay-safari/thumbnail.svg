@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Clay Safari">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd3f4"/><stop offset="1" stop-color="#cdeaf7"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8d86a"/><stop offset="1" stop-color="#7ab648"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff6b0"/><stop offset="1" stop-color="#ffd93d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#sky)"/>
+  <circle cx="490" cy="70" r="55" fill="url(#sun)"/>
+  <circle cx="490" cy="70" r="24" fill="#ffd93d"/>
+
+  <!-- rolling clay hills -->
+  <path d="M0,230 Q90,175 190,225 Q300,175 410,228 Q520,180 600,222 L600,400 L0,400 Z" fill="url(#grass)"/>
+
+  <!-- clay trees -->
+  <g>
+    <rect x="96" y="196" width="15" height="44" rx="7" fill="#8d6b4a"/>
+    <circle cx="103" cy="182" r="40" fill="#6ab04c"/>
+    <circle cx="86" cy="196" r="25" fill="#7dbf59"/>
+    <circle cx="121" cy="198" r="22" fill="#5d9a40"/>
+  </g>
+  <g>
+    <rect x="466" y="204" width="14" height="40" rx="7" fill="#8d6b4a"/>
+    <circle cx="473" cy="190" r="34" fill="#6ab04c"/>
+    <circle cx="492" cy="204" r="20" fill="#5d9a40"/>
+  </g>
+
+  <!-- river -->
+  <path d="M-10,300 Q120,272 250,306 Q370,338 470,308 Q540,290 610,306" fill="none" stroke="#5ec8e8" stroke-width="30" stroke-linecap="round"/>
+  <path d="M-10,300 Q120,272 250,306 Q370,338 470,308 Q540,290 610,306" fill="none" stroke="#9fe4f7" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- animals: lion + giraffe silhouettes on the grass -->
+  <g>
+    <ellipse cx="176" cy="268" rx="30" ry="21" fill="#e8a13c"/>
+    <circle cx="146" cy="258" r="15" fill="#f0b355"/>
+    <circle cx="140" cy="252" r="5" fill="#c8862c"/>
+    <path d="M124,252 q-8,-14 6,-16 M132,246 q-4,-15 10,-13" stroke="#c8862c" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <rect x="200" y="266" width="20" height="4" rx="2" fill="#d99531"/>
+  </g>
+  <g>
+    <rect x="330" y="228" width="13" height="58" rx="6" fill="#edb84e"/>
+    <rect x="348" y="236" width="12" height="50" rx="6" fill="#f0c563"/>
+    <circle cx="336" cy="220" r="12" fill="#f0c563"/>
+    <circle cx="356" cy="228" r="10" fill="#edb84e"/>
+    <g fill="#c99a35">
+      <rect x="330" y="240" width="13" height="7"/><rect x="330" y="256" width="13" height="7"/>
+      <rect x="348" y="248" width="12" height="7"/><rect x="348" y="264" width="12" height="7"/>
+    </g>
+  </g>
+
+  <!-- explorer kid -->
+  <g transform="translate(268,246)">
+    <circle cx="0" cy="-14" r="12" fill="#f6d5b0"/>
+    <path d="M-13,-16 a13,13 0 0 1 26,0 z" fill="#8d6b4a"/>
+    <rect x="-11" y="-1" width="22" height="26" rx="9" fill="#f2f2f0"/>
+    <rect x="-15" y="24" width="11" height="6" rx="3" fill="#5b7f9c"/>
+    <rect x="4" y="24" width="11" height="6" rx="3" fill="#5b7f9c"/>
+    <rect x="14" y="-2" width="7" height="16" rx="3" fill="#9fe4f7"/>
+  </g>
+
+  <!-- grass tufts -->
+  <g fill="#6cb043">
+    <path d="M300,340 l-8,-20 l8,8 l8,-14 l0,26 z"/>
+    <path d="M404,352 l-8,-20 l8,8 l8,-14 l0,26 z"/>
+  </g>
+
+  <text x="300" y="374" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="30" font-weight="800" letter-spacing="2" fill="#2c5f3f">CLAY SAFARI</text>
+  <text x="300" y="394" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" letter-spacing="3" fill="#5c8a5c">MEET 10 ANIMALS · bilingual 3D world</text>
+</svg>
