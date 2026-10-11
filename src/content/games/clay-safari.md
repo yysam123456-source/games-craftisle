@@ -1,7 +1,7 @@
 ---
 title: "Clay Safari"
 slug: "clay-safari"
-description: "A clay-style 3D bilingual animal world for kids. Walk around a small island, tap ten animals to hear their English names, their calls and their Chinese names, and collect them all in the explorer handbook."
+description: "A clay-style 3D world for kids, in English or Chinese. Walk around a small island, tap ten animals to hear their names and calls, and collect them all in the explorer journal."
 category: "casual"
 tags: ["3d", "animals", "kids", "educational", "bilingual", "three.js", "voxel", "exploration", "open source"]
 thumbnail: "/games/clay-safari/thumbnail.svg"
@@ -23,22 +23,26 @@ files anywhere in the project.
 
 ## How to Play
 
-1. Click **开始探险 ▶** (Start) on the loading screen once the clay has finished
+1. Pick your language if the default English isn't right for you — the
+   **中文 / EN** button sits in the top-right of the loading screen, and again
+   beside the title in the top-left once you're in the world. The choice is
+   remembered for next time.
+2. Click **Start Exploring ▶** on the loading screen once the clay has finished
    being sculpted.
-2. Walk to an animal and click it. It plays its own reaction — the elephant
+3. Walk to an animal and click it. It plays its own reaction — the elephant
    flaps its ears, the crocodile opens its jaw, the bird flies a lap, the fish
    leaps out of the water.
-3. A word card appears: the English name is spoken first, then the animal's
-   call, then the Chinese name.
-4. The animal is added to the **探险手册** (Explorer Handbook) in the top right.
+4. A word card appears and the animal is named aloud in your chosen language,
+   followed by its call.
+5. The animal is added to the **Explorer Journal** (探险手册) in the top right.
    Collect all ten to trigger a confetti celebration.
-5. Press the 🤖 button for an automatic guided tour around the island.
+6. Press the 🤖 button for an automatic guided tour around the island.
 
 ## Controls
 
 - **W / A / S / D** or arrow keys — walk
 - **Click the ground** — walk toward that spot
-- **Click an animal** — hear its name, call and Chinese name
+- **Click an animal** — hear its name and its call
 - **Drag** — rotate the camera
 - **Scroll** — zoom
 - **M** — toggle the top-down overview poster
@@ -48,12 +52,25 @@ files anywhere in the project.
 - **Esc** — close an open word card and stop the tour
 - On touch devices a virtual joystick appears for movement
 
+## Two Languages
+
+Upstream this game shipped with a Chinese-only interface. For this integration
+it now opens in **English** and switches to **Chinese** with one tap, covering
+the loading screen, HUD, help panel, word cards, toasts, tour dialogue and the
+speech-synthesis language itself — an English UI speaks English names with an
+`en-US` voice, a Chinese UI speaks Chinese names with a `zh-CN` voice. The
+floating 3D labels reorder too, putting the active language in the large slot.
+The choice persists in `localStorage`; the game's own `clay-safari-labels`
+preference is untouched.
+
 ## Notes
 
-- This is the one game on the site with a bilingual Chinese/English interface —
-  that is intentional, it is built for Chinese-speaking children.
-- Names and calls use the browser's speech synthesis, so a Chinese or English
-  voice pack installed on your OS gives the best result.
+- Both languages are equally first-class here; the bilingual word cards keep
+  showing the other language alongside the active one, which is the point of
+  the game.
+- Names and calls use the browser's speech synthesis, so a matching English or
+  Chinese voice pack installed on your OS gives the best result. With no voice
+  pack installed the browser falls back to its default voice.
 - Runs best on a desktop or a tablet; a phone works but the world is wide.
 
 ## Open Source & License
@@ -64,5 +81,6 @@ Clay Safari is created by **cclank** and distributed under the **MIT License**.
 - Original live build: <https://clay-safari.lanshuagent.com/>
 
 This integration self-hosts the built game so it runs entirely in your browser.
-The only change made was setting Vite's `base` to `./` so the bundle loads from
-the sub-path it is served from.
+The changes made to the upstream source are Vite's `base` set to `./` so the
+bundle loads from the sub-path it is served from, and the English/Chinese
+interface switch described above.
