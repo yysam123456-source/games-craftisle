@@ -39499,7 +39499,10 @@ function create (exports) {
 
         function loadTexture( path, repeat, offset, wrap, anisotropy ) {
 
-          var fullPath = texturePath + path;
+          // Fixed for self-hosting: texturePath can be undefined when the r54 scene
+          // loader parses materials without a resource path, which produced
+          // literal 'undefined<name>.jpg' URLs. Fall back to the page directory.
+          var fullPath = (texturePath || '') + path;
           var loader = Loader.Handlers.get( fullPath );
 
           var texture;

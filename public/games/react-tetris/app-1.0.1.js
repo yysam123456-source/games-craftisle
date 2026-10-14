@@ -32857,7 +32857,7 @@
 	            ),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement('iframe', {
-	              src: 'https://ghbtns.com/github-btn.html?user=chvin&repo=react-tetris&type=star&count=true',
+	              src: '',
 	              frameBorder: '0',
 	              scrolling: '0',
 	              width: '170px',
@@ -32866,7 +32866,7 @@
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement('iframe', {
-	              src: 'https://ghbtns.com/github-btn.html?user=chvin&repo=react-tetris&type=fork&count=true',
+	              src: '',
 	              frameBorder: '0',
 	              scrolling: '0',
 	              width: '170px',

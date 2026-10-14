@@ -45,7 +45,7 @@
 "textures" :
 {
 	"chevron.jpg" : {
-		"url": "../../textures/chevron.jpg",
+		"url": "../textures/chevron.jpg",
         "wrap": ["repeat", "repeat"]
 	}
 },

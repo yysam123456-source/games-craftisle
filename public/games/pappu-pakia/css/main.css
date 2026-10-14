@@ -7,7 +7,6 @@
 	     url('../fonts/happy_sans-webfont.svg#webfont') format('svg');
 }
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 * {
   margin: 0; padding: 0;
@@ -49,7 +48,7 @@ html, body {
 }
 
 body {
-  background: #000 url(http://i.imgur.com/XgUk6.jpg) top center no-repeat fixed;
+  background: #000;
   font-family: 'Open Sans', Verdana;
 }
 

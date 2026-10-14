@@ -138,8 +138,8 @@ define([
         $document.on('click', 'a.login', event => !doLogin());
 
         $document.on('click', 'a.logout', function(event) {
-          $.ajax('/v1/auth/logout')
-          .done(data => Backbone.trigger('app:logout'));
+          // Removed for self-hosting: no /v1/ backend exists in this static build.
+          Backbone.trigger('app:logout');
           return false;
         });
         

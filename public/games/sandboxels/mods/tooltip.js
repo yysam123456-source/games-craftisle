@@ -1,7 +1,7 @@
 const devMode = false;
 // Tippy depends on popper
-const popperUrl = devMode ? "https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js" : "https://unpkg.com/@popperjs/core@2";
-const tippyUrl = devMode ? "https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js" : "https://unpkg.com/tippy.js@6";
+const popperUrl = "mods/lib/popper.min.js";
+const tippyUrl = "mods/lib/tippy-bundle.umd.js";
 window.addEventListener("load", ()=>{
   let popper = document.createElement("script");
   popper.src = popperUrl;

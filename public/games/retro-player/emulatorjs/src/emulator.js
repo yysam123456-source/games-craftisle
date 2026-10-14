@@ -174,6 +174,10 @@ class EmulatorJS {
         })
     }
     checkForUpdates() {
+        // Removed for self-hosting: upstream calls cdn.emulatorjs.org to compare
+        // versions. That leaks the visitor IP to a third party and the result only
+        // produces a console hint, so the check is disabled.
+        return;
         if (this.ejs_version.endsWith("-beta")) {
             console.warn("Using EmulatorJS beta. Not checking for updates. This instance may be out of date. Using stable is highly recommended unless you build and ship your own cores.");
             return;
@@ -613,21 +617,16 @@ class EmulatorJS {
                 this.textElem.innerText = this.localization("Download Game Core") + progress;
             }, false, { responseType: "arraybuffer", method: "GET" });
             if (res === -1) {
-                console.log("File not found, attemping to fetch from emulatorjs cdn.");
-                console.error("**THIS METHOD IS A FAILSAFE, AND NOT OFFICIALLY SUPPORTED. USE AT YOUR OWN RISK**");
-                let version = this.ejs_version.endsWith("-beta") ? "nightly" : this.ejs_version;
-                res = await this.downloadFile(`https://cdn.emulatorjs.org/${version}/data/${corePath}`, (progress) => {
-                    this.textElem.innerText = this.localization("Download Game Core") + progress;
-                }, true, { responseType: "arraybuffer", method: "GET" });
-                if (res === -1) {
-                    if (!this.supportsWebgl2) {
-                        this.startGameError(this.localization("Outdated graphics driver"));
-                    } else {
-                        this.startGameError(this.localization("Error downloading core") + " (" + filename + ")");
-                    }
-                    return;
+                // Removed for self-hosting: upstream falls back to downloading the
+                // core from cdn.emulatorjs.org when it is missing locally. That sends
+                // the visitor IP to a third party, so the fallback is disabled and we
+                // fail cleanly instead. Every supported system ships a local core.
+                if (!this.supportsWebgl2) {
+                    this.startGameError(this.localization("Outdated graphics driver"));
+                } else {
+                    this.startGameError(this.localization("Error downloading core") + " (" + filename + ")");
                 }
-                console.warn("File was not found locally, but was found on the emulatorjs cdn.\nIt is recommended to download the stable release from here: https://cdn.emulatorjs.org/releases/");
+                return;
             }
             gotCore(res.data);
             this.storage.core.put(filename, {

@@ -14456,7 +14456,9 @@ else if (!standalone && settings.lang !== null) {
 if (langCode) {
 	try {
 		var Httpreq = new XMLHttpRequest();
-		Httpreq.open("GET","https://sandboxels.r74n.com/lang/"+langCode+".json",false);
+		// Fixed for self-hosting: upstream pulls the translation from
+		// sandboxels.r74n.com even though the same file ships in ./lang/.
+		Httpreq.open("GET","lang/"+langCode+".json",false);
 		Httpreq.send(null);
 		try {
 			lang = JSON.parse(Httpreq.responseText.replace(/\\"/g,""));
@@ -21293,35 +21295,13 @@ if (document.referrer && document.referrer.indexOf("r74n.") === -1) {
 }
 			
 				function loadPlaylight(skipDialog=false) {
-					if (!isOnSite && !skipDialog) { location.href = "https://r74n.com"; return }
-					if (typeof playlightSDK === "undefined") {
-						let button = document.getElementById("playlightButton");
-						if (button) button.value = "Loading...";
-						document.head.insertAdjacentHTML("beforeend",`<link rel="stylesheet" href="https://sdk.playlight.dev/playlight-sdk.css">`);
-						let script = document.createElement("script");
-						script.setAttribute("type","module");
-						script.innerHTML = `try {
-    const module = await import("https://sdk.playlight.dev/playlight-sdk.es.js");
-    const playlightSDK = module.default;
-    await playlightSDK.init({
-		button: {
-			visible: false
-		},
-		exitIntent: {
-			enabled: false
-		}
-	});
-	${!skipDialog ? "playlightSDK.setDiscovery(true);" : ""}
-	${!skipDialog ? "document.getElementById('playlightButton').value = 'More Games';" : "" }
-  } catch (error) {
-    console.error("Error loading the Playlight SDK:", error);
-	${!skipDialog ? "document.getElementById('playlightButton').value = 'Error...';" : "" }
-  }`;
-						document.head.appendChild(script);
-					}
-					else if (!skipDialog) {
-						playlightSDK.setDiscovery(true);
-					}
+			
+					// Removed for self-hosting: upstream dynamically imports the Playlight
+			
+					// SDK from sdk.playlight.dev (third-party cross-promotion), which leaks
+			
+					// the visitor IP. The button is now a harmless no-op.
+			
 				}
 			}
 			if (urlParams.get("utm_source") === "playlight") {

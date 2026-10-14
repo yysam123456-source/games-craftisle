@@ -8,9 +8,6 @@
 <meta name="theme-color" content="#f4ede0" />
 <title>Tiny World Builder</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #f4ede0;
@@ -3704,14 +3701,8 @@
         clear: true, settings: true, inspector: true, exit: true
       }
     };
-    const style = document.createElement('link');
-    style.rel = 'stylesheet';
-    style.href = 'cluso/cluso-embed.css';
-    document.head.appendChild(style);
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'cluso/cluso-embed.js';
-    document.head.appendChild(script);
+    // Removed for self-hosting: the upstream cluso/ preview harness loaded
+    // cluso-embed.css + cluso-embed.js, which only exist in the author's checkout.
   }());
 </script>
 </head>

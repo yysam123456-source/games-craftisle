@@ -240,7 +240,10 @@ define([
     }
 
     checkUserLogin() {
-      return $.ajax('/v1/auth/me')
+      // Fixed for self-hosting: upstream hardcodes the root-relative '/v1/auth/me',
+      // which 404s because the game is served from a sub-directory. This build
+      // ships its own v1/ payload, so point at it through BASE_PATH.
+      return $.ajax((window.BASE_PATH || '') + 'v1/auth/me')
       .done(data => {
         if (data.user) {
           // _gaq.push ['_setCustomVar', 1, 'User Type', 'Registered', 2]

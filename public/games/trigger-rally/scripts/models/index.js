@@ -142,7 +142,7 @@
 
   class Collection extends Backbone.Collection {}
 
-  const basePath = window.BASE_PATH + '/v1/';
+  const basePath = (window.BASE_PATH || '') + 'v1/';
 
   class PathCollection extends Collection {
     static initClass() {

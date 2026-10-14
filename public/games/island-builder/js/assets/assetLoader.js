@@ -214,7 +214,10 @@ export async function loadAssets(onProgress = () => {}) {
         if (entry.filename) {
             try {
                 const theme = (typeof window !== 'undefined' && window.THEME) || 'default';
-                const url = `/sprites/${theme}/${entry.filename}`;
+                // Fixed for self-hosting: this was root-absolute, so it 404s because the
+                // game is served from /games/island-builder/. Resolve it relative to
+                // the page instead.
+                const url = `sprites/${theme}/${entry.filename}`;
                 const img = await loadImageElement(url);
                 record = imageToAsset(img, entry.footprint, entry.kind, {
                     sizeScale: entry.sizeScale ?? 1,

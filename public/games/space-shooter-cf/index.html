@@ -5,6 +5,19 @@
     <title>Spaceshooter</title>
     <meta name="author" content="Mathieu de Ruiter - Couchfriends.com" />
     <link rel="stylesheet" href="game.css" />
+<!-- Removed for self-hosting: upstream loaded the CouchFriends SDK from
+     couchfriends.com purely to sync achievements. game.js calls
+     COUCHFRIENDS.send() unconditionally, so a local no-op stub keeps the
+     game running without a third-party request. -->
+<script>
+      (function () {
+        var noop = function () {};
+        window.COUCHFRIENDS = window.COUCHFRIENDS || {
+          send: noop, on: noop, off: noop, connect: noop, init: noop,
+          login: noop, logout: noop, disconnect: noop, isConnected: function () { return false; }
+        };
+      })();
+    </script>
 </head>
 <body>
 <div id="ui">
@@ -18,7 +31,6 @@
     </p>
 </div>
 <div id="game"></div>
-<script src="https://couchfriends.com/src/api/build/couchfriends.api-latest.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

@@ -45,7 +45,7 @@
 "textures" :
 {
 	"archtex.jpg" : {
-		"url": "../../textures/archtex.jpg",
+		"url": "../textures/archtex.jpg",
         "wrap": ["repeat", "repeat"]
 	}
 },
