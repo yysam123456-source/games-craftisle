@@ -104,9 +104,9 @@ export const ASSET_MANIFEST = [
     // Garden beds and crop patches already include their own box/slab depth
     // in the PNG. Keep them intact and anchor their painted bottom edge to
     // the cell front corner so they sit on, not above, the highlighted cell.
-    { ...W('garden_bed',   'Garden Bed', { w: 1, d: 1 }, 0.95), filename: 'newAsset/Garden Bed.png', fitCell: true, flatBase: true, noShadow: true, builder: A.plantedGardenBed },
-    { ...W('crop_patch',   'Crop Patch', { w: 1, d: 1 }, 0.95), filename: 'newAsset/Crop Patch.png', fitCell: true, flatBase: true, noShadow: true, builder: A.cropPatch },
-    { ...W('veg_garden',   'Veg Garden', { w: 1, d: 1 }, 0.95), filename: 'newAsset/Veg Garden.png', fitCell: true, flatBase: true, noShadow: true, builder: A.vegetableGarden },
+    { ...W('garden_bed',   'Garden Bed', { w: 1, d: 1 }, 0.95), filename: 'garden_bed.png', fitCell: true, flatBase: true, noShadow: true, builder: A.plantedGardenBed },
+    { ...W('crop_patch',   'Crop Patch', { w: 1, d: 1 }, 0.95), filename: 'crop_patch.png', fitCell: true, flatBase: true, noShadow: true, builder: A.cropPatch },
+    { ...W('veg_garden',   'Veg Garden', { w: 1, d: 1 }, 0.95), filename: 'veg_garden.png', fitCell: true, flatBase: true, noShadow: true, builder: A.vegetableGarden },
 
     // ── BUILDINGS ─────────────────────────────────────────────────
     { ...B('house',         'House',         { w: 2, d: 2 }), builder: A.smallMykonosHouse },
