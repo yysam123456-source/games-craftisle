@@ -2396,6 +2396,33 @@ export const games: Game[] = [
     createdAt: new Date("2026-10-11"),
     updatedAt: new Date("2026-10-11"),
   },
+
+  // ===== Chocolate Keen — Commander Keen 1 SDL reimplementation, WebAssembly =====
+  {
+    id: "chocolate-keen",
+    slug: "chocolate-keen",
+    title: "Chocolate Keen",
+    description: "Commander Keen's first Mars adventure, back on the web. Run, jump and pogo across the Martian outposts, stun Yorps with your raygun and hunt down the legendary Bean-with-Bacon rocket ship. A faithful SDL reimplementation of the 1990 DOS classic, compiled to WebAssembly with the shareware Episode 1 data bundled in.",
+    category: "action",
+    tags: ["keen", "commander keen", "platformer", "retro", "dos", "mars", "webassembly", "open source"],
+    source: "self-hosted",
+    sourceUrl: "/games/chocolate-keen/chocolate-keen.html",
+    thumbnail: "/games/chocolate-keen/thumbnail.svg",
+    instructions: "Arrow keys move Keen and Ctrl jumps. Alt (Option on Mac) hops on the pogo stick once you have one; hold Ctrl+Alt together to fire the raygun while it has charges. Press F3 to rebind keys. Collect gems, food and keycards, stun or zap the Yorps, and find the Bean-with-Bacon rocket ship to leave Mars.",
+    controls: { keyboard: ["Arrow keys — move", "Ctrl — jump", "Alt / Option — pogo stick", "Ctrl+Alt — fire raygun", "F3 — rebind keys"], mouse: false, touch: false, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.6,
+    difficulty: "Medium",
+    estimatedTime: "10-30 minutes",
+    featured: false,
+    disableSandbox: true,
+    hasNativeUI: true,
+    supportsDifficulty: false,
+    createdAt: new Date("2026-10-16"),
+    updatedAt: new Date("2026-10-16"),
+  },
 ];
 
 // ===== Helper Functions =====
