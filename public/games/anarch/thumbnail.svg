@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Anarch - retro raycasting FPS in a dark corridor">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c0a10"/>
+      <stop offset="1" stop-color="#17111a"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b221c"/>
+      <stop offset="1" stop-color="#130e12"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8a7a68" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#8a7a68" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vig" cx="0.5" cy="0.44" r="0.78">
+      <stop offset="0.6" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.6"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#bg)"/>
+
+  <!-- ceiling -->
+  <polygon points="0,0 600,0 340,150 260,150" fill="#16121b"/>
+
+  <!-- corridor side walls (perspective) -->
+  <polygon points="0,0 260,150 260,250 0,400" fill="#332a24"/>
+  <polygon points="600,0 340,150 340,250 600,400" fill="#2b231e"/>
+  <g stroke="#1c1613" stroke-width="2" opacity="0.7">
+    <line x1="0" y1="100" x2="260" y2="175"/>
+    <line x1="0" y1="200" x2="260" y2="200"/>
+    <line x1="0" y1="300" x2="260" y2="225"/>
+    <line x1="600" y1="100" x2="340" y2="175"/>
+    <line x1="600" y1="200" x2="340" y2="200"/>
+    <line x1="600" y1="300" x2="340" y2="225"/>
+  </g>
+  <g fill="#f2e06a" opacity="0.5">
+    <rect x="40" y="60" width="10" height="7"/>
+    <rect x="120" y="140" width="10" height="7"/>
+    <rect x="550" y="60" width="10" height="7"/>
+    <rect x="470" y="140" width="10" height="7"/>
+  </g>
+
+  <!-- back wall with door and red warning light -->
+  <rect x="260" y="150" width="80" height="100" fill="#3a2f28"/>
+  <rect x="286" y="182" width="28" height="68" fill="#211a16"/>
+  <rect x="294" y="164" width="12" height="10" fill="#c03028"/>
+  <circle cx="300" cy="169" r="14" fill="#c03028" opacity="0.25"/>
+
+  <!-- vanishing point light -->
+  <ellipse cx="300" cy="205" rx="120" ry="80" fill="url(#glow)"/>
+
+  <!-- floor -->
+  <polygon points="0,400 260,250 340,250 600,400" fill="url(#floor)"/>
+  <g stroke="#0d0a0e" stroke-width="2" opacity="0.8">
+    <line x1="300" y1="250" x2="140" y2="400"/>
+    <line x1="300" y1="250" x2="230" y2="400"/>
+    <line x1="300" y1="250" x2="370" y2="400"/>
+    <line x1="300" y1="250" x2="460" y2="400"/>
+  </g>
+
+  <!-- enemy robot (blocky pixel silhouette with glowing eye) -->
+  <ellipse cx="300" cy="249" rx="26" ry="5" fill="#000000" opacity="0.55"/>
+  <g>
+    <rect x="278" y="210" width="8" height="10" fill="#2c2c34"/>
+    <rect x="314" y="210" width="8" height="10" fill="#2c2c34"/>
+    <rect x="288" y="228" width="9" height="21" fill="#33333b"/>
+    <rect x="303" y="228" width="9" height="21" fill="#33333b"/>
+    <rect x="284" y="208" width="32" height="22" fill="#454552"/>
+    <rect x="290" y="213" width="20" height="12" fill="#55555f"/>
+    <rect x="290" y="197" width="20" height="12" fill="#3c3c48"/>
+    <rect x="316" y="214" width="20" height="7" fill="#2c2c34"/>
+    <rect x="294" y="201" width="12" height="4" fill="#e03c28"/>
+    <circle cx="300" cy="203" r="9" fill="#e03c28" opacity="0.3"/>
+  </g>
+
+  <!-- held weapon, first person view -->
+  <g>
+    <rect x="294" y="280" width="12" height="12" fill="#5a5764"/>
+    <rect x="276" y="290" width="48" height="30" fill="#2e2c34"/>
+    <rect x="268" y="306" width="64" height="14" fill="#4a4752"/>
+    <rect x="252" y="318" width="96" height="52" fill="#3d3a42"/>
+    <rect x="252" y="318" width="96" height="6" fill="#52505c"/>
+    <rect x="262" y="366" width="76" height="6" fill="#2a2830"/>
+  </g>
+
+  <!-- HUD strip -->
+  <g>
+    <rect x="0" y="0" width="600" height="26" fill="#000000" opacity="0.4"/>
+    <text x="12" y="19" font-family="ui-monospace, monospace" font-size="15" fill="#9fb83a">HP 100  AMMO 32</text>
+    <text x="588" y="19" font-family="ui-monospace, monospace" font-size="15" fill="#9fb83a" text-anchor="end">SECTOR 01</text>
+  </g>
+
+  <!-- vignette -->
+  <rect width="600" height="400" fill="url(#vig)"/>
+
+  <text x="300" y="388" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="30" font-weight="800" letter-spacing="6" fill="#f0eae0" stroke="#7a1f1a" stroke-width="5" paint-order="stroke">ANARCH</text>
+</svg>

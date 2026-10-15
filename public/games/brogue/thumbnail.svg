@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Brogue - classic ASCII roguelike dungeon crawl">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0c14"/>
+      <stop offset="0.6" stop-color="#12141f"/>
+      <stop offset="1" stop-color="#1b1526"/>
+    </linearGradient>
+    <radialGradient id="torch" cx="0" cy="0" r="1">
+      <stop offset="0" stop-color="#ffcf6b" stop-opacity="0.35"/>
+      <stop offset="0.5" stop-color="#ffcf6b" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#ffcf6b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0.6" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#vignette)"/>
+
+  <!-- torch glow around the player -->
+  <circle cx="187" cy="128" r="95" fill="url(#torch)"/>
+
+  <!-- ASCII dungeon map, Brogue-style glyphs -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22" fill="#7d839e" textLength="475" lengthAdjust="spacing">
+    <text x="62" y="80">####################################</text>
+    <text x="62" y="108">#............................."....#</text>
+    <text x="62" y="136">#..r.....@...............k....&gt;....#</text>
+    <text x="62" y="164">#......#####......+......###....#..#</text>
+    <text x="62" y="192">#..[...#..............!....#....&lt;..#</text>
+    <text x="62" y="220">#..!...#....g........)......#......#</text>
+    <text x="62" y="248">#......+###########................#</text>
+    <text x="62" y="276">#............................#.....#</text>
+    <text x="62" y="304">#.....####.....####.....####.......#</text>
+    <text x="62" y="332">####################################</text>
+  </g>
+
+  <!-- highlighted glyphs: @ player, " amulet, items, stairs, monsters -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22" text-anchor="middle">
+    <text x="187" y="136" fill="#ffd75f">@</text>
+    <text x="465" y="108" fill="#58d68d">"</text>
+    <text x="108" y="136" fill="#c09070">r</text>
+    <text x="399" y="136" fill="#d98a8a">k</text>
+    <text x="465" y="136" fill="#f0a050">&gt;</text>
+    <text x="108" y="192" fill="#8fb0d9">[</text>
+    <text x="359" y="192" fill="#e06ac0">!</text>
+    <text x="491" y="192" fill="#f0a050">&lt;</text>
+    <text x="102" y="220" fill="#e06ac0">!</text>
+    <text x="227" y="220" fill="#7fb87f">g</text>
+    <text x="346" y="220" fill="#d7dce8">)</text>
+  </g>
+
+  <!-- depth marker -->
+  <text x="576" y="26" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14" fill="#8f95ad" letter-spacing="2">DLVL 1</text>
+
+  <text x="300" y="374" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="800" letter-spacing="8" fill="#f2ead8" stroke="#0a0c14" stroke-width="7" paint-order="stroke">BROGUE</text>
+  <text x="300" y="394" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" letter-spacing="4" fill="#c9a86a">COMMUNITY EDITION · RETRIEVE THE AMULET OF YENDOR</text>
+</svg>

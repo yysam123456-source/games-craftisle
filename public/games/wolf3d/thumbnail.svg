@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Wolfenstein 3D - classic 1992 first-person shooter running on ECWolf">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1a20"/>
+      <stop offset="0.5" stop-color="#2b2b33"/>
+      <stop offset="1" stop-color="#17171c"/>
+    </linearGradient>
+    <pattern id="brick" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="#232329"/>
+      <rect x="1" y="1" width="38" height="18" fill="#3d3833"/>
+      <rect x="41" y="1" width="38" height="18" fill="#423d37"/>
+      <rect x="-19" y="21" width="38" height="18" fill="#423d37"/>
+      <rect x="21" y="21" width="38" height="18" fill="#3a3530"/>
+      <rect x="61" y="21" width="38" height="18" fill="#423d37"/>
+    </pattern>
+    <radialGradient id="vignette" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0.55" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6d76b"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#9c7c1e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- castle stone wall -->
+  <rect width="600" height="400" fill="url(#wall)"/>
+  <rect width="600" height="400" fill="url(#brick)" opacity="0.85"/>
+
+  <!-- eagle emblem on the wall -->
+  <g transform="translate(300,128)">
+    <!-- wreath -->
+    <g fill="url(#gold)">
+      <ellipse cx="-58" cy="44" rx="12" ry="5" transform="rotate(-50 -58 44)"/>
+      <ellipse cx="-40" cy="58" rx="12" ry="5" transform="rotate(-25 -40 58)"/>
+      <ellipse cx="-16" cy="66" rx="12" ry="5"/>
+      <ellipse cx="16" cy="66" rx="12" ry="5"/>
+      <ellipse cx="40" cy="58" rx="12" ry="5" transform="rotate(25 40 58)"/>
+      <ellipse cx="58" cy="44" rx="12" ry="5" transform="rotate(50 58 44)"/>
+      <ellipse cx="-66" cy="20" rx="12" ry="5" transform="rotate(-75 -66 20)"/>
+      <ellipse cx="66" cy="20" rx="12" ry="5" transform="rotate(75 66 20)"/>
+    </g>
+    <!-- wings -->
+    <path d="M0,-30 L-86,-52 L-70,-24 L-96,-14 L-64,4 L-34,10 Z" fill="url(#gold)"/>
+    <path d="M0,-30 L86,-52 L70,-24 L96,-14 L64,4 L34,10 Z" fill="url(#gold)"/>
+    <!-- body -->
+    <ellipse cx="0" cy="-6" rx="14" ry="26" fill="url(#gold)"/>
+    <!-- tail -->
+    <path d="M-10,18 L10,18 L0,42 Z" fill="url(#gold)"/>
+    <!-- head -->
+    <circle cx="0" cy="-38" r="10" fill="url(#gold)"/>
+    <path d="M8,-40 L20,-36 L8,-33 Z" fill="#e8b923"/>
+  </g>
+
+  <!-- B.J. Blazkowicz (left, blue sweater, pistol) -->
+  <g transform="translate(128,258)">
+    <!-- legs -->
+    <rect x="-16" y="52" width="13" height="46" fill="#5c4a33"/>
+    <rect x="3" y="52" width="13" height="46" fill="#4e3f2b"/>
+    <rect x="-18" y="94" width="17" height="8" fill="#2b2118"/>
+    <rect x="1" y="94" width="17" height="8" fill="#2b2118"/>
+    <!-- torso (blue sweater) -->
+    <rect x="-20" y="6" width="40" height="50" rx="6" fill="#3f6db3"/>
+    <rect x="-20" y="6" width="40" height="12" rx="6" fill="#4a7cc8"/>
+    <!-- arms -->
+    <rect x="-30" y="12" width="10" height="36" rx="4" fill="#3f6db3"/>
+    <rect x="20" y="12" width="10" height="36" rx="4" transform="rotate(-38 25 30)" fill="#3f6db3"/>
+    <!-- head -->
+    <circle cx="0" cy="-10" r="15" fill="#e8b98a"/>
+    <rect x="-15" y="-24" width="30" height="10" rx="4" fill="#6b4a2a"/>
+    <!-- pistol -->
+    <g transform="rotate(-38 25 30)">
+      <rect x="24" y="20" width="10" height="8" fill="#2f2f33"/>
+      <rect x="26" y="27" width="6" height="12" fill="#3a3a40"/>
+    </g>
+  </g>
+
+  <!-- Nazi guard (right, brown uniform, rifle) -->
+  <g transform="translate(470,268)">
+    <rect x="-13" y="46" width="11" height="42" fill="#4a4038"/>
+    <rect x="2" y="46" width="11" height="42" fill="#40382f"/>
+    <rect x="-15" y="6" width="30" height="46" rx="5" fill="#6b5b45"/>
+    <rect x="-15" y="6" width="30" height="10" rx="5" fill="#7a6a50"/>
+    <rect x="-24" y="12" width="9" height="30" rx="4" fill="#6b5b45"/>
+    <rect x="15" y="12" width="9" height="30" rx="4" fill="#6b5b45"/>
+    <circle cx="0" cy="-8" r="13" fill="#e0aa7a"/>
+    <!-- helmet -->
+    <path d="M-15,-12 a15,16 0 0 1 30,0 l-2,4 h-26 Z" fill="#5a5348"/>
+    <rect x="-18" y="-10" width="36" height="5" rx="2" fill="#4a453c"/>
+    <!-- rifle -->
+    <rect x="14" y="-14" width="6" height="52" fill="#241f1a"/>
+    <rect x="12" y="-16" width="10" height="6" fill="#332b22"/>
+  </g>
+
+  <!-- floor -->
+  <rect x="0" y="352" width="600" height="48" fill="#14141a"/>
+  <rect x="0" y="352" width="600" height="4" fill="#3d3833"/>
+
+  <!-- vignette -->
+  <rect width="600" height="400" fill="url(#vignette)"/>
+
+  <!-- HUD strip (Wolf3D style status bar) -->
+  <g>
+    <rect x="0" y="0" width="600" height="30" fill="#000000" opacity="0.55"/>
+    <text x="14" y="21" font-family="ui-monospace, monospace" font-size="15" fill="#e8e8e8">FLOOR 1</text>
+    <text x="150" y="21" font-family="ui-monospace, monospace" font-size="15" fill="#e8e8e8">SCORE 0</text>
+    <text x="300" y="21" font-family="ui-monospace, monospace" font-size="15" fill="#e8e8e8">LIVES 3</text>
+    <text x="440" y="21" font-family="ui-monospace, monospace" font-size="15" fill="#e8e8e8">AMMO 8</text>
+    <text x="586" y="21" font-family="ui-monospace, monospace" font-size="15" fill="#e8e8e8" text-anchor="end">HEALTH 100%</text>
+  </g>
+
+  <text x="300" y="386" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="800" letter-spacing="4" fill="#f6d76b" stroke="#101014" stroke-width="6" paint-order="stroke">WOLFENSTEIN 3D</text>
+</svg>

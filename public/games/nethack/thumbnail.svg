@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="NetHack - ASCII dungeon crawl">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12121f"/>
+      <stop offset="0.6" stop-color="#1a1a2e"/>
+      <stop offset="1" stop-color="#0d0d18"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2340"/>
+      <stop offset="1" stop-color="#1c1830"/>
+    </linearGradient>
+    <radialGradient id="heroGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+
+  <!-- dungeon room floor -->
+  <rect x="24" y="46" width="552" height="252" fill="url(#floor)"/>
+
+  <!-- stone wall frame (top + sides) -->
+  <g fill="#3d3660">
+    <rect x="24" y="46" width="552" height="14"/>
+    <rect x="24" y="284" width="552" height="14"/>
+    <rect x="24" y="46" width="14" height="252"/>
+    <rect x="562" y="46" width="14" height="252"/>
+  </g>
+  <g fill="#554d80">
+    <rect x="24" y="46" width="552" height="4"/>
+    <rect x="24" y="284" width="552" height="4"/>
+    <rect x="24" y="46" width="4" height="252"/>
+    <rect x="572" y="46" width="4" height="252"/>
+  </g>
+  <!-- doorways -->
+  <rect x="276" y="284" width="48" height="14" fill="#8a6d3b"/>
+  <rect x="276" y="288" width="48" height="6" fill="#c9a55c"/>
+
+  <!-- ASCII map rows -->
+  <g font-family="ui-monospace, monospace" font-size="19" fill="#7f9f7f">
+    <text x="52" y="86">---------------------</text>
+    <text x="52" y="110">|.............+.....|</text>
+    <text x="52" y="134">|...$..............k|</text>
+    <text x="52" y="158">|..........@........|</text>
+    <text x="52" y="182">|..r................|</text>
+    <text x="52" y="206">|..............!....|</text>
+    <text x="52" y="230">|.....%.............|</text>
+    <text x="52" y="254">---------------------</text>
+  </g>
+
+  <!-- hero glow + @ -->
+  <ellipse cx="255" cy="152" rx="42" ry="40" fill="url(#heroGlow)"/>
+  <text x="249" y="159" font-family="ui-monospace, monospace" font-size="19" font-weight="700" fill="#ffffff">@</text>
+
+  <!-- gold pieces -->
+  <g font-family="ui-monospace, monospace" font-size="19" font-weight="700" fill="#ffd75e">
+    <text x="94" y="139">$</text>
+  </g>
+
+  <!-- monsters -->
+  <g font-family="ui-monospace, monospace" font-size="19" font-weight="700">
+    <text x="414" y="139" fill="#e05c5c">k</text>
+    <text x="94" y="187" fill="#d98a4a">r</text>
+  </g>
+
+  <!-- items -->
+  <g font-family="ui-monospace, monospace" font-size="19" fill="#9ecbff">
+    <text x="396" y="211">!</text>
+  </g>
+  <g font-family="ui-monospace, monospace" font-size="19" fill="#c9a55c">
+    <text x="116" y="235">%</text>
+  </g>
+
+  <!-- status strip (NetHack style) -->
+  <g>
+    <rect x="0" y="0" width="600" height="30" fill="#000000" opacity="0.55"/>
+    <text x="12" y="20" font-family="ui-monospace, monospace" font-size="14" fill="#e8f2ff">NetHack the Unholy   Dlvl:1  $:47  HP:[14(14)]  Pw:[3(3)]  AC:-1</text>
+  </g>
+
+  <!-- message line -->
+  <g>
+    <rect x="24" y="310" width="552" height="26" fill="#000000" opacity="0.45"/>
+    <text x="36" y="328" font-family="ui-monospace, monospace" font-size="15" fill="#b8e6a0">You see here a gold piece. --More--</text>
+  </g>
+
+  <text x="300" y="376" text-anchor="middle" font-family="ui-monospace, monospace" font-size="32" font-weight="800" letter-spacing="8" fill="#e8f2ff" stroke="#0a0a14" stroke-width="6" paint-order="stroke">NETHACK</text>
+</svg>

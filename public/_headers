@@ -4,6 +4,12 @@
 /games/*
   Cache-Control: public, max-age=3600
 
+# Open Golf：Emscripten pthread 构建（SharedArrayBuffer），需要跨域隔离
+# 注意：COEP require-corp 仅作用于本路径，其它游戏不受影响
+/games/open-golf/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 

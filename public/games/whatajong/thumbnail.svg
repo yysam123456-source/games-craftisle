@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Whatajong - mahjong solitaire roguelite">
+  <defs>
+    <linearGradient id="felt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16402e"/>
+      <stop offset="0.6" stop-color="#0e2c1f"/>
+      <stop offset="1" stop-color="#081c13"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="0.5" cy="0.38" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tileFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="1" stop-color="#eadfc0"/>
+    </linearGradient>
+    <linearGradient id="tileSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8c69a"/>
+      <stop offset="1" stop-color="#b3a075"/>
+    </linearGradient>
+  </defs>
+
+  <!-- felt table -->
+  <rect width="600" height="400" fill="url(#felt)"/>
+  <rect width="600" height="400" fill="url(#spot)"/>
+
+  <!-- bamboo stalks, corners -->
+  <g stroke="#2e6b46" stroke-width="7" fill="none" opacity="0.85">
+    <path d="M 44 400 C 30 300, 52 220, 38 96"/>
+    <path d="M 566 400 C 580 300, 552 230, 570 120"/>
+  </g>
+  <g stroke="#1d4a2f" stroke-width="3" fill="none">
+    <path d="M 30 320 L 56 316"/>
+    <path d="M 42 236 L 66 232"/>
+    <path d="M 26 152 L 50 148"/>
+    <path d="M 552 300 L 580 296"/>
+    <path d="M 558 216 L 584 212"/>
+    <path d="M 548 140 L 574 136"/>
+  </g>
+  <!-- bamboo leaves -->
+  <g fill="#2e6b46" opacity="0.8">
+    <path d="M 38 96 C 10 70, 4 44, 22 28 C 34 52, 40 74, 38 96 Z"/>
+    <path d="M 570 120 C 598 94, 604 66, 586 50 C 574 74, 568 96, 570 120 Z"/>
+  </g>
+
+  <!-- back tiles (fanned, dimmed) -->
+  <g opacity="0.55">
+    <g transform="translate(392,196) rotate(9)">
+      <rect x="6" y="8" width="76" height="102" rx="10" fill="url(#tileSide)"/>
+      <rect x="0" y="0" width="76" height="102" rx="10" fill="url(#tileFace)"/>
+    </g>
+    <g transform="translate(128,204) rotate(-11)">
+      <rect x="6" y="8" width="76" height="102" rx="10" fill="url(#tileSide)"/>
+      <rect x="0" y="0" width="76" height="102" rx="10" fill="url(#tileFace)"/>
+    </g>
+  </g>
+
+  <!-- main tile: five dots -->
+  <g transform="translate(206,128)">
+    <ellipse cx="52" cy="118" rx="60" ry="14" fill="#000000" opacity="0.35"/>
+    <rect x="8" y="10" width="88" height="118" rx="12" fill="url(#tileSide)"/>
+    <rect x="0" y="0" width="88" height="118" rx="12" fill="url(#tileFace)" stroke="#c9b98a" stroke-width="2"/>
+    <g fill="#1f6f43">
+      <circle cx="44" cy="30" r="9"/>
+      <circle cx="44" cy="59" r="9"/>
+      <circle cx="44" cy="88" r="9"/>
+      <circle cx="22" cy="73" r="9"/>
+      <circle cx="66" cy="73" r="9"/>
+    </g>
+    <circle cx="44" cy="59" r="12" fill="none" stroke="#1f6f43" stroke-width="2.5" opacity="0.7"/>
+  </g>
+
+  <!-- main tile: bamboo, selected glow -->
+  <g transform="translate(322,112)">
+    <ellipse cx="52" cy="134" rx="66" ry="16" fill="#000000" opacity="0.35"/>
+    <circle cx="46" cy="64" r="76" fill="#ffd75e" opacity="0.14"/>
+    <rect x="8" y="10" width="88" height="118" rx="12" fill="url(#tileSide)"/>
+    <rect x="0" y="0" width="88" height="118" rx="12" fill="url(#tileFace)" stroke="#e8b64c" stroke-width="3"/>
+    <g stroke="#2c7a4b" stroke-width="6" stroke-linecap="round">
+      <path d="M 30 26 L 30 92"/>
+      <path d="M 46 20 L 46 86"/>
+      <path d="M 62 26 L 62 92"/>
+    </g>
+    <g stroke="#1d5a37" stroke-width="3">
+      <path d="M 24 44 L 36 44"/>
+      <path d="M 40 38 L 52 38"/>
+      <path d="M 56 44 L 68 44"/>
+      <path d="M 24 74 L 36 74"/>
+      <path d="M 40 68 L 52 68"/>
+      <path d="M 56 74 L 68 74"/>
+    </g>
+    <path d="M 46 20 C 40 8, 48 2, 54 6 C 50 12, 50 16, 46 20 Z" fill="#3f9c5e"/>
+  </g>
+
+  <!-- small floating tile: one dot -->
+  <g transform="translate(452,44) rotate(14)" opacity="0.9">
+    <rect x="4" y="5" width="52" height="70" rx="8" fill="url(#tileSide)"/>
+    <rect x="0" y="0" width="52" height="70" rx="8" fill="url(#tileFace)"/>
+    <circle cx="26" cy="35" r="12" fill="#b3362c"/>
+    <circle cx="26" cy="35" r="16" fill="none" stroke="#b3362c" stroke-width="2" opacity="0.6"/>
+  </g>
+
+  <!-- small floating tile: crack -->
+  <g transform="translate(96,36) rotate(-16)" opacity="0.9">
+    <rect x="4" y="5" width="52" height="70" rx="8" fill="url(#tileSide)"/>
+    <rect x="0" y="0" width="52" height="70" rx="8" fill="url(#tileFace)"/>
+    <path d="M 14 16 L 34 36 L 24 44 L 42 62" stroke="#8a8f98" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- coin trail -->
+  <g fill="#ffd75e">
+    <circle cx="160" cy="322" r="7" opacity="0.9"/>
+    <circle cx="186" cy="312" r="6" opacity="0.75"/>
+    <circle cx="210" cy="304" r="5" opacity="0.6"/>
+    <circle cx="440" cy="318" r="6" opacity="0.75"/>
+    <circle cx="466" cy="308" r="7" opacity="0.9"/>
+  </g>
+
+  <!-- title -->
+  <text x="300" y="378" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="800" letter-spacing="4" fill="#ffffff" stroke="#0a1f15" stroke-width="6" paint-order="stroke">WHATAJONG</text>
+</svg>
