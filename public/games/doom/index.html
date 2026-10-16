@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8" />
+        <title>DOOM (1993) — Chocolate Doom WASM</title>
+        <link rel="shortcut icon" href="favicon.png" type="image/png" />
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            html {
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            body {
+                background-color: #111;
+                color: #c8c8c8;
+                margin: 0;
+                padding: 2ch;
+            }
+
+            #container {
+                max-width: 930px;
+                margin: auto;
+            }
+
+            .frame {
+                padding-right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            }
+
+            canvas.frame {
+                background-color: black;
+                width: 800px;
+                height: 600px;
+            }
+        </style>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </head>
+    <body>
+        <div id="container" class="noselect">
+            <canvas class="frame" id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+        </div>
+        <script>
+            var commonArgs = ["-iwad", "doom1.wad", "-window", "-nogui", "-nomusic", "-config", "default.cfg", "-servername", "doomflare"];
+
+            var Module = {
+                onRuntimeInitialized: () => {
+                    callMain(commonArgs);
+                },
+                noInitialRun: true,
+                preRun: () => {
+                    Module.FS.createPreloadedFile("", "doom1.wad", "doom1.wad", true, true);
+                    Module.FS.createPreloadedFile("", "default.cfg", "default.cfg", true, true);
+                },
+                printErr: function (text) {
+                    if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(" ");
+                    console.error(text);
+                },
+                canvas: (function () {
+                    var canvas = document.getElementById("canvas");
+                    canvas.addEventListener(
+                        "webglcontextlost",
+                        function (e) {
+                            alert("WebGL context lost. You will need to reload the page.");
+                            e.preventDefault();
+                        },
+                        false
+                    );
+                    return canvas;
+                })(),
+                print: function (text) {
+                    console.log(text);
+                },
+                setStatus: function (text) {
+                    console.log(text);
+                },
+                totalDependencies: 0,
+                monitorRunDependencies: function (left) {
+                    this.totalDependencies = Math.max(0, left);
+                    Module.setStatus(left ? "Preparing... (" + (this.totalDependencies - left) + "/" + this.totalDependencies + ")" : "All downloads complete.");
+                },
+            };
+
+            window.onerror = function (event) {
+                Module.setStatus("Exception thrown, see JavaScript console");
+                Module.setStatus = function (text) {
+                    if (text) Module.printErr("[post-exception status] " + text);
+                };
+            }
+        </script>
+        <script type="text/javascript" src="websockets-doom.js"></script>
+    </body>
+</html>

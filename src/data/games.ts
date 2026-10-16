@@ -2424,6 +2424,33 @@ export const games: Game[] = [
     updatedAt: new Date("2026-10-16"),
   },
 
+  // ===== DOOM (Chocolate Doom WASM) — id Software FPS classic =====
+  {
+    id: "doom",
+    slug: "doom",
+    title: "DOOM (1993)",
+    description: "The game that invented the first-person shooter, running natively in your browser. Chocolate Doom — a faithful source port of the original — compiled to WebAssembly, with id Software's shareware episode Knee-Deep in the Dead bundled in. Single-player only: no network code is reachable.",
+    category: "action",
+    tags: ["doom", "fps", "id software", "retro", "shooter", "webassembly", "open source"],
+    source: "self-hosted",
+    sourceUrl: "/games/doom/index.html",
+    thumbnail: "/games/doom/thumbnail.svg",
+    instructions: "Arrow keys move and turn, Ctrl fires, Space opens doors and switches, Shift runs, Alt+arrows strafe, 1–7 pick weapons, Tab shows the map, Esc opens the menu. Music is disabled in this build (use the game's own volume key with sound effects). F1 shows the help screen. The shareware episode has ten levels — find the exit switch on each.",
+    controls: { keyboard: ["↑/↓ — move", "←/→ — turn", "Ctrl — fire", "Space — open / use", "Shift — run", "Alt+←/→ — strafe", "1–7 — weapons", "Tab — map", "Esc — menu", "F1 — help"], mouse: true, touch: false, gamepad: false },
+    isOriginal: false,
+    isActive: true,
+    playCount: 0,
+    rating: 4.8,
+    difficulty: "Medium",
+    estimatedTime: "10-40 minutes",
+    featured: false,
+    disableSandbox: true,
+    hasNativeUI: true,
+    supportsDifficulty: false,
+    createdAt: new Date("2026-10-16"),
+    updatedAt: new Date("2026-10-16"),
+  },
+
   // ===== Wolfenstein 3D (ECWolf) — id Software FPS classic, WASM port =====
   {
     id: "wolf3d",
