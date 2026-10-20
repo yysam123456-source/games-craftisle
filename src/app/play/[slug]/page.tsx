@@ -21,9 +21,14 @@ export async function generateMetadata({ params }: GamePageProps) {
     };
   }
 
+  // 🔴 2026-10-20：允许单个游戏覆写 title/description。
+  //   留空时行为与之前完全一致（通用模板），其余 25+ 个游戏零影响。
+  const seoTitle = game.seoTitle ?? `${game.title} - Play Free Online`;
+  const seoDescription = game.seoDescription ?? game.description;
+
   return {
-    title: `${game.title} - Play Free Online`,
-    description: game.description,
+    title: seoTitle,
+    description: seoDescription,
     keywords: [...game.tags, "free games", "online games", game.title, "play online", "free browser game"],
     alternates: {
       canonical: `/play/${game.slug}`,
@@ -32,8 +37,8 @@ export async function generateMetadata({ params }: GamePageProps) {
       type: "website",
       locale: "en_US",
       url: `https://game.craftisle.com/play/${game.slug}`,
-      title: `${game.title} - Play Free Online | Craftisle Games`,
-      description: game.description,
+      title: `${seoTitle} | Craftisle Games`,
+      description: seoDescription,
       siteName: "Craftisle Games",
       images: [
         {
@@ -46,8 +51,8 @@ export async function generateMetadata({ params }: GamePageProps) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${game.title} - Play Free Online | Craftisle Games`,
-      description: game.description,
+      title: `${seoTitle} | Craftisle Games`,
+      description: seoDescription,
       images: [`https://game.craftisle.com${game.thumbnail}`],
     },
   };

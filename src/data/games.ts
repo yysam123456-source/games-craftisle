@@ -130,6 +130,15 @@ export const games: Game[] = [
     slug: "sudoku",
     title: "Sudoku",
     description: "The addictive number placement puzzle. Fill the grid with 1-9, no repeats in rows/columns/boxes!",
+    // 🔴 2026-10-20：GSC 实测 sudoku 簇是全站单条最大曝光源（`sudoku game` 167 曝光），
+    //   但通用模板只产出 "Sudoku - Play Free Online"，不含 game / puzzle / number 变体，
+    //   而真实查询是 `sudoku puzzle game`(15, p56) / `sudoku number game`(14, p59)。
+    //   这里按游戏覆写标题与描述，把三个高频变体都吃进来。
+    //   事实边界：只说页面确实成立的事（浏览器内运行、填 1-9、行列宫不重复、
+    //   键鼠触控均可）——该条目 supportsDifficulty 未设 ⇒ 不说「多难度」。
+    seoTitle: "Sudoku Game — Free Online Number Puzzle",
+    seoDescription:
+      "Play the classic Sudoku puzzle game free online in your browser. Fill each row, column and 3×3 box with digits 1-9 with no repeats — keyboard, mouse and touch all work, on desktop and mobile.",
     category: "puzzle",
     tags: ["sudoku", "numbers", "puzzle", "logic", "brain"],
     source: "self-hosted",
